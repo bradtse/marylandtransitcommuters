@@ -16,10 +16,22 @@ public class TransitProvider extends ContentProvider {
 	/*
 	 * UriMatcher constants
 	 */
-	private static final int GET_ROUTES_LIST = 0;
-	private static final int GET_ROUTE = 1;
-	private static final int GET_STOPS_LIST = 2;
-	private static final int GET_STOP = 3;
+	private static final int GET_AGENCY_LIST = 0;
+	private static final int GET_AGENCY = 1;
+	private static final int GET_CALENDAR_DATES_LIST = 2;
+	private static final int GET_CALENDAR_DATE = 3;
+	private static final int GET_CALENDAR_LIST = 4;
+	private static final int GET_CALENDAR = 5;
+	private static final int GET_ROUTES_LIST = 6;
+	private static final int GET_ROUTE = 7;
+	private static final int GET_SHAPES_LIST = 8;
+	private static final int GET_SHAPE = 9;
+	private static final int GET_STOPS_LIST = 10;
+	private static final int GET_STOP = 11;
+	private static final int GET_STOP_TIMES_LIST = 12;
+	private static final int GET_STOP_TIME = 13;
+	private static final int GET_TRIPS_LIST = 14;
+	private static final int GET_TRIP = 15;
 	private static final UriMatcher sUriMatcher = buildUriMatcher();
 
 	@Override

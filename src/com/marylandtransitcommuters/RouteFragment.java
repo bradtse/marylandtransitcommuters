@@ -22,6 +22,7 @@ public class RouteFragment extends SherlockFragment {
 	private Context context;
 	private View rootView;
 	private ListView mRouteList;
+	private Cursor mCursor;
 	
 	public RouteFragment() {};
 	
@@ -29,6 +30,22 @@ public class RouteFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
+		
+		// The columns we want to query for
+		String[] mProjection = {
+				TransitContract.Routes._ID,
+				TransitContract.Routes.KEY_SHORT_NAME,
+				TransitContract.Routes.KEY_LONG_NAME
+		};
+		
+		// Query the routes table for the columns we want
+	    mCursor = context.getContentResolver().query(
+	    		TransitContract.Routes.CONTENT_URI,
+	    		mProjection,
+	    		null,
+	    		null,
+	    		TransitContract.Routes.DEFAULT_SORT_ORDER
+	    );
 	}
 	
 	@Override
@@ -45,33 +62,15 @@ public class RouteFragment extends SherlockFragment {
 		mRouteList = (ListView) rootView.findViewById(R.id.routes_list);
 		
 		Log.d(MainActivity.BRAD, "Initialize route list");
-		
-		// The columns we want to query for
-		String[] mProjection = {
-				TransitContract.Routes._ID,
-				TransitContract.Routes.KEY_SHORT_NAME,
-				TransitContract.Routes.KEY_LONG_NAME
-		};
-		
-		// Query the routes table for the columns we want
-	    Cursor mCursor = context.getContentResolver().query(
-	    		TransitContract.Routes.CONTENT_URI,
-	    		mProjection,
-	    		null,
-	    		null,
-	    		TransitContract.Routes.DEFAULT_SORT_ORDER
-	    );
-	    
-	    Log.d(MainActivity.BRAD, "mCursor.getCount() = " + mCursor.getCount());
+
+	    // Specify the corresponding layout elements where we want the columns to go
+	    int[] to = {R.id.short_name, R.id.long_name};
 	    
 	    // Specify the columns we want to display in the ListView
 	    String[] from = { 
 	    		TransitContract.Routes.KEY_SHORT_NAME,
 	    		TransitContract.Routes.KEY_LONG_NAME
 	    };
-	
-	    // Specify the corresponding layout elements where we want the columns to go
-	    int[] to = {R.id.short_name, R.id.long_name};
 	    
 	    Log.d(MainActivity.BRAD, "Attempting to create SimpleCursorAdapter");
 	    
@@ -115,6 +114,7 @@ public class RouteFragment extends SherlockFragment {
 		
 		Bundle args = new Bundle();
 		args.putString(TransitContract.Routes._ID, String.valueOf(id));
+//		args.putSerializable(key, value)
 		
 		Fragment fragment = new TimeFragment();
 		fragment.setArguments(args);

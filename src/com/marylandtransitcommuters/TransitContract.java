@@ -34,17 +34,26 @@ public final class TransitContract {
 	
 	/* An array list of all the SQL create table statements */
 	public static final String[] SQL_CREATE_TABLE_ARRAY = {
-//		Agency.CREATE_TABLE,
-//		CalendarDates.CREATE_TABLE,
-//		Calendar.CREATE_TABLE,
+		Agency.CREATE_TABLE,
+		CalendarDates.CREATE_TABLE,
+		Calendar.CREATE_TABLE,
 		Routes.CREATE_TABLE,
-//		Shapes.CREATE_TABLE,
+		Shapes.CREATE_TABLE,
 		Stops.CREATE_TABLE,
-//		StopTimes.CREATE_TABLE,
+		StopTimes.CREATE_TABLE,
 		Trips.CREATE_TABLE
 	};
 	
-	public static final int[] RAW_IDS = {R.raw.routes};
+	public static final int[] RAW_IDS = {
+//		R.raw.agency,
+//		R.raw.calendar_dates,
+//		R.raw.calendar,
+		R.raw.routes,
+//		R.raw.shapes,
+		R.raw.stops,
+		R.raw.stop_times,
+		R.raw.trips,
+	};
 	
 	/* Do not allow this class to be instantiated */
 	private TransitContract() {}
@@ -1097,8 +1106,7 @@ public final class TransitContract {
         										  + KEY_SHORT_NAME + " TEXT," 
         										  + KEY_DIRECTION_ID + " TEXT,"
         										  + KEY_BLOCK_ID + " TEXT,"
-        										  + KEY_SHAPE_ID + " TEXT," 
-        										  + KEY_WHEELCHAIR + " TEXT" 
+        										  + KEY_SHAPE_ID + " TEXT" 
         										  + ");";
         
         /**
@@ -1117,8 +1125,7 @@ public final class TransitContract {
 			KEY_SHORT_NAME,
 			KEY_DIRECTION_ID,
 			KEY_BLOCK_ID,
-			KEY_SHAPE_ID,
-			KEY_WHEELCHAIR
+			KEY_SHAPE_ID
         };
 	}
 }

@@ -20,6 +20,7 @@ import android.widget.Button;
 public class TimeFragment extends SherlockFragment implements OnClickListener {
 	private Context context;
 	private View rootView;
+	private Cursor mCursor;
 	private int time; // AM = 0, PM = 1
 	private String routeId;
 	
@@ -29,6 +30,29 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
+		
+		// The column we want to query for
+		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
+
+		// Append the _ID to the base uri
+		String id = getArguments().getString(TransitContract.Routes._ID);
+		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
+		
+		mCursor = context.getContentResolver().query(
+			data,
+			mProjection,
+			null,
+			null,
+			null
+		);
+		
+		if (mCursor == null) {
+			Log.d(MainActivity.BRAD, "Row not found");
+		} else {
+			mCursor.moveToFirst();
+			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
+			routeId = mCursor.getString(index);
+		}
 	}
 	
 	@Override
@@ -48,29 +72,6 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		// The column we want to query for
-		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
-
-		// Append the _ID to the base uri
-		String id = getArguments().getString(TransitContract.Routes._ID);
-		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
-		
-		Cursor mCursor = context.getContentResolver().query(
-			data,
-			mProjection,
-			null,
-			null,
-			null
-		);
-		
-		if (mCursor == null) {
-			Log.d(MainActivity.BRAD, "Row not found");
-		} else {
-			mCursor.moveToFirst();
-			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
-			routeId = mCursor.getString(index);
-		}
 	}
 
 	/* 
