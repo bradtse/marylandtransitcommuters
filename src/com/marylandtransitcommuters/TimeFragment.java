@@ -15,7 +15,7 @@ import android.widget.Button;
 
 /**
  * The fragment that allows the user to select whether they want AM (inbound) or
- * PM (outbound) times.
+ * PM (outbound) times to be shown.
  */
 public class TimeFragment extends SherlockFragment implements OnClickListener {
 	private Context context;
@@ -36,7 +36,7 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 							 Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_time, container, false);
 		
-		/* Allows the fragment to handle the buttons rather than the main activity */
+		/* Allows the fragment to handle the button clicks instead of the main activity */
 		Button am = (Button) rootView.findViewById(R.id.am_button);
 		am.setOnClickListener(this);
 		Button pm = (Button) rootView.findViewById(R.id.pm_button);
@@ -49,8 +49,10 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		String[] mProjection = {TransitContract.Routes.COLUMN_NAME_ROUTE_ID};
+		// The column we want to query for
+		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
 
+		// Append the _ID to the base uri
 		String id = getArguments().getString(TransitContract.Routes._ID);
 		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
 		
@@ -66,7 +68,7 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 			Log.d(MainActivity.BRAD, "Row not found");
 		} else {
 			mCursor.moveToFirst();
-			int index = mCursor.getColumnIndex(TransitContract.Routes.COLUMN_NAME_ROUTE_ID);	
+			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
 			routeId = mCursor.getString(index);
 		}
 	}

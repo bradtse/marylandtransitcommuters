@@ -7,14 +7,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+/**
+ * Content Provider for the transit data
+ */
 public class TransitProvider extends ContentProvider {	
 	private TransitDatabase mTransitDatabase;
 	
 	/*
-	 * UriMatcher stuff
+	 * UriMatcher constants
 	 */
-	private static final int GET_ROUTE_LIST = 0;
+	private static final int GET_ROUTES_LIST = 0;
 	private static final int GET_ROUTE = 1;
+	private static final int GET_STOPS_LIST = 2;
+	private static final int GET_STOP = 3;
 	private static final UriMatcher sUriMatcher = buildUriMatcher();
 
 	@Override
@@ -27,10 +32,14 @@ public class TransitProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch(sUriMatcher.match(uri)) {
-			case GET_ROUTE_LIST:
+			case GET_ROUTES_LIST:
 				return TransitContract.Routes.CONTENT_TYPE;
 			case GET_ROUTE:
 				return TransitContract.Routes.CONTENT_ITEM_TYPE;
+			case GET_STOPS_LIST:
+				return TransitContract.Stops.CONTENT_TYPE;
+			case GET_STOP:
+				return TransitContract.Stops.CONTENT_ITEM_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -41,12 +50,19 @@ public class TransitProvider extends ContentProvider {
 						String[] selectionArgs, String sortOrder) {
 		Log.d(MainActivity.BRAD, "TransitProvider query()");
 		switch(sUriMatcher.match(uri)) {
-			case GET_ROUTE_LIST:
+			case GET_ROUTES_LIST:
 				return mTransitDatabase.getList(TransitContract.Routes.TABLE_NAME, 
-											  projection, selection, 
-											  selectionArgs, sortOrder);
+											  	projection, selection, 
+											  	selectionArgs, sortOrder);
 			case GET_ROUTE:
 				return mTransitDatabase.getRow(TransitContract.Routes.TABLE_NAME, 
+											   projection, uri);
+			case GET_STOPS_LIST:
+				return mTransitDatabase.getList(TransitContract.Stops.TABLE_NAME,
+												projection, selection,
+												selectionArgs, sortOrder);
+			case GET_STOP:
+				return mTransitDatabase.getRow(TransitContract.Stops.TABLE_NAME,
 											   projection, uri);
 			default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -55,8 +71,7 @@ public class TransitProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri arg0, String arg1, String[] arg2) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("Delete not supported for database");
 	}
 
 	/*
@@ -66,8 +81,7 @@ public class TransitProvider extends ContentProvider {
 	 */
 	@Override
 	public Uri insert(Uri arg0, ContentValues arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Insert not supported for database");
 	}
 
 	@Override
@@ -88,9 +102,13 @@ public class TransitProvider extends ContentProvider {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		
 		/* Complete route list */
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME, GET_ROUTE_LIST);
-		/* Get specific route */
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME, GET_ROUTES_LIST);
+		/* Specific route */
 		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME + "/#", GET_ROUTE);
+		/* Stops list */
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME, GET_STOPS_LIST);
+		/* Specific stop */
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME + "/#", GET_STOP);
 		
 		return matcher;
 	}

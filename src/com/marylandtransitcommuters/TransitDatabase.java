@@ -35,7 +35,6 @@ public class TransitDatabase {
 
 	/**
 	 * Helper function to retrieve a list from a table
-	 * The params are the same as query.
 	 */
 	public Cursor getList(String table, String[] projection, String selection,
 						  String[] selectionArgs, String sortOrder) {
@@ -94,51 +93,48 @@ public class TransitDatabase {
 	 * Helper class that opens/creates the database
 	 */
 	private static class TransitSqlHelper extends SQLiteOpenHelper {
-		private static final String DATABASE_NAME = "transit.db";
 		private static final int DATABASE_VERSION = 1;
 		
 		private final Context mHelperContext;
 		private SQLiteDatabase mDatabase;
 
+		/**
+		 * TransitSqlHelper constructor
+		 * @param context The context of the app
+		 */
 		public TransitSqlHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			super(context, TransitContract.DATABASE_NAME, null, DATABASE_VERSION);
 			Log.d(MainActivity.BRAD, "TransitSqlHelper constructor");
 			mHelperContext = context;
 		}
 
-		/*
-		 * Create the transit database with the tables and columns found in the 
-		 * TransitContract. Also loads the database with the GTFS data.
-		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			Log.d(MainActivity.BRAD, "TransitSqlHelper onCreate()");
 			mDatabase = db;
-			loadDatabase();
+			createDatabase();
+			Log.d(MainActivity.BRAD, "Leaving TransitSqlHelper onCreate()");
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-			
 		}
 		
 		/*
 		 * HELPER FUNCTIONS 
 		 */
 		
-		/* Load database */
-		private void loadDatabase() {
-			/* The tables being created */
-			String[] tables = {
-					TransitContract.Routes.TABLE_NAME,
-					TransitContract.Stops.TABLE_NAME
-			};
-			
-			/* Create all of the tables */
-			for(String s : tables) {
+		/** 
+		 * Create the database with the GTFS data
+		 */
+		private void createDatabase() {
+			Log.d(MainActivity.BRAD, "Table Creation");
+			/* Create all of the tables for the database */
+			for(String s : TransitContract.SQL_CREATE_TABLE_ARRAY) {
 				mDatabase.execSQL(s);
 			}
+			Log.d(MainActivity.BRAD, "Got Past table creation");
 //			new Thread(new Runnable() {
 //				public void run() {
 //					try {
@@ -157,7 +153,10 @@ public class TransitDatabase {
 			}
 		}
 		
-		/* Parse data file and load into database */
+		/** 
+		 * Parse data files and load them into the database 
+		 * XXX Support all data files
+		 */
 		private void loadData() throws IOException {
 			final Resources resources = mHelperContext.getResources();
 			InputStream input = resources.openRawResource(R.raw.routes);
@@ -170,8 +169,7 @@ public class TransitDatabase {
 					if (line.length < numCols) {
 						continue;
 					}
-					
-					long id = addRoutesRow(line);
+					long id = insertRoutesRow(line);
 					if (id < 0) {
 						Log.e(MainActivity.BRAD, 
 							  "Unable to add row of data for route id: " + line[0]);
@@ -182,19 +180,34 @@ public class TransitDatabase {
 			}
 		}
 		
-		/* Add a row of routes data to database */
-		private long addRoutesRow(String[] line) {
+		/** 
+		 * Insert a row of routes data to database 
+		 * @param line the array of strings to insert
+		 */
+		private long insertRoutesRow(String[] line) {
 			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : TransitContract.Routes.COLUMN_ARRAY) {
-				values.put(s, line[i]);
-				i++;
-			}
+//			int i = 0;
+//			for(String s : TransitContract.Routes.COLUMN_ARRAY) {
+//				values.put(s, line[i]);
+//				i++;
+//			}
+			values.put(TransitContract.Routes.KEY_ROUTE_ID, line[0]);
+			values.put(TransitContract.Routes.KEY_AGENCY_ID, line[1]);
+			values.put(TransitContract.Routes.KEY_SHORT_NAME, line[2]);
+			values.put(TransitContract.Routes.KEY_LONG_NAME, line[3]);
+			values.put(TransitContract.Routes.KEY_DESCRIPTION, line[4]);
+			values.put(TransitContract.Routes.KEY_ROUTE_TYPE, line[5]);
+			values.put(TransitContract.Routes.KEY_URL, line[6]);
+			values.put(TransitContract.Routes.KEY_COLOR, line[7]);
+			values.put(TransitContract.Routes.KEY_TEXT_COLOR, line[8]);
+
 			return mDatabase.insert(TransitContract.Routes.TABLE_NAME, null, values);
 		}
 		
-		/* Add a row of trips data to database */
-		private long addStopsRow(String[] line) {
+		/**
+		 * Add a row of trips data to database
+		 */
+		private long insertStopsRow(String[] line) {
 			ContentValues values = new ContentValues();
 			int i = 0;
 			for(String s : TransitContract.Stops.COLUMN_ARRAY) {

@@ -27,7 +27,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	/* 
 	 * Objects that are accessible to the whole activity 
-	 * */
+	 */
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -46,30 +46,10 @@ public class MainActivity extends SherlockFragmentActivity {
         mItems = getResources().getStringArray(R.array.items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//        mRouteList = (ListView) findViewById(R.id.content_frame);
+
+        setUpNavDrawer();
         
-        // Set a custom shadow for the drawer
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        
-        // Add items to the nav drawer from the array groups
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, 
-        		R.layout.drawer_list_text, mItems));
-        // Register a callback to be invoked when item in nav drawer is clicked
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        
-        // Enable Action Bar app icon to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-               
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = getActionBarDrawerToggle();
-        
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        
-        // Set the main frame layout to the list of routes fragment
-        setRouteList();
+        addRouteFragment();
     }
 
     /*
@@ -92,7 +72,6 @@ public class MainActivity extends SherlockFragmentActivity {
     	mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /* Initialize the content of the options menu */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -108,8 +87,7 @@ public class MainActivity extends SherlockFragmentActivity {
     	menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
     	return super.onPrepareOptionsMenu(menu);
     }
-    
-    /* Handle what happens when an item in the options menu is selected */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	// Let ActionBarDrawerToggle attempt to handle home/up action
@@ -117,7 +95,7 @@ public class MainActivity extends SherlockFragmentActivity {
 //    		return true;
 //    	}
     	
-    	// Handle action buttons
+    	// Action taken when option item is selected
     	switch(item.getItemId()) {
     		// A workaround until ABS implements onOptionsItemSelected 
 	    	case android.R.id.home:
@@ -135,7 +113,9 @@ public class MainActivity extends SherlockFragmentActivity {
     	}
     }
   
-    /* Change the title of the action bar when an item is selected */
+    /* 
+     * Changes the title of the action bar
+     */
     @Override
     public void setTitle(CharSequence title) {
     	mTitle = title;
@@ -146,17 +126,42 @@ public class MainActivity extends SherlockFragmentActivity {
      * HELPER FUNCTIONS
      */
     
-    /*
-     * ActionBarDrawerToggle ties together the the proper interactions
-     * between the sliding drawer and the action bar app icon
+    /**
+     * Takes care of setting up all the elements needed for a properly functioning
+     * nav drawer
+     */
+    private void setUpNavDrawer() {
+        // Set a custom shadow for the drawer
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        
+        // Add items to the nav drawer from the array groups
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
+        												mItems));
+        // Register a callback to be invoked when item in nav drawer is clicked
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        // Enable Action Bar app icon to toggle nav drawer
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+               
+        mDrawerToggle = getActionBarDrawerToggle();
+        
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+    
+    /**
+     * Returns a new ActionBarDrawerToggle that ties together the the proper 
+     * interactions between the sliding drawer and the action bar app icon
+     * @return A new ActionBarDrawerToggle object
      */
     private ActionBarDrawerToggle getActionBarDrawerToggle() {
     	return new ActionBarDrawerToggle(
-        		this,					/* Host activity */
-        		mDrawerLayout,			/* Drawerlayout */
-        		R.drawable.ic_drawer,	/* Drawer image */
-        		R.string.drawer_open,	/* Open drawer description */
-        		R.string.drawer_close	/* Close drawer description */
+        		this,					// Host activity
+        		mDrawerLayout,			// Drawerlayout 
+        		R.drawable.ic_drawer,	// Drawer image
+        		R.string.drawer_open,	// Open drawer description 
+        		R.string.drawer_close	// Close drawer description
         		) {
         	// Called when a drawer has settled in a completely closed state
         	public void onDrawerClosed(View view) {
@@ -164,7 +169,7 @@ public class MainActivity extends SherlockFragmentActivity {
         		supportInvalidateOptionsMenu(); // Redraw options menu
         	}
         	
-        	// Called when a drawer has settled in a completely open state
+        	// Called when a drawer has settled in a completely open state 
         	public void onDrawerOpened(View drawerView) {
         		getSupportActionBar().setTitle(mDrawerTitle);
         		supportInvalidateOptionsMenu(); // Redraw options menu
@@ -172,11 +177,12 @@ public class MainActivity extends SherlockFragmentActivity {
         };
     }
     
-    /*
-     *  Initiate the initial list view with the different routes
+    /**
+     *  Initialize the main frame layout with the route fragment
+     *  <br>
      *  TODO This needs to be updated to use a cursorloader
      */
-    private void setRouteList() {
+    private void addRouteFragment() {
 		Fragment fragment = new RouteFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
@@ -184,7 +190,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		fragmentTrans.commit();
     }
     
-    /* The click listener for ListView in the nav drawer */
+    /**
+     * The click listener for the ListView in the nav drawer 
+     */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -193,14 +201,19 @@ public class MainActivity extends SherlockFragmentActivity {
 		}		
     }
     
-    /* Take action when item in nav drawer is selected */
+    /**
+     * Handles selection of nav drawer item
+     */
     private void selectItem(int position) {
     	mDrawerList.setItemChecked(position, true);
     	setTitle(mItems[position]);
     	mDrawerLayout.closeDrawer(mDrawerList);
     }
     
-    /* Checks if external storage is writable */
+    /**
+     * Checks if external storage is writable
+     * @return True if writable, else false
+     */
     public boolean isExternalStorageWritable() {
     	String state = Environment.getExternalStorageState();
     	if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -209,7 +222,10 @@ public class MainActivity extends SherlockFragmentActivity {
     	return false;
     }
     
-    /* Checks if external storage is readable */
+    /**
+     *  Checks if external storage is readable 
+     *  @return True if readable, else false
+     */
     public boolean isExternalStorageReadable() {
     	String state = Environment.getExternalStorageState();
     	if (Environment.MEDIA_MOUNTED.equals(state) || 

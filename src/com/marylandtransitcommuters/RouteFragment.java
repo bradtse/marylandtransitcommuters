@@ -16,11 +16,12 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * The fragment showing the list of available routes
+ * The fragment showing the list of all available routes
  */
 public class RouteFragment extends SherlockFragment {
 	private Context context;
 	private View rootView;
+	private ListView mRouteList;
 	
 	public RouteFragment() {};
 	
@@ -41,17 +42,18 @@ public class RouteFragment extends SherlockFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		ListView mRouteList = (ListView) rootView.findViewById(R.id.routes_list);
+		mRouteList = (ListView) rootView.findViewById(R.id.routes_list);
 		
 		Log.d(MainActivity.BRAD, "Initialize route list");
 		
-		// Specify the columns we want to query for
+		// The columns we want to query for
 		String[] mProjection = {
 				TransitContract.Routes._ID,
-				TransitContract.Routes.COLUMN_NAME_SHORT_NAME,
-				TransitContract.Routes.COLUMN_NAME_LONG_NAME
+				TransitContract.Routes.KEY_SHORT_NAME,
+				TransitContract.Routes.KEY_LONG_NAME
 		};
 		
+		// Query the routes table for the columns we want
 	    Cursor mCursor = context.getContentResolver().query(
 	    		TransitContract.Routes.CONTENT_URI,
 	    		mProjection,
@@ -62,16 +64,17 @@ public class RouteFragment extends SherlockFragment {
 	    
 	    Log.d(MainActivity.BRAD, "mCursor.getCount() = " + mCursor.getCount());
 	    
-	    // Specify the columns we want to display in the result
+	    // Specify the columns we want to display in the ListView
 	    String[] from = { 
-	    		TransitContract.Routes.COLUMN_NAME_SHORT_NAME,
-	    		TransitContract.Routes.COLUMN_NAME_LONG_NAME
+	    		TransitContract.Routes.KEY_SHORT_NAME,
+	    		TransitContract.Routes.KEY_LONG_NAME
 	    };
 	
 	    // Specify the corresponding layout elements where we want the columns to go
 	    int[] to = {R.id.short_name, R.id.long_name};
 	    
 	    Log.d(MainActivity.BRAD, "Attempting to create SimpleCursorAdapter");
+	    
 	    SimpleCursorAdapter mCursorAdapter = new SimpleCursorAdapter(
 	    		context, 
 	    		R.layout.routes_list_row,
@@ -89,7 +92,9 @@ public class RouteFragment extends SherlockFragment {
 	    mRouteList.setOnItemClickListener(new RouteItemClickListener());
 	}
 	
-    /* The click listener for ListView of routes */
+    /** 
+     * The click listener for the ListView of routes 
+     */
     private class RouteItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -98,7 +103,13 @@ public class RouteFragment extends SherlockFragment {
 		}
     }
     
-    /* Helper function to replace the current fragment */
+    /*
+     * HELPER FUNCTIONS
+     */
+    
+    /** 
+     * Helper function to replace the current fragment with the time fragment
+     */
     private void selectRoute(long id) {
 		Log.d(MainActivity.BRAD, "Item selected: " + String.valueOf(id));
 		
@@ -107,8 +118,10 @@ public class RouteFragment extends SherlockFragment {
 		
 		Fragment fragment = new TimeFragment();
 		fragment.setArguments(args);
+		
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
+		
 		fragmentTrans.replace(R.id.content_frame, fragment);
 		fragmentTrans.addToBackStack(null);
 		fragmentTrans.commit();

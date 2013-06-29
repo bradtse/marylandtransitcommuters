@@ -18,6 +18,7 @@ public final class TransitContract {
 	public static final String AUTHORITY = "com.marylandtransitcommuters.TransitProvider";
 	public static final String SCHEME = "content://";
 	public static final String SLASH = "/";
+	public static final String DATABASE_NAME = "transit.db"; 
 	
 	/* An array list of all the table names */
 	public static final String[] TABLE_ARRAY = {
@@ -29,6 +30,18 @@ public final class TransitContract {
 		Stops.TABLE_NAME,
 //		StopTimes.TABLE_NAME,
 		Trips.TABLE_NAME
+	};
+	
+	/* An array list of all the SQL create table statements */
+	public static final String[] SQL_CREATE_TABLE_ARRAY = {
+		Agency.CREATE_TABLE,
+//		CalendarDates.CREATE_TABLE,
+//		Calendar.CREATE_TABLE,
+		Routes.CREATE_TABLE,
+//		Shapes.CREATE_TABLE,
+		Stops.CREATE_TABLE,
+//		StopTimes.CREATE_TABLE,
+		Trips.CREATE_TABLE
 	};
 	
 	/* Do not allow this class to be instantiated */
@@ -55,43 +68,43 @@ public final class TransitContract {
 	     * Column name for the agency ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_AGENCY_ID = "AgencyId";
+		public static final String KEY_AGENCY_ID = "AgencyId";
 		
 		/**
 	     * Column name for the agency name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_NAME = "Name";
+		public static final String KEY_NAME = "Name";
 		
 		/**
 	     * Column name for the agency URL
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_URL = "Url";
+		public static final String KEY_URL = "Url";
 		
 		/**
 	     * Column name for the agency time zone
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_TIMEZONE = "Timezone";
+		public static final String KEY_TIMEZONE = "Timezone";
 		
 		/**
 	     * Column name for the agency language
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_LANG = "Language";
+		public static final String KEY_LANG = "Language";
 		
 		/**
 	     * Column name for the agency phone number
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_PHONE = "PhoneNumber";
+		public static final String KEY_PHONE = "PhoneNumber";
 		
 		/**
 	     * Column name for the agency fare URL
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_FARE_URL = "FareUrl";
+		public static final String KEY_FARE_URL = "FareUrl";
 		
 		/*
          * URI definitions
@@ -110,7 +123,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_AGENCY_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_AGENCY_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -133,13 +146,13 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_AGENCY_ID + " TEXT,"
-        										  + COLUMN_NAME_NAME + " TEXT,"
-        										  + COLUMN_NAME_URL + " TEXT,"
-        										  + COLUMN_NAME_TIMEZONE + " TEXT,"
-        										  + COLUMN_NAME_LANG + " TEXT," 
-        										  + COLUMN_NAME_PHONE + " TEXT,"
-        										  + COLUMN_NAME_FARE_URL + " TEXT"
+        										  + KEY_AGENCY_ID + " TEXT,"
+        										  + KEY_NAME + " TEXT,"
+        										  + KEY_URL + " TEXT,"
+        										  + KEY_TIMEZONE + " TEXT,"
+        										  + KEY_LANG + " TEXT," 
+        										  + KEY_PHONE + " TEXT,"
+        										  + KEY_FARE_URL + " TEXT"
         										  + ");";
         
         /**
@@ -151,13 +164,13 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_AGENCY_ID,
-			COLUMN_NAME_NAME,
-			COLUMN_NAME_URL,
-			COLUMN_NAME_TIMEZONE,
-			COLUMN_NAME_LANG,
-			COLUMN_NAME_PHONE,
-			COLUMN_NAME_FARE_URL
+			KEY_AGENCY_ID,
+			KEY_NAME,
+			KEY_URL,
+			KEY_TIMEZONE,
+			KEY_LANG,
+			KEY_PHONE,
+			KEY_FARE_URL
         };
 	}
 	
@@ -181,19 +194,19 @@ public final class TransitContract {
 	     * Column name for the service ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SERVICE_ID = "ServiceId";
+		public static final String KEY_SERVICE_ID = "ServiceId";
 		
 		/**
 	     * Column name for the date the service is down
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DATE = "Date";
+		public static final String KEY_DATE = "Date";
 		
 		/**
 	     * Column name for the service exception type
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_EXCEPTION_TYPE = "ExceptionType";
+		public static final String KEY_EXCEPTION_TYPE = "ExceptionType";
 		
 		/*
          * URI definitions
@@ -212,7 +225,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SERVICE_ID+ " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_SERVICE_ID+ " ASC";
         
 		/*
          * MIME type definitions
@@ -235,9 +248,9 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
-        										  + COLUMN_NAME_DATE + " TEXT,"
-        										  + COLUMN_NAME_EXCEPTION_TYPE + " INTEGER"
+        										  + KEY_SERVICE_ID + " TEXT,"
+        										  + KEY_DATE + " TEXT,"
+        										  + KEY_EXCEPTION_TYPE + " INTEGER"
         										  + ");";
         
         /**
@@ -249,9 +262,9 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_SERVICE_ID,
-			COLUMN_NAME_DATE,
-			COLUMN_NAME_EXCEPTION_TYPE
+			KEY_SERVICE_ID,
+			KEY_DATE,
+			KEY_EXCEPTION_TYPE
         };
 		
 	}
@@ -277,61 +290,61 @@ public final class TransitContract {
 	     * Column name for the service ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SERVICE_ID = "ServiceId";
+		public static final String KEY_SERVICE_ID = "ServiceId";
 		
 		/**
 	     * Column name for availability on Mondays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_MONDAY = "Monday";
+		public static final String KEY_MONDAY = "Monday";
 		
 		/**
 	     * Column name for availability on Tuesdays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_TUESDAY = "Tuesday";
+		public static final String KEY_TUESDAY = "Tuesday";
 		
 		/**
 	     * Column name for availability on Wednesdays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_WEDNESDAY = "Wednesday";
+		public static final String KEY_WEDNESDAY = "Wednesday";
 		
 		/**
 	     * Column name for availability on Thursdays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_THURSDAY = "Thursday";
+		public static final String KEY_THURSDAY = "Thursday";
 		
 		/**
 	     * Column name for availability on Fridays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_FRIDAY = "Friday";
+		public static final String KEY_FRIDAY = "Friday";
 		
 		/**
 	     * Column name for availability on Saturdays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_SATURDAY = "Saturday";
+		public static final String KEY_SATURDAY = "Saturday";
 		
 		/**
 	     * Column name for availability on Sundays
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_SUNDAY = "Sunday";
+		public static final String KEY_SUNDAY = "Sunday";
 		
 		/**
 	     * Column name for the service start date
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_START_DATE = "StartDate";
+		public static final String KEY_START_DATE = "StartDate";
 		
 		/**
 	     * Column name for the service end date
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_END_DATE = "EndDate";
+		public static final String KEY_END_DATE = "EndDate";
 		
 		/*
          * URI definitions
@@ -350,7 +363,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SERVICE_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_SERVICE_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -373,15 +386,15 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
-        										  + COLUMN_NAME_MONDAY + " INTEGER,"
-        										  + COLUMN_NAME_TUESDAY + " INTEGER,"
-        										  + COLUMN_NAME_THURSDAY + " INTEGER,"
-        										  + COLUMN_NAME_FRIDAY + " INTEGER," 
-        										  + COLUMN_NAME_SATURDAY + " INTEGER,"
-        										  + COLUMN_NAME_SUNDAY + " INTEGER,"
-        										  + COLUMN_NAME_START_DATE + " TEXT," 
-        										  + COLUMN_NAME_END_DATE + " TEXT" 
+        										  + KEY_SERVICE_ID + " TEXT,"
+        										  + KEY_MONDAY + " INTEGER,"
+        										  + KEY_TUESDAY + " INTEGER,"
+        										  + KEY_THURSDAY + " INTEGER,"
+        										  + KEY_FRIDAY + " INTEGER," 
+        										  + KEY_SATURDAY + " INTEGER,"
+        										  + KEY_SUNDAY + " INTEGER,"
+        										  + KEY_START_DATE + " TEXT," 
+        										  + KEY_END_DATE + " TEXT" 
         										  + ");";
         
         /**
@@ -393,15 +406,15 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_SERVICE_ID,
-			COLUMN_NAME_MONDAY,
-			COLUMN_NAME_TUESDAY,
-			COLUMN_NAME_THURSDAY,
-			COLUMN_NAME_FRIDAY,
-			COLUMN_NAME_SATURDAY,
-			COLUMN_NAME_SUNDAY,
-			COLUMN_NAME_START_DATE,
-			COLUMN_NAME_END_DATE
+			KEY_SERVICE_ID,
+			KEY_MONDAY,
+			KEY_TUESDAY,
+			KEY_THURSDAY,
+			KEY_FRIDAY,
+			KEY_SATURDAY,
+			KEY_SUNDAY,
+			KEY_START_DATE,
+			KEY_END_DATE
         };
 	}
 	
@@ -426,55 +439,55 @@ public final class TransitContract {
 	     * Column name for the route ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_ROUTE_ID = "RouteId";
+		public static final String KEY_ROUTE_ID = "RouteId";
 		
 		/**
 	     * Column name for the agency ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_AGENCY_ID = "AgencyId";
+		public static final String KEY_AGENCY_ID = "AgencyId";
 		
 		/**
 	     * Column name for the route short name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SHORT_NAME = "ShortName";
+		public static final String KEY_SHORT_NAME = "ShortName";
 		
 		/**
 	     * Column name for the route long name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_LONG_NAME = "LongName";
+		public static final String KEY_LONG_NAME = "LongName";
 		
 		/**
 	     * Column name for description of the route
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DESCRIPTION = "Description";
+		public static final String KEY_DESCRIPTION = "Description";
 		
 		/**
 	     * Column name for the route type
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_ROUTE_TYPE = "RouteType";
+		public static final String KEY_ROUTE_TYPE = "RouteType";
 		
 		/**
 	     * Column name for the route URL
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_URL = "Url";
+		public static final String KEY_URL = "Url";
 		
 		/**
 	     * Column name for the route color
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_COLOR = "Color";
+		public static final String KEY_COLOR = "Color";
 		
 		/**
 	     * Column name for the color to use for the text 
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_TEXT_COLOR = "TextColor";
+		public static final String KEY_TEXT_COLOR = "TextColor";
 		
 		/*
          * URI definitions
@@ -493,7 +506,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SHORT_NAME + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_SHORT_NAME + " ASC";
         
         /*
          * MIME type definitions
@@ -518,15 +531,15 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_ROUTE_ID + " TEXT,"
-        										  + COLUMN_NAME_AGENCY_ID + " TEXT,"
-        										  + COLUMN_NAME_SHORT_NAME + " TEXT,"
-        										  + COLUMN_NAME_LONG_NAME + " TEXT,"
-        										  + COLUMN_NAME_DESCRIPTION + " TEXT,"
-        										  + COLUMN_NAME_ROUTE_TYPE + " INTEGER," 
-        										  + COLUMN_NAME_URL + " TEXT,"
-        										  + COLUMN_NAME_COLOR + " TEXT,"
-        										  + COLUMN_NAME_TEXT_COLOR + " TEXT" 
+        										  + KEY_ROUTE_ID + " TEXT,"
+        										  + KEY_AGENCY_ID + " TEXT,"
+        										  + KEY_SHORT_NAME + " TEXT,"
+        										  + KEY_LONG_NAME + " TEXT,"
+        										  + KEY_DESCRIPTION + " TEXT,"
+        										  + KEY_ROUTE_TYPE + " INTEGER," 
+        										  + KEY_URL + " TEXT,"
+        										  + KEY_COLOR + " TEXT,"
+        										  + KEY_TEXT_COLOR + " TEXT" 
         										  + ");";
         
         /**
@@ -538,15 +551,15 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_ROUTE_ID,
-			COLUMN_NAME_AGENCY_ID,
-			COLUMN_NAME_SHORT_NAME,
-			COLUMN_NAME_LONG_NAME,
-			COLUMN_NAME_DESCRIPTION,
-			COLUMN_NAME_ROUTE_TYPE,
-			COLUMN_NAME_URL,
-			COLUMN_NAME_COLOR,
-			COLUMN_NAME_TEXT_COLOR
+			KEY_ROUTE_ID,
+			KEY_AGENCY_ID,
+			KEY_SHORT_NAME,
+			KEY_LONG_NAME,
+			KEY_DESCRIPTION,
+			KEY_ROUTE_TYPE,
+			KEY_URL,
+			KEY_COLOR,
+			KEY_TEXT_COLOR
         };
 	}
 	
@@ -571,31 +584,31 @@ public final class TransitContract {
 	     * Column name for the shape ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SHAPE_ID = "ShapeId";
+		public static final String KEY_SHAPE_ID = "ShapeId";
 		
 		/**
 	     * Column name for the shape point's latitude
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_LATITUDE = "Latitude";
+		public static final String KEY_LATITUDE = "Latitude";
 		
 		/**
 	     * Column name for the shape point's longitude
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_LONGITUDE = "Longitude";
+		public static final String KEY_LONGITUDE = "Longitude";
 		
 		/**
 	     * Column name for the sequence order along the shape
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_ORDER = "SequenceOrder";
+		public static final String KEY_ORDER = "SequenceOrder";
 		
 		/**
 	     * Column name for the distance traveled from the first shape point
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_DISTANCE = "DistanceTraveled";
+		public static final String KEY_DISTANCE = "DistanceTraveled";
 		
 		/*
          * URI definitions
@@ -614,7 +627,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SHAPE_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_SHAPE_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -637,11 +650,11 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_SHAPE_ID + " TEXT,"
-        										  + COLUMN_NAME_LATITUDE + " REAL,"
-        										  + COLUMN_NAME_LONGITUDE + " REAL,"
-        										  + COLUMN_NAME_ORDER + " INTEGER,"
-        										  + COLUMN_NAME_DISTANCE + " REAL" 
+        										  + KEY_SHAPE_ID + " TEXT,"
+        										  + KEY_LATITUDE + " REAL,"
+        										  + KEY_LONGITUDE + " REAL,"
+        										  + KEY_ORDER + " INTEGER,"
+        										  + KEY_DISTANCE + " REAL" 
         										  + ");";
         
         /**
@@ -653,11 +666,11 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_SHAPE_ID,
-			COLUMN_NAME_LATITUDE,
-			COLUMN_NAME_LONGITUDE,
-			COLUMN_NAME_ORDER,
-			COLUMN_NAME_DISTANCE
+			KEY_SHAPE_ID,
+			KEY_LATITUDE,
+			KEY_LONGITUDE,
+			KEY_ORDER,
+			KEY_DISTANCE
         };		
 	}
 	
@@ -682,67 +695,67 @@ public final class TransitContract {
 	     * Column name for the stop ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_STOP_ID = "StopId";
+		public static final String KEY_STOP_ID = "StopId";
 		
 		/**
 	     * Column name for the stop code
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_CODE = "Code";
+		public static final String KEY_CODE = "Code";
 		
 		/**
 	     * Column name for the stop name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_NAME = "Name";
+		public static final String KEY_NAME = "Name";
 		
 		/**
 	     * Column name for the stop description
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DESC = "Description";
+		public static final String KEY_DESC = "Description";
 		
 		/**
 	     * Column name for the stop's latitude
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_LATITUDE = "Latitude";
+		public static final String KEY_LATITUDE = "Latitude";
 		
 		/**
 	     * Column name for the stop's longitude
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_LONGITUDE = "Longitude";
+		public static final String KEY_LONGITUDE = "Longitude";
 		
 		/**
 	     * Column name for the stop zone ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_ZONE_ID = "ZoneId";
+		public static final String KEY_ZONE_ID = "ZoneId";
 		
 		/**
 	     * Column name for the stop URL
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_URL = "Url";
+		public static final String KEY_URL = "Url";
 		
 		/**
 	     * Column name for the stop type
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_STOP_TYPE = "StopType";
+		public static final String KEY_STOP_TYPE = "StopType";
 		
 		/**
 	     * Column name for the stop parent station
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_PARENT = "ParentStation";
+		public static final String KEY_PARENT = "ParentStation";
 		
 		/**
 	     * Column name for whether or not the stop supports wheelchair boarding
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_WHEELCHAIR = "Wheelchair";
+		public static final String KEY_WHEELCHAIR = "Wheelchair";
 		
 		/*
          * URI definitions
@@ -761,7 +774,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_STOP_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_STOP_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -784,17 +797,17 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_STOP_ID + " TEXT,"
-        										  + COLUMN_NAME_CODE + " TEXT,"
-        										  + COLUMN_NAME_NAME + " TEXT,"
-        										  + COLUMN_NAME_DESC + " TEXT,"
-        										  + COLUMN_NAME_LATITUDE + " REAL,"
-        										  + COLUMN_NAME_LONGITUDE + " REAL," 
-        										  + COLUMN_NAME_ZONE_ID + " TEXT,"
-        										  + COLUMN_NAME_URL + " TEXT,"
-        										  + COLUMN_NAME_STOP_TYPE + " INTEGER," 
-        										  + COLUMN_NAME_PARENT + " INTEGER," 
-        										  + COLUMN_NAME_WHEELCHAIR + " INTEGER" 
+        										  + KEY_STOP_ID + " TEXT,"
+        										  + KEY_CODE + " TEXT,"
+        										  + KEY_NAME + " TEXT,"
+        										  + KEY_DESC + " TEXT,"
+        										  + KEY_LATITUDE + " REAL,"
+        										  + KEY_LONGITUDE + " REAL," 
+        										  + KEY_ZONE_ID + " TEXT,"
+        										  + KEY_URL + " TEXT,"
+        										  + KEY_STOP_TYPE + " INTEGER," 
+        										  + KEY_PARENT + " INTEGER," 
+        										  + KEY_WHEELCHAIR + " INTEGER" 
         										  + ");";
         
         /**
@@ -806,17 +819,17 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-        	COLUMN_NAME_STOP_ID,
-			COLUMN_NAME_CODE,
-			COLUMN_NAME_NAME,
-			COLUMN_NAME_DESC,
-			COLUMN_NAME_LATITUDE,
-			COLUMN_NAME_LONGITUDE,
-			COLUMN_NAME_ZONE_ID,
-			COLUMN_NAME_URL,
-			COLUMN_NAME_STOP_TYPE,
-			COLUMN_NAME_PARENT,
-			COLUMN_NAME_WHEELCHAIR,
+        	KEY_STOP_ID,
+			KEY_CODE,
+			KEY_NAME,
+			KEY_DESC,
+			KEY_LATITUDE,
+			KEY_LONGITUDE,
+			KEY_ZONE_ID,
+			KEY_URL,
+			KEY_STOP_TYPE,
+			KEY_PARENT,
+			KEY_WHEELCHAIR,
         };
 	}
 	
@@ -841,55 +854,55 @@ public final class TransitContract {
 	     * Column name for trip ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_TRIP_ID = "TripId";
+		public static final String KEY_TRIP_ID = "TripId";
 		
 		/**
 	     * Column name for the arrival time
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_ARRIVAL_TIME = "ArrivalTime";
+		public static final String KEY_ARRIVAL_TIME = "ArrivalTime";
 		
 		/**
 	     * Column name for the departure time
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DEPARTURE_TIME = "DepartureTime";
+		public static final String KEY_DEPARTURE_TIME = "DepartureTime";
 		
 		/**
 	     * Column name for the stop ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_STOP_ID = "StopId";
+		public static final String KEY_STOP_ID = "StopId";
 		
 		/**
 	     * Column name for the stop sequence number
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_STOP_SEQ = "StopOrder";
+		public static final String KEY_STOP_SEQ = "StopOrder";
 		
 		/**
 	     * Column name for the text that appears on the sign for the stop
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_HEADSIGN = "HeadsignText";
+		public static final String KEY_HEADSIGN = "HeadsignText";
 		
 		/**
 	     * Column name for the pickup type
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_PICKUP_TYPE = "PickupType";
+		public static final String KEY_PICKUP_TYPE = "PickupType";
 		
 		/**
 	     * Column name for the drop-off type
 	     * <P>Type: INTEGER</P>
 	     */
-		public static final String COLUMN_NAME_DROPOFF_TYPE= "DropoffType";
+		public static final String KEY_DROPOFF_TYPE= "DropoffType";
 		
 		/**
 	     * Column name for the distance traveled from the first shape point
 	     * <P>Type: REAL</P>
 	     */
-		public static final String COLUMN_NAME_DISTANCE = "DistanceTraveled";
+		public static final String KEY_DISTANCE = "DistanceTraveled";
 		
 		/*
          * URI definitions
@@ -908,7 +921,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_TRIP_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_TRIP_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -931,15 +944,15 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_TRIP_ID + " TEXT,"
-        										  + COLUMN_NAME_ARRIVAL_TIME + " TEXT,"
-        										  + COLUMN_NAME_DEPARTURE_TIME + " TEXT,"
-        										  + COLUMN_NAME_STOP_ID + " TEXT,"
-        										  + COLUMN_NAME_STOP_SEQ + " INTEGER," 
-        										  + COLUMN_NAME_HEADSIGN + " TEXT,"
-        										  + COLUMN_NAME_PICKUP_TYPE + " INTEGER,"
-        										  + COLUMN_NAME_DROPOFF_TYPE + " INTEGER," 
-        										  + COLUMN_NAME_DISTANCE + " REAL" 
+        										  + KEY_TRIP_ID + " TEXT,"
+        										  + KEY_ARRIVAL_TIME + " TEXT,"
+        										  + KEY_DEPARTURE_TIME + " TEXT,"
+        										  + KEY_STOP_ID + " TEXT,"
+        										  + KEY_STOP_SEQ + " INTEGER," 
+        										  + KEY_HEADSIGN + " TEXT,"
+        										  + KEY_PICKUP_TYPE + " INTEGER,"
+        										  + KEY_DROPOFF_TYPE + " INTEGER," 
+        										  + KEY_DISTANCE + " REAL" 
         										  + ");";
         
         /**
@@ -951,15 +964,15 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-        	COLUMN_NAME_TRIP_ID,
-        	COLUMN_NAME_ARRIVAL_TIME,
-        	COLUMN_NAME_DEPARTURE_TIME,
-        	COLUMN_NAME_STOP_ID,
-        	COLUMN_NAME_STOP_SEQ,
-        	COLUMN_NAME_HEADSIGN,
-        	COLUMN_NAME_PICKUP_TYPE,
-        	COLUMN_NAME_DROPOFF_TYPE,
-        	COLUMN_NAME_DISTANCE
+        	KEY_TRIP_ID,
+        	KEY_ARRIVAL_TIME,
+        	KEY_DEPARTURE_TIME,
+        	KEY_STOP_ID,
+        	KEY_STOP_SEQ,
+        	KEY_HEADSIGN,
+        	KEY_PICKUP_TYPE,
+        	KEY_DROPOFF_TYPE,
+        	KEY_DISTANCE
         };
 	}
 	
@@ -984,56 +997,56 @@ public final class TransitContract {
 	     * Column name for the route ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_ROUTE_ID = "RouteId";
+		public static final String KEY_ROUTE_ID = "RouteId";
 		
 		/**
 	     * Column name for the service ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SERVICE_ID = "ServiceId";
+		public static final String KEY_SERVICE_ID = "ServiceId";
 		
 		/**
 	     * Column name for the trip ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_TRIP_ID = "TripId";
+		public static final String KEY_TRIP_ID = "TripId";
 		
 		/**
 	     * Column name for the trip headsign
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_HEADSIGN = "HeadsignText";
+		public static final String KEY_HEADSIGN = "HeadsignText";
 		
 		/**
 	     * Column name for the trip short name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SHORT_NAME = "ShortName";
+		public static final String KEY_SHORT_NAME = "ShortName";
 		
 		/**
 	     * Column name for the direction ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DIRECTION_ID = "DirectionId";
+		public static final String KEY_DIRECTION_ID = "DirectionId";
 		
 		/**
 	     * Column name for the block ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_BLOCK_ID = "BlockId";
+		public static final String KEY_BLOCK_ID = "BlockId";
 		
 		
 		/**
 	     * Column name for the shape ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_SHAPE_ID = "ShapeId";
+		public static final String KEY_SHAPE_ID = "ShapeId";
 		
 		/**
 	     * Column name for wheelchair accessibility
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_WHEELCHAIR = "Wheelchair";
+		public static final String KEY_WHEELCHAIR = "Wheelchair";
 		
 		/*
          * URI definitions
@@ -1052,7 +1065,7 @@ public final class TransitContract {
         /**
          * The default sort order for this table
          */
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_ROUTE_ID + " ASC";
+        public static final String DEFAULT_SORT_ORDER = KEY_ROUTE_ID + " ASC";
         
 		/*
          * MIME type definitions
@@ -1075,15 +1088,15 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + COLUMN_NAME_ROUTE_ID + " TEXT,"
-        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
-        										  + COLUMN_NAME_TRIP_ID + " TEXT,"
-        										  + COLUMN_NAME_HEADSIGN + " TEXT,"
-        										  + COLUMN_NAME_SHORT_NAME + " TEXT," 
-        										  + COLUMN_NAME_DIRECTION_ID + " TEXT,"
-        										  + COLUMN_NAME_BLOCK_ID + " TEXT,"
-        										  + COLUMN_NAME_SHAPE_ID + " TEXT," 
-        										  + COLUMN_NAME_WHEELCHAIR + " TEXT" 
+        										  + KEY_ROUTE_ID + " TEXT,"
+        										  + KEY_SERVICE_ID + " TEXT,"
+        										  + KEY_TRIP_ID + " TEXT,"
+        										  + KEY_HEADSIGN + " TEXT,"
+        										  + KEY_SHORT_NAME + " TEXT," 
+        										  + KEY_DIRECTION_ID + " TEXT,"
+        										  + KEY_BLOCK_ID + " TEXT,"
+        										  + KEY_SHAPE_ID + " TEXT," 
+        										  + KEY_WHEELCHAIR + " TEXT" 
         										  + ");";
         
         /**
@@ -1095,15 +1108,15 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] COLUMN_ARRAY = {
-			COLUMN_NAME_ROUTE_ID,
-			COLUMN_NAME_SERVICE_ID,
-			COLUMN_NAME_TRIP_ID,
-			COLUMN_NAME_HEADSIGN,
-			COLUMN_NAME_SHORT_NAME,
-			COLUMN_NAME_DIRECTION_ID,
-			COLUMN_NAME_BLOCK_ID,
-			COLUMN_NAME_SHAPE_ID,
-			COLUMN_NAME_WHEELCHAIR
+			KEY_ROUTE_ID,
+			KEY_SERVICE_ID,
+			KEY_TRIP_ID,
+			KEY_HEADSIGN,
+			KEY_SHORT_NAME,
+			KEY_DIRECTION_ID,
+			KEY_BLOCK_ID,
+			KEY_SHAPE_ID,
+			KEY_WHEELCHAIR
         };
 	}
 }
