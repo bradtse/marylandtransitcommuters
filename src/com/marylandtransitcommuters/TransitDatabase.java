@@ -114,7 +114,6 @@ public class TransitDatabase {
 		public void onCreate(SQLiteDatabase db) {
 			Log.d(MainActivity.BRAD, "TransitSqlHelper onCreate()");
 			mDatabase = db;
-			mDatabase.execSQL(TransitContract.Routes.CREATE_TABLE);
 			loadDatabase();
 		}
 
@@ -130,6 +129,16 @@ public class TransitDatabase {
 		
 		/* Load database */
 		private void loadDatabase() {
+			/* The tables being created */
+			String[] tables = {
+					TransitContract.Routes.TABLE_NAME,
+					TransitContract.Stops.TABLE_NAME
+			};
+			
+			/* Create all of the tables */
+			for(String s : tables) {
+				mDatabase.execSQL(s);
+			}
 //			new Thread(new Runnable() {
 //				public void run() {
 //					try {
@@ -176,33 +185,23 @@ public class TransitDatabase {
 		/* Add a row of routes data to database */
 		private long addRoutesRow(String[] line) {
 			ContentValues values = new ContentValues();
-			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_ID, line[0]);
-			values.put(TransitContract.Routes.COLUMN_NAME_AGENCY_ID, line[1]);
-			values.put(TransitContract.Routes.COLUMN_NAME_SHORT_NAME, line[2]);
-			values.put(TransitContract.Routes.COLUMN_NAME_LONG_NAME, line[3]);
-			values.put(TransitContract.Routes.COLUMN_NAME_DESCRIPTION, line[4]);
-			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_TYPE, line[5]);
-			values.put(TransitContract.Routes.COLUMN_NAME_URL, line[6]);
-			values.put(TransitContract.Routes.COLUMN_NAME_COLOR, line[7]);
-			values.put(TransitContract.Routes.COLUMN_NAME_TEXT_COLOR, line[8]);
-			
+			int i = 0;
+			for(String s : TransitContract.Routes.COLUMN_ARRAY) {
+				values.put(s, line[i]);
+				i++;
+			}
 			return mDatabase.insert(TransitContract.Routes.TABLE_NAME, null, values);
 		}
 		
 		/* Add a row of trips data to database */
 		private long addStopsRow(String[] line) {
 			ContentValues values = new ContentValues();
-			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_ID, line[0]);
-			values.put(TransitContract.Routes.COLUMN_NAME_AGENCY_ID, line[1]);
-			values.put(TransitContract.Routes.COLUMN_NAME_SHORT_NAME, line[2]);
-			values.put(TransitContract.Routes.COLUMN_NAME_LONG_NAME, line[3]);
-			values.put(TransitContract.Routes.COLUMN_NAME_DESCRIPTION, line[4]);
-			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_TYPE, line[5]);
-			values.put(TransitContract.Routes.COLUMN_NAME_URL, line[6]);
-			values.put(TransitContract.Routes.COLUMN_NAME_COLOR, line[7]);
-			values.put(TransitContract.Routes.COLUMN_NAME_TEXT_COLOR, line[8]);
-			
-			return mDatabase.insert(TransitContract.Routes.TABLE_NAME, null, values);
+			int i = 0;
+			for(String s : TransitContract.Stops.COLUMN_ARRAY) {
+				values.put(s, line[i]);
+				i++;
+			}
+			return mDatabase.insert(TransitContract.Stops.TABLE_NAME, null, values);
 		}
 	}
 	

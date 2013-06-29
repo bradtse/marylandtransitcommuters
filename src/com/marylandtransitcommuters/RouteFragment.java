@@ -63,16 +63,13 @@ public class RouteFragment extends SherlockFragment {
 	    Log.d(MainActivity.BRAD, "mCursor.getCount() = " + mCursor.getCount());
 	    
 	    // Specify the columns we want to display in the result
-	    String[] from = new String[] { 
+	    String[] from = { 
 	    		TransitContract.Routes.COLUMN_NAME_SHORT_NAME,
 	    		TransitContract.Routes.COLUMN_NAME_LONG_NAME
 	    };
 	
 	    // Specify the corresponding layout elements where we want the columns to go
-	    int[] to = new int[] { 
-	    		R.id.short_name,
-	    		R.id.long_name
-	    };
+	    int[] to = {R.id.short_name, R.id.long_name};
 	    
 	    Log.d(MainActivity.BRAD, "Attempting to create SimpleCursorAdapter");
 	    SimpleCursorAdapter mCursorAdapter = new SimpleCursorAdapter(

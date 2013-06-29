@@ -49,10 +49,8 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		String[] mProjection = {
-				TransitContract.Routes.COLUMN_NAME_ROUTE_ID
-		};
-		
+		String[] mProjection = {TransitContract.Routes.COLUMN_NAME_ROUTE_ID};
+
 		String id = getArguments().getString(TransitContract.Routes._ID);
 		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
 		
@@ -68,9 +66,7 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 			Log.d(MainActivity.BRAD, "Row not found");
 		} else {
 			mCursor.moveToFirst();
-			
-			int index = mCursor.getColumnIndex(TransitContract.Routes.COLUMN_NAME_ROUTE_ID);
-			
+			int index = mCursor.getColumnIndex(TransitContract.Routes.COLUMN_NAME_ROUTE_ID);	
 			routeId = mCursor.getString(index);
 		}
 	}

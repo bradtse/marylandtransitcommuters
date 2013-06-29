@@ -19,6 +19,18 @@ public final class TransitContract {
 	public static final String SCHEME = "content://";
 	public static final String SLASH = "/";
 	
+	/* An array list of all the table names */
+	public static final String[] TABLE_ARRAY = {
+//		Agency.TABLE_NAME,
+//		CalendarDates.TABLE_NAME,
+//		Calendar.TABLE_NAME,
+		Routes.TABLE_NAME,
+//		Shapes.TABLE_NAME,
+		Stops.TABLE_NAME,
+//		StopTimes.TABLE_NAME,
+		Trips.TABLE_NAME
+	};
+	
 	/* Do not allow this class to be instantiated */
 	private TransitContract() {}
 	
@@ -43,7 +55,7 @@ public final class TransitContract {
 	     * Column name for the agency ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_ID = "AgencyId";
+		public static final String COLUMN_NAME_AGENCY_ID = "AgencyId";
 		
 		/**
 	     * Column name for the agency name
@@ -81,10 +93,10 @@ public final class TransitContract {
 	     */
 		public static final String COLUMN_NAME_FARE_URL = "FareUrl";
 		
-        /*
+		/*
          * URI definitions
          */
-		
+
 		/**
 		 * The content style URI
 		 */
@@ -95,6 +107,58 @@ public final class TransitContract {
 		 */
 		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
 		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_AGENCY_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.agency";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.agency";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_AGENCY_ID + " TEXT,"
+        										  + COLUMN_NAME_NAME + " TEXT,"
+        										  + COLUMN_NAME_URL + " TEXT,"
+        										  + COLUMN_NAME_TIMEZONE + " TEXT,"
+        										  + COLUMN_NAME_LANG + " TEXT," 
+        										  + COLUMN_NAME_PHONE + " TEXT,"
+        										  + COLUMN_NAME_FARE_URL + " TEXT"
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_AGENCY_ID,
+			COLUMN_NAME_NAME,
+			COLUMN_NAME_URL,
+			COLUMN_NAME_TIMEZONE,
+			COLUMN_NAME_LANG,
+			COLUMN_NAME_PHONE,
+			COLUMN_NAME_FARE_URL
+        };
 	}
 	
 	/**
@@ -134,6 +198,61 @@ public final class TransitContract {
 		/*
          * URI definitions
          */
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
+		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SERVICE_ID+ " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.calendardates";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.calendardates";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
+        										  + COLUMN_NAME_DATE + " TEXT,"
+        										  + COLUMN_NAME_EXCEPTION_TYPE + " INTEGER"
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_SERVICE_ID,
+			COLUMN_NAME_DATE,
+			COLUMN_NAME_EXCEPTION_TYPE
+        };
 		
 	}
 
@@ -217,7 +336,73 @@ public final class TransitContract {
 		/*
          * URI definitions
          */
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
 		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SERVICE_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.calendar";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.calendar";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
+        										  + COLUMN_NAME_MONDAY + " INTEGER,"
+        										  + COLUMN_NAME_TUESDAY + " INTEGER,"
+        										  + COLUMN_NAME_THURSDAY + " INTEGER,"
+        										  + COLUMN_NAME_FRIDAY + " INTEGER," 
+        										  + COLUMN_NAME_SATURDAY + " INTEGER,"
+        										  + COLUMN_NAME_SUNDAY + " INTEGER,"
+        										  + COLUMN_NAME_START_DATE + " TEXT," 
+        										  + COLUMN_NAME_END_DATE + " TEXT" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_SERVICE_ID,
+			COLUMN_NAME_MONDAY,
+			COLUMN_NAME_TUESDAY,
+			COLUMN_NAME_THURSDAY,
+			COLUMN_NAME_FRIDAY,
+			COLUMN_NAME_SATURDAY,
+			COLUMN_NAME_SUNDAY,
+			COLUMN_NAME_START_DATE,
+			COLUMN_NAME_END_DATE
+        };
 	}
 	
 	/**
@@ -225,7 +410,7 @@ public final class TransitContract {
 	 * <P>Defines: Transit routes. A route is a group of trips that are displayed
 	 * to riders as a single service.<P>
 	 */
-	public static final class Routes implements BaseColumns {
+	public static final class Routes implements BaseColumns {		
 		private Routes() {}
 		
 		/**
@@ -348,6 +533,21 @@ public final class TransitContract {
          * SQL statement to delete the table
          */
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_ROUTE_ID,
+			COLUMN_NAME_AGENCY_ID,
+			COLUMN_NAME_SHORT_NAME,
+			COLUMN_NAME_LONG_NAME,
+			COLUMN_NAME_DESCRIPTION,
+			COLUMN_NAME_ROUTE_TYPE,
+			COLUMN_NAME_URL,
+			COLUMN_NAME_COLOR,
+			COLUMN_NAME_TEXT_COLOR
+        };
 	}
 	
 	/**
@@ -375,13 +575,13 @@ public final class TransitContract {
 		
 		/**
 	     * Column name for the shape point's latitude
-	     * <P>Type: TEXT</P>
+	     * <P>Type: REAL</P>
 	     */
 		public static final String COLUMN_NAME_LATITUDE = "Latitude";
 		
 		/**
 	     * Column name for the shape point's longitude
-	     * <P>Type: TEXT</P>
+	     * <P>Type: REAL</P>
 	     */
 		public static final String COLUMN_NAME_LONGITUDE = "Longitude";
 		
@@ -400,7 +600,65 @@ public final class TransitContract {
 		/*
          * URI definitions
          */
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
 		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_SHAPE_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.shapes";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.shapes";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_SHAPE_ID + " TEXT,"
+        										  + COLUMN_NAME_LATITUDE + " REAL,"
+        										  + COLUMN_NAME_LONGITUDE + " REAL,"
+        										  + COLUMN_NAME_ORDER + " INTEGER,"
+        										  + COLUMN_NAME_DISTANCE + " REAL" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_SHAPE_ID,
+			COLUMN_NAME_LATITUDE,
+			COLUMN_NAME_LONGITUDE,
+			COLUMN_NAME_ORDER,
+			COLUMN_NAME_DISTANCE
+        };		
 	}
 	
 	/**
@@ -442,17 +700,17 @@ public final class TransitContract {
 	     * Column name for the stop description
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DESCRIPTION = "Description";
+		public static final String COLUMN_NAME_DESC = "Description";
 		
 		/**
 	     * Column name for the stop's latitude
-	     * <P>Type: TEXT</P>
+	     * <P>Type: REAL</P>
 	     */
 		public static final String COLUMN_NAME_LATITUDE = "Latitude";
 		
 		/**
 	     * Column name for the stop's longitude
-	     * <P>Type: TEXT</P>
+	     * <P>Type: REAL</P>
 	     */
 		public static final String COLUMN_NAME_LONGITUDE = "Longitude";
 		
@@ -490,6 +748,76 @@ public final class TransitContract {
          * URI definitions
          */
 		
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
+		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_STOP_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.stops";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.stops";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_STOP_ID + " TEXT,"
+        										  + COLUMN_NAME_CODE + " TEXT,"
+        										  + COLUMN_NAME_NAME + " TEXT,"
+        										  + COLUMN_NAME_DESC + " TEXT,"
+        										  + COLUMN_NAME_LATITUDE + " REAL,"
+        										  + COLUMN_NAME_LONGITUDE + " REAL," 
+        										  + COLUMN_NAME_ZONE_ID + " TEXT,"
+        										  + COLUMN_NAME_URL + " TEXT,"
+        										  + COLUMN_NAME_STOP_TYPE + " INTEGER," 
+        										  + COLUMN_NAME_PARENT + " INTEGER," 
+        										  + COLUMN_NAME_WHEELCHAIR + " INTEGER" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+        	COLUMN_NAME_STOP_ID,
+			COLUMN_NAME_CODE,
+			COLUMN_NAME_NAME,
+			COLUMN_NAME_DESC,
+			COLUMN_NAME_LATITUDE,
+			COLUMN_NAME_LONGITUDE,
+			COLUMN_NAME_ZONE_ID,
+			COLUMN_NAME_URL,
+			COLUMN_NAME_STOP_TYPE,
+			COLUMN_NAME_PARENT,
+			COLUMN_NAME_WHEELCHAIR,
+        };
 	}
 	
 	/**
@@ -566,7 +894,73 @@ public final class TransitContract {
 		/*
          * URI definitions
          */
-	
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
+		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_TRIP_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.stoptimes";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.stoptimes";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_TRIP_ID + " TEXT,"
+        										  + COLUMN_NAME_ARRIVAL_TIME + " TEXT,"
+        										  + COLUMN_NAME_DEPARTURE_TIME + " TEXT,"
+        										  + COLUMN_NAME_STOP_ID + " TEXT,"
+        										  + COLUMN_NAME_STOP_SEQ + " INTEGER," 
+        										  + COLUMN_NAME_HEADSIGN + " TEXT,"
+        										  + COLUMN_NAME_PICKUP_TYPE + " INTEGER,"
+        										  + COLUMN_NAME_DROPOFF_TYPE + " INTEGER," 
+        										  + COLUMN_NAME_DISTANCE + " REAL" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+        	COLUMN_NAME_TRIP_ID,
+        	COLUMN_NAME_ARRIVAL_TIME,
+        	COLUMN_NAME_DEPARTURE_TIME,
+        	COLUMN_NAME_STOP_ID,
+        	COLUMN_NAME_STOP_SEQ,
+        	COLUMN_NAME_HEADSIGN,
+        	COLUMN_NAME_PICKUP_TYPE,
+        	COLUMN_NAME_DROPOFF_TYPE,
+        	COLUMN_NAME_DISTANCE
+        };
 	}
 	
 	/**
@@ -633,7 +1027,7 @@ public final class TransitContract {
 	     * Column name for the shape ID
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String COLUMN_NAME_DISTANCE = "ShapeId";
+		public static final String COLUMN_NAME_SHAPE_ID = "ShapeId";
 		
 		/**
 	     * Column name for wheelchair accessibility
@@ -644,6 +1038,72 @@ public final class TransitContract {
 		/*
          * URI definitions
          */
-	
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
+		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_ROUTE_ID + " ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.trips";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.trips";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + COLUMN_NAME_ROUTE_ID + " TEXT,"
+        										  + COLUMN_NAME_SERVICE_ID + " TEXT,"
+        										  + COLUMN_NAME_TRIP_ID + " TEXT,"
+        										  + COLUMN_NAME_HEADSIGN + " TEXT,"
+        										  + COLUMN_NAME_SHORT_NAME + " TEXT," 
+        										  + COLUMN_NAME_DIRECTION_ID + " TEXT,"
+        										  + COLUMN_NAME_BLOCK_ID + " TEXT,"
+        										  + COLUMN_NAME_SHAPE_ID + " TEXT," 
+        										  + COLUMN_NAME_WHEELCHAIR + " TEXT" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] COLUMN_ARRAY = {
+			COLUMN_NAME_ROUTE_ID,
+			COLUMN_NAME_SERVICE_ID,
+			COLUMN_NAME_TRIP_ID,
+			COLUMN_NAME_HEADSIGN,
+			COLUMN_NAME_SHORT_NAME,
+			COLUMN_NAME_DIRECTION_ID,
+			COLUMN_NAME_BLOCK_ID,
+			COLUMN_NAME_SHAPE_ID,
+			COLUMN_NAME_WHEELCHAIR
+        };
 	}
 }
