@@ -21,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- Provides search suggestions for words and their definitions. -->
+        <provider android:name=".TransitProvider"
+                  android:authorities="com.marylandtransitcommuters.TransitProvider" />
+        
     </application>
 
 </manifest>

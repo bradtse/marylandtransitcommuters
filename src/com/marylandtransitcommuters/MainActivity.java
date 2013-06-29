@@ -1,23 +1,33 @@
 package com.marylandtransitcommuters;
 
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends SherlockFragmentActivity {
+	/* Logging tag */
+	public static final String BRAD = "BRAD";
 
+	/* 
+	 * Objects that should be accessible to the whole activity 
+	 * */
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -25,7 +35,7 @@ public class MainActivity extends SherlockActivity {
 	private String[] mItems;
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
-	
+		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +46,7 @@ public class MainActivity extends SherlockActivity {
         mItems = getResources().getStringArray(R.array.items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//        mRouteList = (ListView) findViewById(R.id.content_frame);
         
         // Set a custom shadow for the drawer
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -52,33 +63,13 @@ public class MainActivity extends SherlockActivity {
                
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-        		this,					/* Host activity */
-        		mDrawerLayout,			/* Drawerlayout */
-        		R.drawable.ic_drawer,	/* Drawer image */
-        		R.string.drawer_open,	/* Open drawer description */
-        		R.string.drawer_close	/* Close drawer description */
-        		) {
-        	// Called when a drawer has settled in a completely closed state
-        	public void onDrawerClosed(View view) {
-        		getSupportActionBar().setTitle(mTitle);
-        		supportInvalidateOptionsMenu(); // Redraw options menu
-        	}
-        	
-        	// Called when a drawer has settled in a completely open state
-        	public void onDrawerOpened(View drawerView) {
-        		getSupportActionBar().setTitle(mDrawerTitle);
-        		supportInvalidateOptionsMenu(); // Redraw options menu
-        	}
-        };
+        mDrawerToggle = getActionBarDrawerToggle();
         
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-     
-        if (savedInstanceState == null) {
-        	selectItem(0);
-        }
-        Toast.makeText(this, getIntent().getAction(), Toast.LENGTH_SHORT).show();
+        
+        // Set the initial fragment to the list of routes
+        setRouteList();
     }
 
     /*
@@ -143,7 +134,58 @@ public class MainActivity extends SherlockActivity {
 	    		return super.onOptionsItemSelected(item);
     	}
     }
+  
+    /* Change the title of the action bar when an item is selected */
+    @Override
+    public void setTitle(CharSequence title) {
+    	mTitle = title;
+    	getSupportActionBar().setTitle(mTitle);
+    }
     
+    /*
+     * HELPER FUNCTIONS
+     */
+    
+    /*
+     * ActionBarDrawerToggle ties together the the proper interactions
+     * between the sliding drawer and the action bar app icon
+     */
+    private ActionBarDrawerToggle getActionBarDrawerToggle() {
+    	return new ActionBarDrawerToggle(
+        		this,					/* Host activity */
+        		mDrawerLayout,			/* Drawerlayout */
+        		R.drawable.ic_drawer,	/* Drawer image */
+        		R.string.drawer_open,	/* Open drawer description */
+        		R.string.drawer_close	/* Close drawer description */
+        		) {
+        	// Called when a drawer has settled in a completely closed state
+        	public void onDrawerClosed(View view) {
+        		getSupportActionBar().setTitle(mTitle);
+        		supportInvalidateOptionsMenu(); // Redraw options menu
+        	}
+        	
+        	// Called when a drawer has settled in a completely open state
+        	public void onDrawerOpened(View drawerView) {
+        		getSupportActionBar().setTitle(mDrawerTitle);
+        		supportInvalidateOptionsMenu(); // Redraw options menu
+        	}
+        };
+    }
+    
+    /*
+     *  Initiate the initial list view with the different routes
+     *  TODO This needs to be updated to use a cursorloader
+     */
+    private void setRouteList() {
+		Fragment fragment = new RouteFragment();
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
+		fragmentTrans.replace(R.id.content_frame, fragment).commit();
+	    
+    }
+    
+    
+
     /* The click listener for ListView in the nav drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
@@ -158,13 +200,6 @@ public class MainActivity extends SherlockActivity {
     	mDrawerList.setItemChecked(position, true);
     	setTitle(mItems[position]);
     	mDrawerLayout.closeDrawer(mDrawerList);
-    }
-    
-    /* Change the title of the action bar when an item is selected */
-    @Override
-    public void setTitle(CharSequence title) {
-    	mTitle = title;
-    	getSupportActionBar().setTitle(mTitle);
     }
     
     /* Checks if external storage is writable */

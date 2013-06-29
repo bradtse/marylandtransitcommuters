@@ -6,13 +6,10 @@
     android:layout_height="match_parent" >
 
     <!-- The main view -->
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-       
-    </LinearLayout>
+        android:layout_height="match_parent" />
   
     <!-- The navigation drawer view -->
     <ListView
