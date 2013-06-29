@@ -42,17 +42,16 @@ public class TransitProvider extends ContentProvider {
 		Log.d(MainActivity.BRAD, "TransitProvider query()");
 		switch(sUriMatcher.match(uri)) {
 			case GET_ROUTE_LIST:
-				return mTransitDatabase.query(TransitContract.Routes.TABLE_NAME, 
+				return mTransitDatabase.getList(TransitContract.Routes.TABLE_NAME, 
 											  projection, selection, 
 											  selectionArgs, sortOrder);
 			case GET_ROUTE:
-				// TODO
-                throw new UnsupportedOperationException("GET_ROUTE not implemented");
+				return mTransitDatabase.getRow(TransitContract.Routes.TABLE_NAME, 
+											   projection, uri);
 			default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 	}
-	
 
 	@Override
 	public int delete(Uri arg0, String arg1, String[] arg2) {

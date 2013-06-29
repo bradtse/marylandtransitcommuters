@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragment;
 
+/**
+ * The fragment showing the list of available routes
+ */
 public class RouteFragment extends SherlockFragment {
 	private Context context;
 	private View rootView;
@@ -32,7 +34,6 @@ public class RouteFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_routes, container, false);
-
 		return rootView;
 	}
 	
@@ -44,6 +45,7 @@ public class RouteFragment extends SherlockFragment {
 		
 		Log.d(MainActivity.BRAD, "Initialize route list");
 		
+		// Specify the columns we want to query for
 		String[] mProjection = {
 				TransitContract.Routes._ID,
 				TransitContract.Routes.COLUMN_NAME_SHORT_NAME,
@@ -75,7 +77,7 @@ public class RouteFragment extends SherlockFragment {
 	    Log.d(MainActivity.BRAD, "Attempting to create SimpleCursorAdapter");
 	    SimpleCursorAdapter mCursorAdapter = new SimpleCursorAdapter(
 	    		context, 
-	    		R.layout.routes_list,
+	    		R.layout.routes_list_row,
 	    		mCursor, 
 	    		from, 
 	    		to, 
@@ -85,10 +87,9 @@ public class RouteFragment extends SherlockFragment {
 	    mRouteList.setAdapter(mCursorAdapter);
 	    
 	    Log.d(MainActivity.BRAD, "Successfully created and set SimpleCursorAdapter");
-//	    
-//	    // Define the on-click listener for the route items
-//	    mRouteList.setOnItemClickListener(new RouteItemClickListener());
-		
+	    
+	    // Define the on-click listener for the route items
+	    mRouteList.setOnItemClickListener(new RouteItemClickListener());
 	}
 	
     /* The click listener for ListView of routes */
@@ -103,14 +104,16 @@ public class RouteFragment extends SherlockFragment {
     /* Helper function to replace the current fragment */
     private void selectRoute(long id) {
 		Log.d(MainActivity.BRAD, "Item selected: " + String.valueOf(id));
-		Fragment fragment = new TimeFragment();
+		
 		Bundle args = new Bundle();
 		args.putString(TransitContract.Routes._ID, String.valueOf(id));
+		
+		Fragment fragment = new TimeFragment();
 		fragment.setArguments(args);
-		Log.d(MainActivity.BRAD, "Got past creation of fragment");
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
-		fragmentTrans.replace(R.id.content_frame, fragment).commit();
-		Log.d(MainActivity.BRAD, "Got past replacing of fragment");
+		fragmentTrans.replace(R.id.content_frame, fragment);
+		fragmentTrans.addToBackStack(null);
+		fragmentTrans.commit();
     }
 }

@@ -11,13 +11,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Rather than implementing the SQLiteOpenHelper inside of TransitProvider,
  * I decided to implement it within this class. The purpose of the class is
- * to correctly handle the different types of database queries. 
+ * to correctly handle the different types of database queries. As of now
+ * this class is kind of pointless.
  */
 public class TransitDatabase {	
 	private TransitSqlHelper mTransitHelper;
@@ -29,6 +31,29 @@ public class TransitDatabase {
 	public TransitDatabase(Context context) {
 		Log.d(MainActivity.BRAD, "TransitDatabase constructor");
 		mTransitHelper = new TransitSqlHelper(context);
+	}
+
+	/**
+	 * Helper function to retrieve a list from a table
+	 * The params are the same as query.
+	 */
+	public Cursor getList(String table, String[] projection, String selection,
+						  String[] selectionArgs, String sortOrder) {
+		return query(table, projection, selection, selectionArgs, sortOrder);
+	}
+	
+	/**
+	 * Helper function to retrieve a single row from a table
+	 * @param table The table to query
+	 * @param projection The columns you want to return
+	 * @param uri The uri containing the rowid of the row we want
+	 * @return
+	 */
+	public Cursor getRow(String table, String[] projection, Uri uri) {
+		String id = uri.getLastPathSegment();
+		String selection = TransitContract.Routes._ID + " = ?";
+		String[] selectionArgs = {id};
+		return query(table, projection, selection, selectionArgs, null);
 	}
 	
     /**
@@ -115,7 +140,9 @@ public class TransitDatabase {
 //				}
 //			}).start();
 			try {
+				Log.d(MainActivity.BRAD, "Loading GTFS data");
 				loadData();
+				Log.d(MainActivity.BRAD, "Done loading GTFS data");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -123,7 +150,6 @@ public class TransitDatabase {
 		
 		/* Parse data file and load into database */
 		private void loadData() throws IOException {
-			Log.d(MainActivity.BRAD, "Loading GTFS data");
 			final Resources resources = mHelperContext.getResources();
 			InputStream input = resources.openRawResource(R.raw.routes);
 			CSVReader reader = new CSVReader(new InputStreamReader(input));
@@ -145,11 +171,26 @@ public class TransitDatabase {
 			} finally {
 				reader.close();
 			}
-			Log.d(MainActivity.BRAD, "Done loading GTFS data");
 		}
 		
-		/* Add a row of data to database */
+		/* Add a row of routes data to database */
 		private long addRoutesRow(String[] line) {
+			ContentValues values = new ContentValues();
+			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_ID, line[0]);
+			values.put(TransitContract.Routes.COLUMN_NAME_AGENCY_ID, line[1]);
+			values.put(TransitContract.Routes.COLUMN_NAME_SHORT_NAME, line[2]);
+			values.put(TransitContract.Routes.COLUMN_NAME_LONG_NAME, line[3]);
+			values.put(TransitContract.Routes.COLUMN_NAME_DESCRIPTION, line[4]);
+			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_TYPE, line[5]);
+			values.put(TransitContract.Routes.COLUMN_NAME_URL, line[6]);
+			values.put(TransitContract.Routes.COLUMN_NAME_COLOR, line[7]);
+			values.put(TransitContract.Routes.COLUMN_NAME_TEXT_COLOR, line[8]);
+			
+			return mDatabase.insert(TransitContract.Routes.TABLE_NAME, null, values);
+		}
+		
+		/* Add a row of trips data to database */
+		private long addStopsRow(String[] line) {
 			ContentValues values = new ContentValues();
 			values.put(TransitContract.Routes.COLUMN_NAME_ROUTE_ID, line[0]);
 			values.put(TransitContract.Routes.COLUMN_NAME_AGENCY_ID, line[1]);

@@ -1,7 +1,6 @@
 package com.marylandtransitcommuters;
 
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -10,8 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,12 +18,15 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+/**
+ * The main activity
+ */
 public class MainActivity extends SherlockFragmentActivity {
 	/* Logging tag */
 	public static final String BRAD = "BRAD";
 
 	/* 
-	 * Objects that should be accessible to the whole activity 
+	 * Objects that are accessible to the whole activity 
 	 * */
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -68,7 +68,7 @@ public class MainActivity extends SherlockFragmentActivity {
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
-        // Set the initial fragment to the list of routes
+        // Set the main frame layout to the list of routes fragment
         setRouteList();
     }
 
@@ -180,12 +180,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		Fragment fragment = new RouteFragment();
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
-		fragmentTrans.replace(R.id.content_frame, fragment).commit();
-	    
+		fragmentTrans.replace(R.id.content_frame, fragment);
+		fragmentTrans.commit();
     }
     
-    
-
     /* The click listener for ListView in the nav drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override

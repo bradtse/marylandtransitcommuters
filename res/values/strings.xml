@@ -6,6 +6,8 @@
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
     <string name="drawer_item_icon">Icon for drawer item</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
     
     <!-- Items added to nav drawer -->
     <string-array name="items">
