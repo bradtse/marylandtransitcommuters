@@ -212,11 +212,7 @@ public class TransitDatabase {
 					return -1;
 			}
 		}
-		
-//		private long insertTest(String[] line, Object cls) {
-//			(TransitContract.Routes) cls.COLUMN_ARRAY;
-//		}
-		
+
 		/**
 		 * Insert line of data into table
 		 * @param line the data
@@ -232,69 +228,6 @@ public class TransitDatabase {
 				i++;
 			}
 			return mDatabase.insert(table, null, values);
-		}
-
-		/** 
-		 * Insert a row of routes data to database 
-		 * @param line the array of strings to insert
-		 */
-		private long insertRoutesRow(String[] line) {
-			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : TransitContract.Routes.COLUMN_ARRAY) {
-				values.put(s, line[i]);
-				i++;
-			}
-//			values.put(TransitContract.Routes.KEY_ROUTE_ID, line[0]);
-//			values.put(TransitContract.Routes.KEY_AGENCY_ID, line[1]);
-//			values.put(TransitContract.Routes.KEY_SHORT_NAME, line[2]);
-//			values.put(TransitContract.Routes.KEY_LONG_NAME, line[3]);
-//			values.put(TransitContract.Routes.KEY_DESCRIPTION, line[4]);
-//			values.put(TransitContract.Routes.KEY_ROUTE_TYPE, Integer.parseInt(line[5]));
-//			values.put(TransitContract.Routes.KEY_URL, line[6]);
-//			values.put(TransitContract.Routes.KEY_COLOR, line[7]);
-//			values.put(TransitContract.Routes.KEY_TEXT_COLOR, line[8]);
-
-			return mDatabase.insert(TransitContract.Routes.TABLE_NAME, null, values);
-		}
-		
-		/**
-		 * Add a row of stops data to database
-		 */
-		private long insertStopsRow(String[] line) {
-			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : TransitContract.Stops.COLUMN_ARRAY) {
-				values.put(s, line[i]);
-				i++;
-			}
-			return mDatabase.insert(TransitContract.Stops.TABLE_NAME, null, values);
-		}
-		
-		/**
-		 * Add a row of trips data to database
-		 */
-		private long insertTripsRow(String[] line) {
-			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : TransitContract.Stops.COLUMN_ARRAY) {
-				values.put(s, line[i]);
-				i++;
-			}
-			return mDatabase.insert(TransitContract.Stops.TABLE_NAME, null, values);
-		}
-
-		/**
-		 * Add a row of stop times data to database
-		 */
-		private long insertStopTimesRow(String[] line) {
-			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : TransitContract.Stops.COLUMN_ARRAY) {
-				values.put(s, line[i]);
-				i++;
-			}
-			return mDatabase.insert(TransitContract.Stops.TABLE_NAME, null, values);
 		}
 	}
 	
