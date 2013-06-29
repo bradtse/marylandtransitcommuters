@@ -34,7 +34,7 @@ public final class TransitContract {
 	
 	/* An array list of all the SQL create table statements */
 	public static final String[] SQL_CREATE_TABLE_ARRAY = {
-		Agency.CREATE_TABLE,
+//		Agency.CREATE_TABLE,
 //		CalendarDates.CREATE_TABLE,
 //		Calendar.CREATE_TABLE,
 		Routes.CREATE_TABLE,
@@ -43,6 +43,8 @@ public final class TransitContract {
 //		StopTimes.CREATE_TABLE,
 		Trips.CREATE_TABLE
 	};
+	
+	public static final int[] RAW_IDS = {R.raw.routes};
 	
 	/* Do not allow this class to be instantiated */
 	private TransitContract() {}

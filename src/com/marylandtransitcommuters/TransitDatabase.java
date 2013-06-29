@@ -129,12 +129,11 @@ public class TransitDatabase {
 		 * Create the database with the GTFS data
 		 */
 		private void createDatabase() {
-			Log.d(MainActivity.BRAD, "Table Creation");
 			/* Create all of the tables for the database */
 			for(String s : TransitContract.SQL_CREATE_TABLE_ARRAY) {
 				mDatabase.execSQL(s);
 			}
-			Log.d(MainActivity.BRAD, "Got Past table creation");
+			
 //			new Thread(new Runnable() {
 //				public void run() {
 //					try {
@@ -144,6 +143,7 @@ public class TransitDatabase {
 //					}
 //				}
 //			}).start();
+			
 			try {
 				Log.d(MainActivity.BRAD, "Loading GTFS data");
 				loadData();
@@ -196,7 +196,7 @@ public class TransitDatabase {
 			values.put(TransitContract.Routes.KEY_SHORT_NAME, line[2]);
 			values.put(TransitContract.Routes.KEY_LONG_NAME, line[3]);
 			values.put(TransitContract.Routes.KEY_DESCRIPTION, line[4]);
-			values.put(TransitContract.Routes.KEY_ROUTE_TYPE, line[5]);
+			values.put(TransitContract.Routes.KEY_ROUTE_TYPE, Integer.parseInt(line[5]));
 			values.put(TransitContract.Routes.KEY_URL, line[6]);
 			values.put(TransitContract.Routes.KEY_COLOR, line[7]);
 			values.put(TransitContract.Routes.KEY_TEXT_COLOR, line[8]);
