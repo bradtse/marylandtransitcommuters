@@ -174,7 +174,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_AGENCY_ID,
 			KEY_NAME,
 			KEY_URL,
@@ -272,7 +272,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_SERVICE_ID,
 			KEY_DATE,
 			KEY_EXCEPTION_TYPE
@@ -416,7 +416,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_SERVICE_ID,
 			KEY_MONDAY,
 			KEY_TUESDAY,
@@ -561,7 +561,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_ROUTE_ID,
 			KEY_AGENCY_ID,
 			KEY_SHORT_NAME,
@@ -676,7 +676,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_SHAPE_ID,
 			KEY_LATITUDE,
 			KEY_LONGITUDE,
@@ -829,7 +829,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
         	KEY_STOP_ID,
 			KEY_CODE,
 			KEY_NAME,
@@ -974,7 +974,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
         	KEY_TRIP_ID,
         	KEY_ARRIVAL_TIME,
         	KEY_DEPARTURE_TIME,
@@ -1117,7 +1117,7 @@ public final class TransitContract {
         /**
          * Array of all the columns. Makes for cleaner code
          */
-        public static final String[] COLUMN_ARRAY = {
+        public static final String[] KEY_ARRAY = {
 			KEY_ROUTE_ID,
 			KEY_SERVICE_ID,
 			KEY_TRIP_ID,

@@ -165,13 +165,8 @@ public class TransitDatabase {
 				CSVReader reader = new CSVReader(new InputStreamReader(input));
 				
 				try {
-					String [] line = reader.readNext(); // Skip the first line of the file
-					int numCols = line.length; // Get number of columns in file
-					mDatabase.beginTransaction();
+					String [] line = reader.readNext(); // Skip the first line of the file	
 					while ((line = reader.readNext()) != null ) {
-						if (line.length < numCols) {
-							continue;
-						}
 						long rowid = insertRowHelper(id, line);
 						Log.d(MainActivity.BRAD, "Inserted to row: " + rowid);
 						if (rowid < 0) {
@@ -179,8 +174,6 @@ public class TransitDatabase {
 								  "Unable to add row of data for route id: " + line[0]);
 						}
 					}
-					mDatabase.setTransactionSuccessful();
-					mDatabase.endTransaction();
 				} finally {
 					reader.close();
 				}
@@ -197,16 +190,16 @@ public class TransitDatabase {
 		private long insertRowHelper(int id, String[] line) {
 			switch(id) {
 				case R.raw.routes:
-					return insertRow(line, TransitContract.Routes.COLUMN_ARRAY, 
+					return insertRow(line, TransitContract.Routes.KEY_ARRAY, 
 									 TransitContract.Routes.TABLE_NAME);
 				case R.raw.stops:
-					return insertRow(line, TransitContract.Stops.COLUMN_ARRAY,
+					return insertRow(line, TransitContract.Stops.KEY_ARRAY,
 									 TransitContract.Stops.TABLE_NAME);
 				case R.raw.stop_times:
-					return insertRow(line, TransitContract.StopTimes.COLUMN_ARRAY,
+					return insertRow(line, TransitContract.StopTimes.KEY_ARRAY,
 									 TransitContract.StopTimes.TABLE_NAME);
 				case R.raw.trips:
-					return insertRow(line, TransitContract.Trips.COLUMN_ARRAY,
+					return insertRow(line, TransitContract.Trips.KEY_ARRAY,
 									 TransitContract.Trips.TABLE_NAME);
 				default:
 					return -1;
