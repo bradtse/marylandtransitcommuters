@@ -13,6 +13,8 @@ import android.util.Log;
 public class TransitProvider extends ContentProvider {	
 	private TransitDatabase mTransitDatabase;
 	
+	private static final UriMatcher sUriMatcher = buildUriMatcher();
+	
 	/*
 	 * UriMatcher constants
 	 */
@@ -32,7 +34,6 @@ public class TransitProvider extends ContentProvider {
 	private static final int GET_STOP_TIME = 13;
 	private static final int GET_TRIPS_LIST = 14;
 	private static final int GET_TRIP = 15;
-	private static final UriMatcher sUriMatcher = buildUriMatcher();
 
 	@Override
 	public boolean onCreate() {
@@ -44,16 +45,40 @@ public class TransitProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch(sUriMatcher.match(uri)) {
+			case GET_AGENCY_LIST:
+				return TransitContract.Agency.CONTENT_TYPE;
+			case GET_AGENCY:
+				return TransitContract.Agency.CONTENT_ITEM_TYPE;
+			case GET_CALENDAR_DATES_LIST:
+				return TransitContract.CalendarDates.CONTENT_TYPE;
+			case GET_CALENDAR_DATE:
+				return TransitContract.CalendarDates.CONTENT_ITEM_TYPE;
+			case GET_CALENDAR_LIST:
+				return TransitContract.Calendar.CONTENT_TYPE;
+			case GET_CALENDAR:
+				return TransitContract.Calendar.CONTENT_ITEM_TYPE;
 			case GET_ROUTES_LIST:
 				return TransitContract.Routes.CONTENT_TYPE;
 			case GET_ROUTE:
 				return TransitContract.Routes.CONTENT_ITEM_TYPE;
+			case GET_SHAPES_LIST:
+				return TransitContract.Shapes.CONTENT_TYPE;
+			case GET_SHAPE:
+				return TransitContract.Shapes.CONTENT_ITEM_TYPE;
 			case GET_STOPS_LIST:
 				return TransitContract.Stops.CONTENT_TYPE;
 			case GET_STOP:
 				return TransitContract.Stops.CONTENT_ITEM_TYPE;
+			case GET_STOP_TIMES_LIST:
+				return TransitContract.StopTimes.CONTENT_TYPE;
+			case GET_STOP_TIME:
+				return TransitContract.StopTimes.CONTENT_ITEM_TYPE;
+			case GET_TRIPS_LIST:
+				return TransitContract.Trips.CONTENT_TYPE;
+			case GET_TRIP:
+				return TransitContract.Trips.CONTENT_ITEM_TYPE;
 			default:
-				throw new IllegalArgumentException("Unknown URI " + uri);
+				throw new IllegalArgumentException("Unsupported URI " + uri);
 		}
 	}
 
@@ -77,7 +102,7 @@ public class TransitProvider extends ContentProvider {
 				return mTransitDatabase.getRow(TransitContract.Stops.TABLE_NAME,
 											   projection, uri);
 			default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
 	}
 
@@ -113,16 +138,23 @@ public class TransitProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		
-		/* Complete route list */
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Agency.TABLE_NAME, GET_AGENCY_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Agency.TABLE_NAME + "/#", GET_AGENCY);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.CalendarDates.TABLE_NAME, GET_CALENDAR_DATES_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.CalendarDates.TABLE_NAME + "/#", GET_CALENDAR_DATE);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Calendar.TABLE_NAME, GET_CALENDAR_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Calendar.TABLE_NAME + "/#", GET_CALENDAR);
 		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME, GET_ROUTES_LIST);
-		/* Specific route */
 		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME + "/#", GET_ROUTE);
-		/* Stops list */
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Shapes.TABLE_NAME, GET_SHAPES_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Shapes.TABLE_NAME + "/#", GET_SHAPE);
 		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME, GET_STOPS_LIST);
-		/* Specific stop */
 		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME + "/#", GET_STOP);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.StopTimes.TABLE_NAME, GET_STOP_TIMES_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.StopTimes.TABLE_NAME + "/#", GET_STOP_TIME);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Trips.TABLE_NAME, GET_TRIPS_LIST);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Trips.TABLE_NAME + "/#", GET_TRIP);
 		
 		return matcher;
 	}
-
 }

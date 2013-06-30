@@ -44,6 +44,10 @@ public final class TransitContract {
 		Trips.CREATE_TABLE
 	};
 	
+	/**
+	 * Array of resource ids for each GTFS data file that will be loaded into 
+	 * database
+	 */
 	public static final int[] RAW_IDS = {
 //		R.raw.agency,
 //		R.raw.calendar_dates,
@@ -51,7 +55,7 @@ public final class TransitContract {
 		R.raw.routes,
 //		R.raw.shapes,
 		R.raw.stops,
-		R.raw.stop_times,
+//		R.raw.stop_times,
 		R.raw.trips,
 	};
 	

@@ -143,11 +143,14 @@ public class TransitDatabase {
 //					}
 //				}
 //			}).start();
-			
+						
 			try {
 				Log.d(MainActivity.BRAD, "Loading GTFS data");
+				final long startTime = System.currentTimeMillis();
 				loadData();
-				Log.d(MainActivity.BRAD, "Done loading GTFS data");
+				final long endTime = System.currentTimeMillis();
+				Log.d(MainActivity.BRAD, "Done loading GTFS data: " + 
+						String.valueOf(endTime - startTime) + " ms");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -155,7 +158,6 @@ public class TransitDatabase {
 		
 		/** 
 		 * Parse data files and load them into the database 
-		 * XXX Support all data files
 		 */
 		private void loadData() throws IOException {
 			final Resources resources = mHelperContext.getResources();
@@ -170,8 +172,7 @@ public class TransitDatabase {
 						long rowid = insertRowHelper(id, line);
 						Log.d(MainActivity.BRAD, "Inserted to row: " + rowid);
 						if (rowid < 0) {
-							Log.e(MainActivity.BRAD, 
-								  "Unable to add row of data for route id: " + line[0]);
+							Log.e(MainActivity.BRAD, "Unable to add row of data for route id: " + line[0]);
 						}
 					}
 				} finally {
