@@ -50,7 +50,7 @@ public class TransitDatabase {
 	 */
 	public Cursor getRow(String table, String[] projection, Uri uri) {
 		String id = uri.getLastPathSegment();
-		String selection = TransitContract.Routes._ID + " = ?";
+		String selection = "((" + TransitContract.Routes._ID + " = ?))";
 		String[] selectionArgs = {id};
 		return query(table, projection, selection, selectionArgs, null);
 	}
@@ -189,22 +189,45 @@ public class TransitDatabase {
 		 * @return the row the line was inserted into
 		 */
 		private long insertRowHelper(int id, String[] line) {
+			String[] keys;
+			String table;
 			switch(id) {
+				case R.raw.agency:
+					keys = TransitContract.Agency.KEY_ARRAY;
+					table = TransitContract.Agency.TABLE_NAME;
+					break;
+				case R.raw.calendar_dates:
+					keys = TransitContract.CalendarDates.KEY_ARRAY;
+					table = TransitContract.CalendarDates.TABLE_NAME;
+					break;
+				case R.raw.calendar:
+					keys = TransitContract.Calendar.KEY_ARRAY;
+					table = TransitContract.Calendar.TABLE_NAME;
+					break;
 				case R.raw.routes:
-					return insertRow(line, TransitContract.Routes.KEY_ARRAY, 
-									 TransitContract.Routes.TABLE_NAME);
+					keys = TransitContract.Routes.KEY_ARRAY;
+					table = TransitContract.Routes.TABLE_NAME;
+					break;
+				case R.raw.shapes:
+					keys = TransitContract.Shapes.KEY_ARRAY;
+					table = TransitContract.Shapes.TABLE_NAME;
+					break;
 				case R.raw.stops:
-					return insertRow(line, TransitContract.Stops.KEY_ARRAY,
-									 TransitContract.Stops.TABLE_NAME);
+					keys = TransitContract.Stops.KEY_ARRAY;
+					table = TransitContract.Stops.TABLE_NAME;
+					break;
 				case R.raw.stop_times:
-					return insertRow(line, TransitContract.StopTimes.KEY_ARRAY,
-									 TransitContract.StopTimes.TABLE_NAME);
+					keys = TransitContract.StopTimes.KEY_ARRAY;
+					table = TransitContract.StopTimes.TABLE_NAME;
+					break;
 				case R.raw.trips:
-					return insertRow(line, TransitContract.Trips.KEY_ARRAY,
-									 TransitContract.Trips.TABLE_NAME);
+					keys = TransitContract.Trips.KEY_ARRAY;
+					table = TransitContract.Trips.TABLE_NAME;
+					break;
 				default:
 					return -1;
 			}
+			return insertRow(line, keys, table);
 		}
 
 		/**

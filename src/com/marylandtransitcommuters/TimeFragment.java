@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * The fragment that allows the user to select whether they want AM (inbound) or
@@ -52,6 +53,7 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 			mCursor.moveToFirst();
 			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
 			routeId = mCursor.getString(index);
+			Toast.makeText(context, routeId, Toast.LENGTH_SHORT).show();
 		}
 	}
 	
