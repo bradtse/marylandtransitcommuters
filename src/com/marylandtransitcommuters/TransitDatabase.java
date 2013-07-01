@@ -192,42 +192,42 @@ public class TransitDatabase {
 			String[] keys;
 			String table;
 			switch(id) {
-				case R.raw.agency:
-					keys = TransitContract.Agency.KEY_ARRAY;
-					table = TransitContract.Agency.TABLE_NAME;
-					break;
-				case R.raw.calendar_dates:
-					keys = TransitContract.CalendarDates.KEY_ARRAY;
-					table = TransitContract.CalendarDates.TABLE_NAME;
-					break;
-				case R.raw.calendar:
-					keys = TransitContract.Calendar.KEY_ARRAY;
-					table = TransitContract.Calendar.TABLE_NAME;
-					break;
-				case R.raw.routes:
-					keys = TransitContract.Routes.KEY_ARRAY;
-					table = TransitContract.Routes.TABLE_NAME;
-					break;
+//				case R.raw.agency:
+//					keys = TransitContract.Agency.KEY_ARRAY;
+//					table = TransitContract.Agency.TABLE_NAME;
+//					break;
+//				case R.raw.calendar_dates:
+//					keys = TransitContract.CalendarDates.KEY_ARRAY;
+//					table = TransitContract.CalendarDates.TABLE_NAME;
+//					break;
+//				case R.raw.calendar:
+//					keys = TransitContract.Calendar.KEY_ARRAY;
+//					table = TransitContract.Calendar.TABLE_NAME;
+//					break;
+//				case R.raw.routes:
+//					keys = TransitContract.Routes.KEY_ARRAY;
+//					table = TransitContract.Routes.TABLE_NAME;
+//					break;
 //				case R.raw.shapes:
 //					keys = TransitContract.Shapes.KEY_ARRAY;
 //					table = TransitContract.Shapes.TABLE_NAME;
 //					break;
-				case R.raw.stops:
-					keys = TransitContract.Stops.KEY_ARRAY;
-					table = TransitContract.Stops.TABLE_NAME;
-					break;
+//				case R.raw.stops:
+//					keys = TransitContract.Stops.KEY_ARRAY;
+//					table = TransitContract.Stops.TABLE_NAME;
+//					break;
 //				case R.raw.stop_times:
 //					keys = TransitContract.StopTimes.KEY_ARRAY;
 //					table = TransitContract.StopTimes.TABLE_NAME;
 //					break;
-				case R.raw.trips:
-					keys = TransitContract.Trips.KEY_ARRAY;
-					table = TransitContract.Trips.TABLE_NAME;
-					break;
+//				case R.raw.trips:
+//					keys = TransitContract.Trips.KEY_ARRAY;
+//					table = TransitContract.Trips.TABLE_NAME;
+//					break;
 				default:
 					return -1;
 			}
-			return insertRow(line, keys, table);
+//			return insertRow(line, keys, table);
 		}
 
 		/**

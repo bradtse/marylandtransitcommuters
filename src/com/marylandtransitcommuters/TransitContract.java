@@ -52,7 +52,7 @@ public final class TransitContract {
 //		R.raw.agency,
 //		R.raw.calendar_dates,
 //		R.raw.calendar,
-		R.raw.routes,
+//		R.raw.routes,
 //		R.raw.shapes,
 //		R.raw.stops,
 //		R.raw.stop_times,
