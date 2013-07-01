@@ -54,9 +54,9 @@ public final class TransitContract {
 //		R.raw.calendar,
 		R.raw.routes,
 //		R.raw.shapes,
-		R.raw.stops,
+//		R.raw.stops,
 //		R.raw.stop_times,
-		R.raw.trips,
+//		R.raw.trips,
 	};
 	
 	/* Do not allow this class to be instantiated */
@@ -424,6 +424,7 @@ public final class TransitContract {
 			KEY_SERVICE_ID,
 			KEY_MONDAY,
 			KEY_TUESDAY,
+			KEY_WEDNESDAY,
 			KEY_THURSDAY,
 			KEY_FRIDAY,
 			KEY_SATURDAY,

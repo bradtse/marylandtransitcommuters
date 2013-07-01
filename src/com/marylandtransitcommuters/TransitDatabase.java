@@ -208,18 +208,18 @@ public class TransitDatabase {
 					keys = TransitContract.Routes.KEY_ARRAY;
 					table = TransitContract.Routes.TABLE_NAME;
 					break;
-				case R.raw.shapes:
-					keys = TransitContract.Shapes.KEY_ARRAY;
-					table = TransitContract.Shapes.TABLE_NAME;
-					break;
+//				case R.raw.shapes:
+//					keys = TransitContract.Shapes.KEY_ARRAY;
+//					table = TransitContract.Shapes.TABLE_NAME;
+//					break;
 				case R.raw.stops:
 					keys = TransitContract.Stops.KEY_ARRAY;
 					table = TransitContract.Stops.TABLE_NAME;
 					break;
-				case R.raw.stop_times:
-					keys = TransitContract.StopTimes.KEY_ARRAY;
-					table = TransitContract.StopTimes.TABLE_NAME;
-					break;
+//				case R.raw.stop_times:
+//					keys = TransitContract.StopTimes.KEY_ARRAY;
+//					table = TransitContract.StopTimes.TABLE_NAME;
+//					break;
 				case R.raw.trips:
 					keys = TransitContract.Trips.KEY_ARRAY;
 					table = TransitContract.Trips.TABLE_NAME;
@@ -238,6 +238,10 @@ public class TransitDatabase {
 		 * @return the row the line was inserted into
 		 */
 		private long insertRow(String[] line, String[] keys, String table) {
+			// Check to make sure the line returned by OpenCSV is the correct size
+			if (line.length != keys.length) {
+				return -1;
+			}
 			ContentValues values = new ContentValues();
 			int i = 0;
 			for(String s : keys) {
