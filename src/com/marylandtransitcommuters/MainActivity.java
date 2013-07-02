@@ -23,7 +23,7 @@ import com.actionbarsherlock.view.MenuItem;
  */
 public class MainActivity extends SherlockFragmentActivity {
 	/* Logging tag */
-	public static final String BRAD = "BRAD";
+	public static final String TAG = "BRAD";
 
 	/* 
 	 * Objects that are accessible to the whole activity 

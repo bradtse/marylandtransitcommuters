@@ -59,7 +59,7 @@ public class StopFragment extends SherlockFragment {
 		
 		mStopList = (ListView) rootView.findViewById(R.id.routes_list);
 		
-		Log.d(MainActivity.BRAD, "Initialize stop list");
+		Log.d(MainActivity.TAG, "Initialize stop list");
 
 	    // Specify the corresponding layout elements where we want the columns to go
 	    int[] to = {R.id.short_name, R.id.long_name};
@@ -70,7 +70,7 @@ public class StopFragment extends SherlockFragment {
 	    		TransitContract.Routes.KEY_LONG_NAME
 	    };
 	    
-	    Log.d(MainActivity.BRAD, "Attempting to create SimpleCursorAdapter");
+	    Log.d(MainActivity.TAG, "Attempting to create SimpleCursorAdapter");
 	    
 	    SimpleCursorAdapter mCursorAdapter = new SimpleCursorAdapter(
 	    		context, 
@@ -83,7 +83,7 @@ public class StopFragment extends SherlockFragment {
 	    
 	    mStopList.setAdapter(mCursorAdapter);
 	    
-	    Log.d(MainActivity.BRAD, "Successfully created and set SimpleCursorAdapter");
+	    Log.d(MainActivity.TAG, "Successfully created and set SimpleCursorAdapter");
 	    
 	    // Define the on-click listener for the route items
 	    mStopList.setOnItemClickListener(new StopItemClickListener());

@@ -29,7 +29,7 @@ public class TransitDatabase {
 	 * @param context The apps context
 	 */
 	public TransitDatabase(Context context) {
-		Log.d(MainActivity.BRAD, "TransitDatabase constructor");
+		Log.d(MainActivity.TAG, "TransitDatabase constructor");
 		mTransitHelper = new TransitSqlHelper(context);
 	}
 
@@ -64,7 +64,7 @@ public class TransitDatabase {
      */
     public Cursor query(String table, String[] projection, String selection, 
     					 String[] selectionArgs, String sortOrder) {
-    	Log.d(MainActivity.BRAD, "Transitdatabase query (Database creation)");
+    	Log.d(MainActivity.TAG, "Transitdatabase query (Database creation)");
         /* The SQLiteBuilder provides a map for all possible columns requested to
          * actual columns in the database, creating a simple column alias mechanism
          * by which the ContentProvider does not need to know the real column names
@@ -78,14 +78,14 @@ public class TransitDatabase {
                 projection, selection, selectionArgs, null, null, sortOrder);
 
         if (cursor == null) {
-        	Log.d(MainActivity.BRAD, "Returned cursor was null");
+        	Log.d(MainActivity.TAG, "Returned cursor was null");
             return null;
         } else if (!cursor.moveToFirst()) {
-        	Log.d(MainActivity.BRAD, "Cursor was empty");
+        	Log.d(MainActivity.TAG, "Cursor was empty");
             cursor.close();
             return null;
         }
-        Log.d(MainActivity.BRAD, "Leaving Transitdatabase query");
+        Log.d(MainActivity.TAG, "Leaving Transitdatabase query");
         return cursor;
     }
 	
@@ -104,16 +104,16 @@ public class TransitDatabase {
 		 */
 		public TransitSqlHelper(Context context) {
 			super(context, TransitContract.DATABASE_NAME, null, DATABASE_VERSION);
-			Log.d(MainActivity.BRAD, "TransitSqlHelper constructor");
+			Log.d(MainActivity.TAG, "TransitSqlHelper constructor");
 			mHelperContext = context;
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d(MainActivity.BRAD, "TransitSqlHelper onCreate()");
+			Log.d(MainActivity.TAG, "TransitSqlHelper onCreate()");
 			mDatabase = db;
 			createDatabase();
-			Log.d(MainActivity.BRAD, "Leaving TransitSqlHelper onCreate()");
+			Log.d(MainActivity.TAG, "Leaving TransitSqlHelper onCreate()");
 		}
 
 		@Override
@@ -145,11 +145,11 @@ public class TransitDatabase {
 //			}).start();
 						
 			try {
-				Log.d(MainActivity.BRAD, "Loading GTFS data");
+				Log.d(MainActivity.TAG, "Loading GTFS data");
 				final long startTime = System.currentTimeMillis();
 				loadData();
 				final long endTime = System.currentTimeMillis();
-				Log.d(MainActivity.BRAD, "Done loading GTFS data: " + 
+				Log.d(MainActivity.TAG, "Done loading GTFS data: " + 
 						String.valueOf(endTime - startTime) + " ms");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -162,7 +162,7 @@ public class TransitDatabase {
 		private void loadData() throws IOException {
 			final Resources resources = mHelperContext.getResources();
 			for(int id : TransitContract.RAW_IDS) {
-				Log.d(MainActivity.BRAD, "Loading: " + id);
+				Log.d(MainActivity.TAG, "Loading: " + id);
 				InputStream input = resources.openRawResource(id);
 				CSVReader reader = new CSVReader(new InputStreamReader(input));
 				
@@ -170,9 +170,9 @@ public class TransitDatabase {
 					String [] line = reader.readNext(); // Skip the first line of the file	
 					while ((line = reader.readNext()) != null ) {
 						long rowid = insertRowHelper(id, line);
-						Log.d(MainActivity.BRAD, "Inserted to row: " + rowid);
+						Log.d(MainActivity.TAG, "Inserted to row: " + rowid);
 						if (rowid < 0) {
-							Log.e(MainActivity.BRAD, "Unable to add row of data for route id: " + line[0]);
+							Log.e(MainActivity.TAG, "Unable to add row of data for route id: " + line[0]);
 						}
 					}
 				} finally {

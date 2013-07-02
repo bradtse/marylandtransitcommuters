@@ -48,7 +48,7 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 		);
 		
 		if (mCursor == null) {
-			Log.d(MainActivity.BRAD, "Row not found");
+			Log.d(MainActivity.TAG, "Row not found");
 		} else {
 			mCursor.moveToFirst();
 			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
