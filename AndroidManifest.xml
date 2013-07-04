@@ -28,6 +28,8 @@
         <provider android:name=".TransitProvider"
                   android:authorities="com.marylandtransitcommuters.TransitProvider" />
         
+        <service android:name=".TransitService" />
+        
     </application>
 
 </manifest>

@@ -65,10 +65,7 @@ public class TransitDatabase {
     public Cursor query(String table, String[] projection, String selection, 
     					 String[] selectionArgs, String sortOrder) {
     	Log.d(MainActivity.TAG, "Transitdatabase query (Database creation)");
-        /* The SQLiteBuilder provides a map for all possible columns requested to
-         * actual columns in the database, creating a simple column alias mechanism
-         * by which the ContentProvider does not need to know the real column names
-         */
+
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(table);
 

@@ -2,10 +2,8 @@ package com.marylandtransitcommuters;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,8 +29,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
-	
-	private String[] mItems;
+	private String[] mDrawerItems;
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
 		
@@ -40,24 +37,16 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        // Get needed resources and layouts
+
         mTitle = mDrawerTitle = getTitle();
-        mItems = getResources().getStringArray(R.array.items);
+        mDrawerItems = getResources().getStringArray(R.array.items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        setUpNavDrawer();
-        
+        setUpNavDrawer();       
         addRouteFragment();
     }
-
-    /*
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */ 
-    
-    /* Syncs the action bar drawer toggle */
+ 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
     	super.onPostCreate(savedInstanceState);
@@ -74,15 +63,14 @@ public class MainActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getSupportMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
     
-    /* Called whenever we call invalidateOptionsMenu() */
+    /* Callback function after we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-    	// Hide action bar items when nav draw is open
+    	// Hide action bar items when nav drawer is open
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
     	menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
     	return super.onPrepareOptionsMenu(menu);
@@ -95,7 +83,6 @@ public class MainActivity extends SherlockFragmentActivity {
 //    		return true;
 //    	}
     	
-    	// Action taken when option item is selected
     	switch(item.getItemId()) {
     		// A workaround until ABS implements onOptionsItemSelected 
 	    	case android.R.id.home:
@@ -113,9 +100,6 @@ public class MainActivity extends SherlockFragmentActivity {
     	}
     }
   
-    /* 
-     * Changes the title of the action bar
-     */
     @Override
     public void setTitle(CharSequence title) {
     	mTitle = title;
@@ -127,6 +111,15 @@ public class MainActivity extends SherlockFragmentActivity {
      */
     
     /**
+     *  Initialize the main frame layout with the route fragment
+     */
+    private void addRouteFragment() {
+		Fragment fragment = new RouteFragment();
+		FragmentTransaction fragmentTrans = getSupportFragmentManager().beginTransaction();
+		fragmentTrans.replace(R.id.content_frame, fragment).commit();
+    }
+    
+    /**
      * Takes care of setting up all the elements needed for a properly functioning
      * nav drawer
      */
@@ -136,7 +129,7 @@ public class MainActivity extends SherlockFragmentActivity {
         
         // Add items to the nav drawer from the array groups
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
-        												mItems));
+        												mDrawerItems));
         // Register a callback to be invoked when item in nav drawer is clicked
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
@@ -156,13 +149,8 @@ public class MainActivity extends SherlockFragmentActivity {
      * @return A new ActionBarDrawerToggle object
      */
     private ActionBarDrawerToggle getActionBarDrawerToggle() {
-    	return new ActionBarDrawerToggle(
-        		this,					// Host activity
-        		mDrawerLayout,			// Drawerlayout 
-        		R.drawable.ic_drawer,	// Drawer image
-        		R.string.drawer_open,	// Open drawer description 
-        		R.string.drawer_close	// Close drawer description
-        		) {
+    	return new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,	
+    									R.string.drawer_open, R.string.drawer_close) {
         	// Called when a drawer has settled in a completely closed state
         	public void onDrawerClosed(View view) {
         		getSupportActionBar().setTitle(mTitle);
@@ -176,20 +164,7 @@ public class MainActivity extends SherlockFragmentActivity {
         	}
         };
     }
-    
-    /**
-     *  Initialize the main frame layout with the route fragment
-     *  <br>
-     *  TODO This needs to be updated to use a cursorloader
-     */
-    private void addRouteFragment() {
-		Fragment fragment = new RouteFragment();
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
-		fragmentTrans.replace(R.id.content_frame, fragment);
-		fragmentTrans.commit();
-    }
-    
+   
     /**
      * The click listener for the ListView in the nav drawer 
      */
@@ -206,32 +181,7 @@ public class MainActivity extends SherlockFragmentActivity {
      */
     private void selectItem(int position) {
     	mDrawerList.setItemChecked(position, true);
-    	setTitle(mItems[position]);
+    	setTitle(mDrawerItems[position]);
     	mDrawerLayout.closeDrawer(mDrawerList);
-    }
-    
-    /**
-     * Checks if external storage is writable
-     * @return True if writable, else false
-     */
-    public boolean isExternalStorageWritable() {
-    	String state = Environment.getExternalStorageState();
-    	if (Environment.MEDIA_MOUNTED.equals(state)) {
-    		return true;
-    	}
-    	return false;
-    }
-    
-    /**
-     *  Checks if external storage is readable 
-     *  @return True if readable, else false
-     */
-    public boolean isExternalStorageReadable() {
-    	String state = Environment.getExternalStorageState();
-    	if (Environment.MEDIA_MOUNTED.equals(state) || 
-    			Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-    		return true;
-    	}
-    	return false;
     }
 }

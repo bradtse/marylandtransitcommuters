@@ -2,15 +2,22 @@ package com.marylandtransitcommuters;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,6 +31,8 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	private Cursor mCursor;
 	private int time; // AM = 0, PM = 1
 	private String routeId;
+	private CurrentSearch info;
+	private TransitResultReceiver mReceiver;
 	
 	public TimeFragment() {}
 	
@@ -31,30 +40,31 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-		
-		// The column we want to query for
-		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
 
-		// Append the _ID to the base uri
-		String id = getArguments().getString(TransitContract.Routes._ID);
-		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
-		
-		mCursor = context.getContentResolver().query(
-			data,
-			mProjection,
-			null,
-			null,
-			null
-		);
-		
-		if (mCursor == null) {
-			Log.d(MainActivity.TAG, "Row not found");
-		} else {
-			mCursor.moveToFirst();
-			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
-			routeId = mCursor.getString(index);
-			Toast.makeText(context, routeId, Toast.LENGTH_SHORT).show();
-		}
+		info = CurrentSearch.getInstance();
+//		// The column we want to query for
+//		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
+//
+//		// Append the _ID to the base uri
+//		String id = getArguments().getString(TransitContract.Routes._ID);
+//		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
+//		
+//		mCursor = context.getContentResolver().query(
+//			data,
+//			mProjection,
+//			null,
+//			null,
+//			null
+//		);
+//		
+//		if (mCursor == null) {
+//			Log.d(MainActivity.TAG, "Row not found");
+//		} else {
+//			mCursor.moveToFirst();
+//			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
+//			routeId = mCursor.getString(index);
+//			Toast.makeText(context, routeId, Toast.LENGTH_SHORT).show();
+//		}
 	}
 	
 	@Override
@@ -83,10 +93,11 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 	public void onClick(View view) {
 		switch(view.getId()) {
 			case R.id.am_button:
-				time = 0;
+				Toast.makeText(context, info.getRouteId(), Toast.LENGTH_SHORT).show();
+				info.setTime(0);
 				break;
 			case R.id.pm_button:
-				time = 1;
+				info.setTime(1);
 				break;
 			default:
 				throw new IllegalArgumentException("Should only be called via the buttons");
@@ -95,6 +106,21 @@ public class TimeFragment extends SherlockFragment implements OnClickListener {
 		/* 
 		 * Starts the stops fragment
 		 */
+		Fragment fragment = new StopFragment();
 		
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
+		
+		fragmentTrans.replace(R.id.content_frame, fragment);
+		fragmentTrans.addToBackStack(null);
+		fragmentTrans.commit();
+		
+//		mReceiver = new TransitResultReceiver(new Handler());
+//		mReceiver.setReceiver(this);
+//		
+//		Intent intent = new Intent(context, TransitService.class);
+//		intent.putExtra("type", 1);
+//		intent.putExtra("receiver", mReceiver);
+//		context.startService(intent);		
 	}
 }

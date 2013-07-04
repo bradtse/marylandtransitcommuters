@@ -1,5 +1,6 @@
 package com.marylandtransitcommuters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,7 +17,7 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-public class StopFragment extends SherlockFragment {
+public class StopFragment extends SherlockFragment implements TransitResultReceiver.Receiver{
 	private View rootView;
 	private Context context;
 	private ListView mStopList;
@@ -26,29 +27,12 @@ public class StopFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-		
-		// The column we want to query for
-		String[] mProjection = {
-				TransitContract.Stops.KEY_STOP_ID
-		};
-
-		// Append the _ID to the base uri
-		String id = getArguments().getString(TransitContract.Routes._ID);
-		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
-		
-		mCursor = context.getContentResolver().query(
-			data,
-			mProjection,
-			null,
-			null,
-			null
-		);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_time, container, false);
+		rootView = inflater.inflate(R.layout.fragment_routes, container, false);
 		
 		return rootView;
 	}
@@ -61,32 +45,24 @@ public class StopFragment extends SherlockFragment {
 		
 		Log.d(MainActivity.TAG, "Initialize stop list");
 
-	    // Specify the corresponding layout elements where we want the columns to go
-	    int[] to = {R.id.short_name, R.id.long_name};
-	    
-	    // Specify the columns we want to display in the ListView
-	    String[] from = { 
-	    		TransitContract.Routes.KEY_SHORT_NAME,
-	    		TransitContract.Routes.KEY_LONG_NAME
-	    };
-	    
-	    Log.d(MainActivity.TAG, "Attempting to create SimpleCursorAdapter");
-	    
-	    SimpleCursorAdapter mCursorAdapter = new SimpleCursorAdapter(
-	    		context, 
-	    		R.layout.routes_list_row,
-	    		mCursor, 
-	    		from, 
-	    		to, 
-	    		0
-	    );
-	    
-	    mStopList.setAdapter(mCursorAdapter);
-	    
-	    Log.d(MainActivity.TAG, "Successfully created and set SimpleCursorAdapter");
-	    
-	    // Define the on-click listener for the route items
-	    mStopList.setOnItemClickListener(new StopItemClickListener());
+		
+	}
+	
+	@Override
+	public void onReceiveResult(int resultCode, Bundle resultData) {
+//		switch(resultCode) {
+//			case TransitService.START:
+//				pd = new ProgressDialog(context);
+//				pd.setTitle("Getting data from server");
+//				pd.setMessage("Please wait");
+//				pd.show();
+//				break;
+//			case TransitService.FINISH:
+//				
+//				break;
+//			default:
+//
+//		}
 	}
 	
 	/** 
