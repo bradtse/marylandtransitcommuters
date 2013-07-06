@@ -18,7 +18,7 @@ import android.util.Log;
 
 public class Rest {
 //	private static final String WEBSITE = "http://android:test@bradleytse.com/testing/transitapi.php";
-	private static final String WEBSITE = "http://bradleytse.com/transit/transitapi.php";
+	private static final String WEBSITE = "http://bradleytse.com/transit/gtfsapi.php";
 	private URL url;
 	private String query;
 	
@@ -49,9 +49,9 @@ public class Rest {
 	public JSONArray post() {
 		InputStream in = null;
 		BufferedWriter bw = null;
-		StringBuilder fin = new StringBuilder(); // final response
+		StringBuilder response = new StringBuilder(); // final response
 		HttpURLConnection conn = null;
-		JSONArray finJSON = null;
+		JSONArray json = null;
 		int responseCode = 0;
 		
 		try {
@@ -83,19 +83,20 @@ public class Rest {
 			// Convert to string
 			Scanner s = new Scanner(in, "UTF-8");
 			while(s.hasNext() != false) {
-				fin.append(s.next());
+				response.append(s.next());
 			}
 			
-			finJSON = new JSONArray(fin.toString());
+			json = new JSONArray(response.toString());
 		} catch (IOException e) {
 			Log.d(MainActivity.TAG, "Ok " + e.getMessage());
 		} catch (JSONException e) {
+			Log.d(MainActivity.TAG, response.toString());
 			Log.d(MainActivity.TAG, e.getMessage());
 		} finally {
 			Log.d(MainActivity.TAG, String.valueOf(responseCode));
 			conn.disconnect(); // close connection
 		}
-		Log.d(MainActivity.TAG, finJSON.toString());
-		return finJSON;
+		Log.d(MainActivity.TAG, json.toString());
+		return json;
 	}
 }

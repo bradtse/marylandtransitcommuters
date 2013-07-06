@@ -30,20 +30,14 @@ public class DirectionFragment extends SherlockFragment implements OnClickListen
 	private View rootView;
 	private Cursor mCursor;
 	private int direction; // INBOUND/AM = 0, OUTBOUND/PM = 1
-	private String routeId;
-	private SearchData info;
 	private TransitResultReceiver mReceiver;
 	
-	public DirectionFragment() {
-		
-	}
+	public DirectionFragment() {}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-
-		info = SearchData.getInstance();
 //		// The column we want to query for
 //		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
 //
@@ -93,13 +87,14 @@ public class DirectionFragment extends SherlockFragment implements OnClickListen
 	 */
 	@Override
 	public void onClick(View view) {
+		SearchData data = SearchData.getInstance();
+		Toast.makeText(context, data.getRouteId(), Toast.LENGTH_SHORT).show();
 		switch(view.getId()) {
 			case R.id.am_button:
-				Toast.makeText(context, info.getRouteId(), Toast.LENGTH_SHORT).show();
-				info.setTime(0);
+				data.setDirection(0);
 				break;
 			case R.id.pm_button:
-				info.setTime(1);
+				data.setDirection(1);
 				break;
 			default:
 				throw new IllegalArgumentException("Should only be called via the buttons");

@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -25,6 +29,7 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	private ListView mStopList;
 	private Cursor mCursor;
 	private TransitResultReceiver mReceiver;
+	private ProgressDialog pd;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_routes, container, false);
+		rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 		return rootView;
 	}
 	
@@ -43,34 +48,39 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		mStopList = (ListView) rootView.findViewById(R.id.routes_list);
+		mStopList = (ListView) rootView.findViewById(R.id.fragment_list);
 		
 		mReceiver = new TransitResultReceiver(new Handler());
 		mReceiver.setReceiver(this);
 		
 		// Start a new service that contacts the server
 		Intent intent  = new Intent(context, TransitService.class);
-		intent.putExtra("type", 0);
+		intent.putExtra(TransitService.TYPE, TransitService.STOPS);
 		intent.putExtra("receiver", mReceiver);
 		context.startService(intent);
-		
 	}
 	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-//		switch(resultCode) {
-//			case TransitService.START:
-//				pd = new ProgressDialog(context);
-//				pd.setTitle("Getting data from server");
-//				pd.setMessage("Please wait");
-//				pd.show();
-//				break;
-//			case TransitService.FINISH:
-//				
-//				break;
-//			default:
-//
-//		}
+		switch(resultCode) {
+			case TransitService.START:
+				pd = new ProgressDialog(context);
+				pd.setTitle("Getting data from server");
+				pd.setMessage("Please wait");
+				pd.show();
+				break;
+			case TransitService.FINISH:
+				SearchData profile = SearchData.getInstance();
+				String[] stops = profile.getStopsCol("stop_name");
+				mStopList.setAdapter(new ArrayAdapter<String>(
+							context, android.R.layout.simple_list_item_1, 
+							stops));
+				mStopList.setOnItemClickListener(new StopItemClickListener());
+				pd.dismiss();
+				break;
+			default:
+
+		}
 	}
 	
 	/** 
@@ -80,7 +90,22 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			return;
+			selectItem(id);
 		}
+    }
+    
+    private void selectItem(long id) {
+		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(id));
+		
+		SearchData data = SearchData.getInstance();
+		data.setStopId(String.valueOf(id));
+		
+		Fragment fragment = new TimeFragment();	
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
+		
+		fragmentTrans.replace(R.id.content_frame, fragment);
+		fragmentTrans.addToBackStack(null);
+		fragmentTrans.commit();
     }
 }

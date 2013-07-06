@@ -46,7 +46,6 @@ public class MainActivity extends SherlockFragmentActivity {
 
         setUpNavDrawer();   
         if (savedInstanceState == null) {
-        	Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show();
         	addRouteFragment();
         }
     }

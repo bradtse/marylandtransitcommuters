@@ -36,22 +36,22 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_routes, container, false);
+		rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 		return rootView;
 	}
 
-	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mRouteList = (ListView) rootView.findViewById(R.id.routes_list);
+		mRouteList = (ListView) rootView.findViewById(R.id.fragment_list);
 	
 		mReceiver = new TransitResultReceiver(new Handler());
 		mReceiver.setReceiver(this);
 		
-		// Start a new service that contacts the server
+		// Start a new service that contacts the server and gets the list of 
+		// routes
 		Intent intent  = new Intent(context, TransitService.class);
-		intent.putExtra("type", 0);
+		intent.putExtra(TransitService.TYPE, TransitService.ROUTES);
 		intent.putExtra("receiver", mReceiver);
 		context.startService(intent);
 	}
@@ -70,9 +70,10 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 				break;
 			case TransitService.FINISH:
 				SearchData profile = SearchData.getInstance();
+				String[] routes = profile.getRoutesCol("route_short_name");
 				mRouteList.setAdapter(new ArrayAdapter<String>(
 							context, android.R.layout.simple_list_item_1, 
-							profile.getRoutesCol("ShortName")));
+							routes));
 				mRouteList.setOnItemClickListener(new RouteItemClickListener());
 				pd.dismiss();
 				break;
@@ -88,7 +89,7 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			selectRoute(id);
+			selectItem(id);
 		}
     }
     
@@ -99,7 +100,7 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
     /** 
      * Helper function to replace the current fragment with the time fragment
      */
-    private void selectRoute(long id) {
+    private void selectItem(long id) {
 		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(id));
 		
 		SearchData data = SearchData.getInstance();
