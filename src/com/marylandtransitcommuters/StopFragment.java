@@ -2,9 +2,11 @@ package com.marylandtransitcommuters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	private Context context;
 	private ListView mStopList;
 	private Cursor mCursor;
+	private TransitResultReceiver mReceiver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,6 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_routes, container, false);
-		
 		return rootView;
 	}
 	
@@ -43,8 +45,14 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 		
 		mStopList = (ListView) rootView.findViewById(R.id.routes_list);
 		
-		Log.d(MainActivity.TAG, "Initialize stop list");
-
+		mReceiver = new TransitResultReceiver(new Handler());
+		mReceiver.setReceiver(this);
+		
+		// Start a new service that contacts the server
+		Intent intent  = new Intent(context, TransitService.class);
+		intent.putExtra("type", 0);
+		intent.putExtra("receiver", mReceiver);
+		context.startService(intent);
 		
 	}
 	

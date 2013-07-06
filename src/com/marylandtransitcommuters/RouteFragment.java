@@ -69,8 +69,9 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 				pd.show();
 				break;
 			case TransitService.FINISH:
-				CurrentSearch profile = CurrentSearch.getInstance();
-				mRouteList.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, 
+				SearchData profile = SearchData.getInstance();
+				mRouteList.setAdapter(new ArrayAdapter<String>(
+							context, android.R.layout.simple_list_item_1, 
 							profile.getRoutesCol("ShortName")));
 				mRouteList.setOnItemClickListener(new RouteItemClickListener());
 				pd.dismiss();
@@ -101,11 +102,10 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
     private void selectRoute(long id) {
 		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(id));
 		
-		CurrentSearch profile = CurrentSearch.getInstance();
-		profile.setRouteId(String.valueOf(id));
+		SearchData data = SearchData.getInstance();
+		data.setRouteId(String.valueOf(id));
 		
-		Fragment fragment = new TimeFragment();
-		
+		Fragment fragment = new DirectionFragment();	
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
 		

@@ -27,11 +27,25 @@ public class TransitService extends IntentService {
 	}
 	
 	private void restHelper(int type) {
-		CurrentSearch profile = CurrentSearch.getInstance();
+		SearchData profile = SearchData.getInstance();
 		switch(type) {
 			case 0:
-				profile.setRouteJSON(new Rest("SELECT * FROM Routes ORDER BY RouteId").post());
+				profile.setRouteJSON(new Rest("SELECT * FROM Routes ORDER BY ShortName").post());
+				break;
 			case 1:
+				String query = String.format("SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T1.shape_id, 
+					    T3.stop_lat, T3.stop_lon, T3.stop_name 
+					    FROM 
+					    trips AS T1
+					    JOIN
+					    stop_times AS T2
+					        ON T1.trip_id=T2.trip_id AND route_id = 6122 AND direction_id = 0
+					    JOIN 
+					    stops AS T3
+					        ON T2.stop_id=T3.stop_id
+					    GROUP BY T3.stop_id
+					    ORDER BY T2.stop_sequence");
+				profile.setRouteJSON(new Rest(""))
 				return;
 			default:
 		}

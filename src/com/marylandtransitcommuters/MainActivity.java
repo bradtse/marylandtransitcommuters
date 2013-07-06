@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,8 +44,11 @@ public class MainActivity extends SherlockFragmentActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        setUpNavDrawer();       
-        addRouteFragment();
+        setUpNavDrawer();   
+        if (savedInstanceState == null) {
+        	Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show();
+        	addRouteFragment();
+        }
     }
  
     @Override
@@ -115,7 +119,8 @@ public class MainActivity extends SherlockFragmentActivity {
      */
     private void addRouteFragment() {
 		Fragment fragment = new RouteFragment();
-		FragmentTransaction fragmentTrans = getSupportFragmentManager().beginTransaction();
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
 		fragmentTrans.replace(R.id.content_frame, fragment).commit();
     }
     
