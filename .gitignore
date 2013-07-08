@@ -2,6 +2,8 @@
 ## Eclipse
 #################
 
+scripts-n-data/py-gtfs-mysql/create_gtfs_db.sql
+scripts-n-data/py-gtfs-mysql/gtfs/
 *.pydevproject
 .project
 .metadata
