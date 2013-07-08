@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+scripts-n-data/
 *.pydevproject
 .project
 .metadata
