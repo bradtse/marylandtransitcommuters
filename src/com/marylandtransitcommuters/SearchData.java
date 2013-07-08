@@ -15,12 +15,12 @@ import android.util.Log;
 public final class SearchData {
 	public static final String KEY = "profile";
 	private static SearchData instance = null;
-	private int direction;
-	private String routeId;
-	private String stopId;
-	private JSONArray routesData;
-	private JSONArray stopsData;
-	private JSONArray timesData;
+	private int direction = -1;
+	private int routeIndex = -1;
+	private int stopIndex = -1;
+	private JSONArray routesData = null;
+	private JSONArray stopsData = null;
+	private JSONArray timesData = null;
 //	private DateTime[] timeList;
 	
 	private SearchData() {
@@ -33,15 +33,22 @@ public final class SearchData {
 		return instance;
 	}
 
-	public void setRouteId(String routeId) {
-		this.routeId = routeId;
+	public void setRouteIndex(int index) {
+		this.routeIndex = index;
 	}
 	
 	public String getRouteId() {
-		return this.routeId;
+		if (routesData != null) {
+			try {
+				return routesData.getJSONObject(routeIndex).getString("route_id");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} 
+		return null;
 	}
 	
-	public void setRouteJSON(JSONArray json) {
+	public void putRoutesData(JSONArray json) {
 		this.routesData = json;
 	}
 	
@@ -69,7 +76,7 @@ public final class SearchData {
 		return this.direction;
 	}
 	
-	public void setStopsJSON(JSONArray json) {
+	public void putStopsData(JSONArray json) {
 		this.stopsData = json;
 	}
 	
@@ -89,15 +96,22 @@ public final class SearchData {
 		return finArr;
 	}
 	
-	public void setStopId(String stopId) {
-		this.stopId = stopId;
+	public void setStopIndex(int index) {
+		this.stopIndex = index;
 	}
 	
 	public String getStopId() {
-		return this.stopId;
+		if (stopsData != null) {
+			try {
+				return stopsData.getJSONObject(stopIndex).getString("stop_id");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
-	public void setTimesJSON(JSONArray json) {
+	public void putTimesData(JSONArray json) {
 		this.timesData = json;
 	}
 	

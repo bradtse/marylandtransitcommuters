@@ -90,15 +90,15 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			selectItem(id);
+			selectItem(position);
 		}
     }
     
-    private void selectItem(long id) {
-		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(id));
+    private void selectItem(int position) {
+		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(position));
 		
 		SearchData data = SearchData.getInstance();
-		data.setStopId(String.valueOf(id));
+		data.setStopIndex(position);
 		
 		Fragment fragment = new TimeFragment();	
 		FragmentManager fragmentManager = getFragmentManager();

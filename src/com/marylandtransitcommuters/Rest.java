@@ -13,23 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Base64;
 import android.util.Log;
 
 public class Rest {
 //	private static final String WEBSITE = "http://android:test@bradleytse.com/testing/transitapi.php";
 	private static final String WEBSITE = "http://bradleytse.com/transit/gtfsapi.php";
-	private URL url;
-	private String query;
 	
-	public Rest(String q) {
-		try {
-			url = new URL(WEBSITE);
-		} catch (MalformedURLException e) {
-			Log.d(MainActivity.TAG, "URL Fail: " + e.getMessage());
-		}
-		query = q;
-	}
+	public Rest() {}
 	
 	public JSONArray get() {
 //		// Create new URL and Json objects, then pass it along to the post helper
@@ -46,16 +36,15 @@ public class Rest {
 	}
 	
 	/* I think I am going to use post for queries also */
-	public JSONArray post() {
-		InputStream in = null;
-		BufferedWriter bw = null;
+	public static JSONArray post(JSONObject data) {
 		StringBuilder response = new StringBuilder(); // final response
 		HttpURLConnection conn = null;
 		JSONArray json = null;
+		URL url = null;
 		int responseCode = 0;
-		
+
 		try {
-			String jsonQuery = new JSONObject().put("select", query).toString();
+			url = new URL(WEBSITE);
 			// Does not actually do any network IO
 			conn = (HttpURLConnection) url.openConnection();
 //			String basicAuth = "Basic " + new String(Base64.encode(url.getUserInfo().getBytes(), 0));
@@ -68,16 +57,16 @@ public class Rest {
 			conn.setRequestMethod("POST");
 			
 			// This actually opens the connection and then sends POST and headers
-			bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 
 			// Send the message
-			bw.write(jsonQuery);
+			Log.d(MainActivity.TAG, data.toString());
+			bw.write(data.toString());
 			bw.flush();
 			bw.close(); 
-			Log.d(MainActivity.TAG, "BRAD");
 
 			// Get server response
-			in = conn.getInputStream();
+			InputStream in = conn.getInputStream();
 			responseCode = conn.getResponseCode();
 
 			// Convert to string
@@ -87,16 +76,18 @@ public class Rest {
 			}
 			
 			json = new JSONArray(response.toString());
+		} catch (MalformedURLException e) {
+			Log.d(MainActivity.TAG, "URL Fail: " + e.getMessage());
 		} catch (IOException e) {
 			Log.d(MainActivity.TAG, "Ok " + e.getMessage());
 		} catch (JSONException e) {
 			Log.d(MainActivity.TAG, response.toString());
 			Log.d(MainActivity.TAG, e.getMessage());
 		} finally {
-			Log.d(MainActivity.TAG, String.valueOf(responseCode));
+			Log.d(MainActivity.TAG, "Response code: " + String.valueOf(responseCode));
 			conn.disconnect(); // close connection
 		}
-		Log.d(MainActivity.TAG, json.toString());
+//		Log.d(MainActivity.TAG, json.toString());
 		return json;
 	}
 }

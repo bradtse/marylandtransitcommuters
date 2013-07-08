@@ -5,7 +5,7 @@ FROM
 trips AS T1
 JOIN
 stop_times AS T2
-    ON T1.trip_id=T2.trip_id AND route_id = 6122 AND direction_id = 0
+    ON T1.trip_id=T2.trip_id AND T1.route_id = 6122 AND T1.direction_id = 0
 JOIN 
 stops AS T3
     ON T2.stop_id=T3.stop_id
@@ -20,7 +20,7 @@ FROM
 trips as T1
 JOIN
 stop_times as T2
-    on T1.trip_id = T2.trip_id AND route_id = 6122 AND direction_id = 0
+    on T1.trip_id = T2.trip_id AND T1.route_id = 6122 AND T1.direction_id = 0
 JOIN
 stops as T3
     on T2.stop_id = T3.stop_id and T2.stop_id = 11785

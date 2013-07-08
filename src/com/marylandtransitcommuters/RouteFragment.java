@@ -89,7 +89,7 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			selectItem(id);
+			selectItem(position);
 		}
     }
     
@@ -100,11 +100,11 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
     /** 
      * Helper function to replace the current fragment with the time fragment
      */
-    private void selectItem(long id) {
-		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(id));
+    private void selectItem(int position) {
+		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(position));
 		
 		SearchData data = SearchData.getInstance();
-		data.setRouteId(String.valueOf(id));
+		data.setRouteIndex(position);
 		
 		Fragment fragment = new DirectionFragment();	
 		FragmentManager fragmentManager = getFragmentManager();
