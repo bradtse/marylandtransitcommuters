@@ -1,25 +1,18 @@
 package com.marylandtransitcommuters;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragment;
 
 /**
  * The fragment that allows the user to select whether they want AM (inbound) or
@@ -28,9 +21,6 @@ import android.widget.Toast;
 public class DirectionFragment extends SherlockFragment implements OnClickListener {
 	private Context context;
 	private View rootView;
-	private Cursor mCursor;
-	private int direction; // INBOUND/AM = 0, OUTBOUND/PM = 1
-	private TransitResultReceiver mReceiver;
 	
 	public DirectionFragment() {}
 	
@@ -110,14 +100,6 @@ public class DirectionFragment extends SherlockFragment implements OnClickListen
 		
 		fragmentTrans.replace(R.id.content_frame, fragment);
 		fragmentTrans.addToBackStack(null);
-		fragmentTrans.commit();
-		
-//		mReceiver = new TransitResultReceiver(new Handler());
-//		mReceiver.setReceiver(this);
-//		
-//		Intent intent = new Intent(context, TransitService.class);
-//		intent.putExtra("type", 1);
-//		intent.putExtra("receiver", mReceiver);
-//		context.startService(intent);		
+		fragmentTrans.commit();	
 	}
 }

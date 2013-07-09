@@ -3,22 +3,17 @@ package com.marylandtransitcommuters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -27,7 +22,6 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 	private View rootView;
 	private Context context;
 	private ListView mStopList;
-	private Cursor mCursor;
 	private TransitResultReceiver mReceiver;
 	private ProgressDialog pd;
 	

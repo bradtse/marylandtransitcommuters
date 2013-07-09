@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', 'On');
+// ini_set('display_errors', 'On');
 
 /*
  * The interface to the gtfs database
@@ -28,14 +28,26 @@ $type = $json['type'];
  * NOTE: Make sure to check the validity of a parameter provided
  */
 
-$type = "routes";
+// These should be checked or whitelisted 
+$route_id = $json['route_id'];
+$direction_id = $json['direction_id'];
+$stop_id = $json['stop_id'];
 
 if ($type == "routes") {
     queryDB($routesQuery);
 } else if ($type == "stops") {
-
+    $keys = array(
+                    ":routeid" => $route_id,
+                    ":directionid" => $direction_id
+                    );
+    queryDB($stopsQuery, $keys);
 } else if ($type == "times") {
-
+    $keys = array(
+                    ":routeid" => $route_id,
+                    ":directionid" => $direction_id,
+                    ":stopid" => $stop_id 
+                    );
+    queryDB($timesQuery, $keys);
 } else {
     echo "YOU DONT BELONG HERE!!";
 }
