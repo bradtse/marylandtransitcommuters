@@ -18,11 +18,11 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-public class StopFragment extends SherlockFragment implements TransitResultReceiver.Receiver{
+public class StopFragment extends SherlockFragment implements TransitReceiver.Receiver{
 	private View rootView;
 	private Context context;
 	private ListView mStopList;
-	private TransitResultReceiver mReceiver;
+	private TransitReceiver mReceiver;
 	private ProgressDialog pd;
 	
 	@Override
@@ -44,7 +44,7 @@ public class StopFragment extends SherlockFragment implements TransitResultRecei
 		
 		mStopList = (ListView) rootView.findViewById(R.id.fragment_list);
 		
-		mReceiver = new TransitResultReceiver(new Handler());
+		mReceiver = new TransitReceiver(new Handler());
 		mReceiver.setReceiver(this);
 		
 		// Start a new service that contacts the server

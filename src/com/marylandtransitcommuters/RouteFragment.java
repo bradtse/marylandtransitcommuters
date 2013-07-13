@@ -20,11 +20,11 @@ import com.actionbarsherlock.app.SherlockFragment;
 /**
  * The fragment showing the list of all available routes
  */
-public class RouteFragment extends SherlockFragment implements TransitResultReceiver.Receiver {
+public class RouteFragment extends SherlockFragment implements TransitReceiver.Receiver {
 	private Context context;
 	private View rootView;
 	private ListView mRouteList;
-	private TransitResultReceiver mReceiver;
+	private TransitReceiver mReceiver;
 	private ProgressDialog pd;
 	
 	@Override
@@ -45,7 +45,7 @@ public class RouteFragment extends SherlockFragment implements TransitResultRece
 		super.onActivityCreated(savedInstanceState);
 		mRouteList = (ListView) rootView.findViewById(R.id.fragment_list);
 	
-		mReceiver = new TransitResultReceiver(new Handler());
+		mReceiver = new TransitReceiver(new Handler());
 		mReceiver.setReceiver(this);
 		
 		// Start a new service that contacts the server and gets the list of 

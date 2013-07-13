@@ -8,10 +8,10 @@ import android.os.ResultReceiver;
  * Allows the IntentService to let the main ui thread know it finished through
  * a callback
  */
-public class TransitResultReceiver extends ResultReceiver {
+public class TransitReceiver extends ResultReceiver {
 	private Receiver mReceiver;
 	
-	public TransitResultReceiver(Handler handler) {
+	public TransitReceiver(Handler handler) {
 		super(handler);
 	}
 	

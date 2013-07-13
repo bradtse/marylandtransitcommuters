@@ -21,8 +21,7 @@ public final class SearchData {
 	private JSONArray timesData = null;
 //	private DateTime[] timeList;
 	
-	private SearchData() {
-	}
+	private SearchData() {}
 	
 	public static SearchData getInstance() {
 		if (instance == null) {
