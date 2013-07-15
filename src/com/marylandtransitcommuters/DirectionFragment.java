@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -18,77 +20,53 @@ import com.actionbarsherlock.app.SherlockFragment;
  * The fragment that allows the user to select whether they want AM (inbound) or
  * PM (outbound) times to be shown.
  */
-public class DirectionFragment extends SherlockFragment implements OnClickListener {
+public class DirectionFragment extends SherlockFragment {
 	private Context context;
 	private View rootView;
-	
-	public DirectionFragment() {}
-	
+	private ListView mList;
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-//		// The column we want to query for
-//		String[] mProjection = {TransitContract.Routes.KEY_ROUTE_ID};
-//
-//		// Append the _ID to the base uri
-//		String id = getArguments().getString(TransitContract.Routes._ID);
-//		Uri data = Uri.withAppendedPath(TransitContract.Routes.CONTENT_URI, id);
-//		
-//		mCursor = context.getContentResolver().query(
-//			data,
-//			mProjection,
-//			null,
-//			null,
-//			null
-//		);
-//		
-//		if (mCursor == null) {
-//			Log.d(MainActivity.TAG, "Row not found");
-//		} else {
-//			mCursor.moveToFirst();
-//			int index = mCursor.getColumnIndex(TransitContract.Routes.KEY_ROUTE_ID);	
-//			routeId = mCursor.getString(index);
-//			Toast.makeText(context, routeId, Toast.LENGTH_SHORT).show();
-//		}
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_time, container, false);
-		
-		/* Allows the fragment to handle the button clicks instead of the main activity */
-		Button am = (Button) rootView.findViewById(R.id.am_button);
-		am.setOnClickListener(this);
-		Button pm = (Button) rootView.findViewById(R.id.pm_button);
-		pm.setOnClickListener(this);
-		
+		rootView = inflater.inflate(R.layout.fragment_layout, container, false);
 		return rootView;
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		text.setText("Choose your direction:");
+		
+		mList = (ListView) rootView.findViewById(R.id.fragment_list);
+		String[] direction = getResources().getStringArray(R.array.direction);
+		
+		mList.setAdapter(new ArrayAdapter<String>(
+				context, android.R.layout.simple_list_item_1, 
+				direction));
+		mList.setOnItemClickListener(new ItemClickListener());
 	}
-
-	/* 
-	 * Handles the click event on the AM and PM buttons
-	 */
-	@Override
-	public void onClick(View view) {
-		SearchData data = SearchData.getInstance();
-		Toast.makeText(context, data.getRouteId(), Toast.LENGTH_SHORT).show();
-		switch(view.getId()) {
-			case R.id.am_button:
-				data.setDirection(0);
-				break;
-			case R.id.pm_button:
-				data.setDirection(1);
-				break;
-			default:
-				throw new IllegalArgumentException("Should only be called via the buttons");
+	
+    class ItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			selectItem(position);
 		}
+    }
+
+	public void selectItem(int position) {
+		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(position));
+		
+		SearchData profile = SearchData.getInstance();
+		profile.setIndex(position, TransitService.Type.DIRECTION);
 		
 		/* 
 		 * Starts the stops fragment

@@ -85,7 +85,6 @@ public class MainActivity extends SherlockFragmentActivity {
 //    	if (mDrawerToggle.onOptionsItemSelected(item)) {
 //    		return true;
 //    	}
-    	
     	switch(item.getItemId()) {
     		// A workaround until ABS implements onOptionsItemSelected 
 	    	case android.R.id.home:

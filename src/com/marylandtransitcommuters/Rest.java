@@ -21,20 +21,6 @@ public class Rest {
 	
 	public Rest() {}
 	
-	public JSONArray get() {
-//		// Create new URL and Json objects, then pass it along to the post helper
-//		String charset = "UTF-8";
-//		query = String.format("param1=%s&param2=%s",
-//							  URLEncoder.encode("param1", charset),
-//							  URLEncoder.encode("param2", charset));
-//
-//		HttpURLConnection urlConnection = (HttpURLConnection) new URL(Surl + "?" + query).openConnection();                        
-//		urlConnection.connect();
-//
-//		 Set up properties
-		return null;
-	}
-	
 	/* I think I am going to use post for queries also */
 	public static JSONArray post(JSONObject data) {
 		StringBuilder response = new StringBuilder(); // final response

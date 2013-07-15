@@ -12,14 +12,13 @@ import android.util.Log;
  */
 public final class SearchData {
 	public static final String KEY = "profile";
-	private static SearchData instance = null;
+	private static SearchData instance;
 	private int direction = -1;
 	private int routeIndex = -1;
 	private int stopIndex = -1;
-	private JSONArray routesData = null;
-	private JSONArray stopsData = null;
-	private JSONArray timesData = null;
-//	private DateTime[] timeList;
+	private JSONArray routesData;
+	private JSONArray stopsData;
+	private JSONArray timesData;
 	
 	private SearchData() {}
 	
@@ -30,8 +29,33 @@ public final class SearchData {
 		return instance;
 	}
 
-	public void setRouteIndex(int index) {
-		this.routeIndex = index;
+	public void setIndex(int index, TransitService.Type type) {
+		switch(type) {
+			case ROUTES:
+				this.routeIndex = index;
+				break;
+			case STOPS:
+				this.stopIndex = index;
+				break;
+			case DIRECTION:
+				this.direction = index;
+			default:	
+		}
+	}
+	
+	public void setData(JSONArray json, TransitService.Type type) {
+		switch(type) {
+			case ROUTES:
+				this.routesData = json;
+				break;
+			case STOPS:
+				this.stopsData = json;
+				break;
+			case TIMES:
+				this.timesData = json;
+				break;
+			default:
+		}
 	}
 	
 	public String getRouteId() {
@@ -45,15 +69,9 @@ public final class SearchData {
 		return null;
 	}
 	
-	public void putRoutesData(JSONArray json) {
-		this.routesData = json;
-	}
-	
 	public String[] getRoutesCol(String key) {
-		int i = 0;
-		int length = routesData.length();
 		ArrayList<String> keyList = new ArrayList<String>();
-		for (i = 0; i < length; i++) {
+		for (int i = 0; i < routesData.length(); i++) {
 			try {
 				keyList.add(routesData.getJSONObject(i).getString(key));
 			} catch (JSONException e) {
@@ -61,27 +79,16 @@ public final class SearchData {
 			}
 		}
 		String[] finArr = new String[keyList.size()];
-		finArr = keyList.toArray(finArr);
-		return finArr;
-	}
-	
-	public void setDirection(int direction) {
-		this.direction = direction;
+		return keyList.toArray(finArr);
 	}
 	
 	public int getDirection() {
 		return this.direction;
 	}
-	
-	public void putStopsData(JSONArray json) {
-		this.stopsData = json;
-	}
-	
+
 	public String[] getStopsCol(String key) {
-		int i = 0;
-		int length = stopsData.length();
 		ArrayList<String> keyList = new ArrayList<String>();
-		for (i = 0; i < length; i++) {
+		for (int i = 0; i < stopsData.length(); i++) {
 			try {
 				keyList.add(stopsData.getJSONObject(i).getString(key));
 			} catch (JSONException e) {
@@ -89,12 +96,7 @@ public final class SearchData {
 			}
 		}
 		String[] finArr = new String[keyList.size()];
-		finArr = keyList.toArray(finArr);
-		return finArr;
-	}
-	
-	public void setStopIndex(int index) {
-		this.stopIndex = index;
+		return keyList.toArray(finArr);
 	}
 	
 	public String getStopId() {
@@ -107,16 +109,10 @@ public final class SearchData {
 		}
 		return null;
 	}
-	
-	public void putTimesData(JSONArray json) {
-		this.timesData = json;
-	}
-	
+
 	public String[] getTimesCol(String key) {
-		int i = 0;
-		int length = timesData.length();
 		ArrayList<String> keyList = new ArrayList<String>();
-		for (i = 0; i < length; i++) {
+		for (int i = 0; i < timesData.length(); i++) {
 			try {
 				keyList.add(timesData.getJSONObject(i).getString(key));
 			} catch (JSONException e) {
@@ -124,8 +120,6 @@ public final class SearchData {
 			}
 		}
 		String[] finArr = new String[keyList.size()];
-		finArr = keyList.toArray(finArr);
-		return finArr;
+		return keyList.toArray(finArr);
 	}
-	
 }

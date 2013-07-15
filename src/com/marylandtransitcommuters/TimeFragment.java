@@ -1,77 +1,24 @@
 package com.marylandtransitcommuters;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
-public class TimeFragment extends SherlockFragment implements TransitReceiver.Receiver {
-	private View rootView;
-	private Context context;
-	private ListView mTimeList;
-	private TransitReceiver mReceiver;
-	private ProgressDialog pd;
-	
-	public TimeFragment() {
-		
-	}
+public class TimeFragment extends TransitFragment {
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		context = getActivity();
+	public void setServiceType(Intent intent) {
+		intent.putExtra(TransitService.Type.KEY, TransitService.Type.TIMES);
 	}
 
-	@Override 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_listview, container, false);
-		return rootView;
-	}
-	
-	@Override 
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		mTimeList = (ListView) rootView.findViewById(R.id.fragment_list);
-		
-		mReceiver = new TransitReceiver(new Handler());
-		mReceiver.setReceiver(this);
-		
-		// Start a new service that contacts the server
-		Intent intent  = new Intent(context, TransitService.class);
-		intent.putExtra(TransitService.TYPE, TransitService.TIMES);
-		intent.putExtra("receiver", mReceiver);
-		context.startService(intent);
-	}
-	
 	@Override
-	public void onReceiveResult(int resultCode, Bundle resultData) {
-		switch(resultCode) {
-			case TransitService.START:
-				pd = new ProgressDialog(context);
-				pd.setTitle("Getting data from server");
-				pd.setMessage("Please wait");
-				pd.show();
-				break;
-			case TransitService.FINISH:
-				SearchData profile = SearchData.getInstance();
-				String[] times = profile.getTimesCol("arrival_time");
-				mTimeList.setAdapter(new ArrayAdapter<String>(
-							context, android.R.layout.simple_list_item_1, 
-							times));
-				pd.dismiss();
-				break;
-			default:
+	public void setAdapter() {
+		mList.setAdapter(new ArrayAdapter<String>(
+					context, android.R.layout.simple_list_item_1, 
+					profile.getTimesCol("arrival_time")));
+	}
 
-		}
+	@Override
+	public void selectItem(int position) {
+		return;
 	}
 }
