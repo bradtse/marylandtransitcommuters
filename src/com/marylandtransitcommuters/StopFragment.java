@@ -7,11 +7,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class StopFragment extends TransitFragment {
+	public static final String TAG = "stops";
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
-		text.setText("Choose your stop:");
+		text.setText(R.string.stops_header);
 		super.onActivityCreated(savedInstanceState);
 	}
 	
@@ -34,6 +35,6 @@ public class StopFragment extends TransitFragment {
 		
 		profile.setIndex(position, TransitService.Type.STOPS);
 		
-		replaceFragment(new TimeFragment());
+		replaceFragment(new TimeFragment(), "stops", "time");
 	}
 }

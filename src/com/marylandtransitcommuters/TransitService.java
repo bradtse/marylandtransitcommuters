@@ -22,10 +22,6 @@ public class TransitService extends IntentService {
 		public static final String KEY = "type";
 	}
 	
-	public static final String ROUTEID = "route_id";
-	public static final String DIRID = "direction_id";
-	public static final String STOPID = "stop_id";
-
 	public TransitService() {
 		super("TransitIntentService");
 	}
@@ -44,9 +40,9 @@ public class TransitService extends IntentService {
 		try {
 			SearchData profile = SearchData.getInstance();
 			JSONObject data = new JSONObject();
-			data.put(ROUTEID, profile.getRouteId());
-			data.put(DIRID, profile.getDirection());
-			data.put(STOPID, profile.getStopId());
+			data.put(SearchData.ROUTE_ID, profile.getRouteId());
+			data.put(SearchData.DIR_ID, profile.getDirection());
+			data.put(SearchData.STOP_ID, profile.getStopId());
 			data.put(Type.KEY, type.name().toLowerCase(Locale.US));
 			profile.setData(Rest.post(data), type);
 		} catch (JSONException e) {

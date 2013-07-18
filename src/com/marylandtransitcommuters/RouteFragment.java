@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -23,11 +22,12 @@ import android.widget.TextView;
  * The fragment showing the list of all available routes
  */
 public class RouteFragment extends TransitFragment {
+	public static final String TAG = "routes";
     
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
-		text.setText("Choose your route:");
+		text.setText(R.string.routes_header);
 		super.onActivityCreated(savedInstanceState);
 	}
 	
@@ -59,7 +59,7 @@ public class RouteFragment extends TransitFragment {
 								0, to.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					to.setSpan(new RelativeSizeSpan(0.8f), 0, to.length(), 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					to.setSpan(new ForegroundColorSpan(Color.RED), 0, to.length(),
+					to.setSpan(new ForegroundColorSpan(0xFFED4035), 0, to.length(),
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					result.replace(index+1, index+3, to);
 					tv.setText(result);
@@ -76,6 +76,6 @@ public class RouteFragment extends TransitFragment {
 		
 		profile.setIndex(position, TransitService.Type.ROUTES);
 		
-		replaceFragment(new DirectionFragment());
+		replaceFragment(new DirectionFragment(), TAG, DirectionFragment.TAG);
 	}
 }

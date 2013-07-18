@@ -12,6 +12,16 @@
         -->
     </style>
 
+    <style name="Theme.MyTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/Widget.MyTheme.ActionBar</item>
+<!--         <item name="android:actionBarStyle">@style/Widget.MyTheme.ActionBar</item> -->
+    </style>
+    
+    <style name="Widget.MyTheme.ActionBar" parent="Widget.Sherlock.ActionBar">
+        <item name="android:background">#ffffffff</item>
+        <item name="background">#ffffffff</item>
+    </style>
+    
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->

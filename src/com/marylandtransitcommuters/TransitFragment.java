@@ -21,20 +21,22 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	View rootView;
 	ListView mList;
 	SearchData profile;
+	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		context = getActivity();
-		profile = SearchData.getInstance();
-		
-		// Set up the progress dialog
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setTitle("Retrieving data from server");
-		progressDialog.setMessage("Please wait");
+//		if (alive == false) {
+			context = getActivity();
+			profile = SearchData.getInstance();
+			
+			// Set up the progress dialog
+			progressDialog = new ProgressDialog(context);
+			progressDialog.setTitle("Retrieving data from server");
+			progressDialog.setMessage("Please wait");
+//		}
 	}
 	
 	@Override
@@ -47,15 +49,23 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mList = (ListView) rootView.findViewById(R.id.fragment_list);
-
-		mReceiver = new TransitReceiver(new Handler());
-		mReceiver.setReceiver(this);
 		
-		Intent intent  = new Intent(context, TransitService.class);
-		intent.putExtra("receiver", mReceiver);
-		setServiceType(intent);
-		context.startService(intent);
+//		if (alive == false) {
+			mList = (ListView) rootView.findViewById(R.id.fragment_list);
+			mReceiver = new TransitReceiver(new Handler());
+			mReceiver.setReceiver(this);
+			
+			Intent intent  = new Intent(context, TransitService.class);
+			intent.putExtra("receiver", mReceiver);
+			setServiceType(intent);
+			context.startService(intent);
+			alive = true;
+//		} 
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 	}
 	
 	/**
@@ -97,11 +107,20 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      */
     public abstract void selectItem(int position);
     
-    public void replaceFragment(Fragment fragment) {
-    	FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
-		fragmentTrans.replace(R.id.content_frame, fragment);
-		fragmentTrans.addToBackStack(null);
-		fragmentTrans.commit();
+    public void replaceFragment(Fragment fragment, String currFragTag, String nextFragTag) {
+    	FragmentManager fm = getFragmentManager();
+    	Fragment nextFrag = fm.findFragmentByTag(nextFragTag);
+    	Fragment currFrag = fm.findFragmentByTag(currFragTag);
+    	
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
+							   R.animator.slide_in_left, R.animator.slide_out_right);
+		ft.hide(currFrag);
+		if (nextFrag != null) {
+			ft.remove(nextFrag);
+		} 
+		ft.add(R.id.content_frame, fragment, nextFragTag);
+		ft.addToBackStack(null);
+		ft.commit();
     }
 }

@@ -2,11 +2,15 @@ package com.marylandtransitcommuters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+import org.joda.time.Period;
 import org.joda.time.Seconds;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -22,6 +26,9 @@ public final class SearchData {
 	public static final String STOP_NAME = "stop_name";
 	public static final String ARRIVAL_TIME = "arrival_time";
 	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
+	public static final String STOP_ID = "stop_id";
+	public static final String ROUTE_ID = "route_id";
+	public static final String DIR_ID = "direction_id";
 	private static SearchData instance;
 	private int direction = -1;
 	private int routeIndex = -1;
@@ -29,7 +36,6 @@ public final class SearchData {
 	private JSONArray routesData;
 	private JSONArray stopsData;
 	private JSONArray timesData;
-	private final Pattern pattern = Pattern.compile("^.*\\S-\\S.*$");
 
 	private SearchData() {}
 	
@@ -112,11 +118,8 @@ public final class SearchData {
 		String longName = null;
 		try {
 			longName = routesData.getJSONObject(index).getString(ROUTE_LONG_NAME);
-			Matcher matcher = pattern.matcher(longName);
-			if (matcher.matches()) {
-				longName = longName.replaceAll("-", " - ");
-			}
-			longName = longName.replaceAll("-", "to");
+			longName = longName.replaceAll("\\s*-\\s*", " to ");
+			longName = longName.replaceAll(" TO ", " to ");
 		} catch (JSONException e) {
 			Log.d(MainActivity.TAG, e.getMessage());
 		}
@@ -143,7 +146,7 @@ public final class SearchData {
 	public String getStopId() {
 		if (stopsData != null) {
 			try {
-				return stopsData.getJSONObject(stopIndex).getString("stop_id");
+				return stopsData.getJSONObject(stopIndex).getString(STOP_ID);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -157,17 +160,16 @@ public final class SearchData {
 		int currTimeSecs = dt.getSecondOfDay();
 		for (int i = 0; i < timesData.length(); i++) {
 			try {
-				StringBuilder result = new StringBuilder();
-				String arrivalTime = timesData.getJSONObject(i).getString(ARRIVAL_TIME);
-				result.append(arrivalTime + " : ");
 				int arrivalTimeSecs = Integer.parseInt(timesData.getJSONObject(i).getString(ARRIVAL_TIME_SECONDS));
 				if (arrivalTimeSecs < currTimeSecs) {
 					continue;
 				}
-				Seconds sec = Seconds.seconds(arrivalTimeSecs);
-				sec.minus(currTimeSecs);
 
-				result.append(sec.toStandardMinutes().toString());
+				StringBuilder result = new StringBuilder();
+				result.append(timeUntilArrival(currTimeSecs, arrivalTimeSecs));
+				result.append(" until " );
+				result.append(clockTime(arrivalTimeSecs));
+				
 				list.add(result.toString());
 			} catch (JSONException e) {
 				Log.d(MainActivity.TAG, e.getMessage());
@@ -175,5 +177,33 @@ public final class SearchData {
 		}
 		String[] finArr = new String[list.size()];
 		return list.toArray(finArr);
+	}
+
+	private String timeUntilArrival(int currTimeSecs, int arrivalTimeSecs) {
+		Seconds seconds = Seconds.seconds(arrivalTimeSecs - currTimeSecs);
+		Period period = new Period(seconds);
+		PeriodFormatter dhm = new PeriodFormatterBuilder()
+				.appendDays()
+				.appendSuffix(" day", " days")
+				.appendSeparator(" and ")
+				.appendHours()
+				.appendSuffix(" hour", " hours")
+				.appendSeparator(" and " )
+				.appendMinutes()
+				.appendSuffix(" minute", " minutes")
+				.toFormatter();
+		return dhm.print(period.normalizedStandard());
+	}
+	
+	private String clockTime(int arrivalTimeSecs) {
+		Seconds seconds = Seconds.seconds(arrivalTimeSecs);
+		int hours = seconds.toStandardHours().getHours() % 24;
+//		if (hours >= 24) {
+//			hours = hours - 24;
+//		}
+		int minutes = seconds.toStandardMinutes().getMinutes() % 60;
+		LocalTime lt = new LocalTime(hours, minutes);
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm");
+		return fmt.print(lt);
 	}
 }

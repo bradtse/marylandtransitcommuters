@@ -8,8 +8,11 @@
     <string name="drawer_item_icon">Icon for drawer item</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <string name="routes_header">Choose your route:</string>
-    
+    <string name="routes_header">Choose Your Route</string>
+    <string name="direction_header">Choose Your Direction</string>
+    <string name="stops_header">Choose Your Stop</string>
+    <string name="times_header">Time Until Next Bus</string>
+        
     <!-- Items added to nav drawer -->
     <string-array name="items">
         <item>Bus</item>

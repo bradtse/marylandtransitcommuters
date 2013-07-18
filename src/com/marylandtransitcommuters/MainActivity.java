@@ -46,7 +46,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
         setUpNavDrawer();   
         if (savedInstanceState == null) {
-        	addRouteFragment();
+        	initializeFragments();
         }
     }
  
@@ -115,11 +115,12 @@ public class MainActivity extends SherlockFragmentActivity {
     /**
      *  Initialize the main frame layout with the route fragment
      */
-    private void addRouteFragment() {
-		Fragment fragment = new RouteFragment();
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTrans = fragmentManager.beginTransaction();
-		fragmentTrans.replace(R.id.content_frame, fragment).commit();
+    private void initializeFragments() {
+		Fragment routeFrag = new RouteFragment();
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.add(R.id.content_frame, routeFrag, RouteFragment.TAG);
+		ft.commit();
     }
     
     /**
