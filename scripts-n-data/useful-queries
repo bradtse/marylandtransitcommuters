@@ -15,7 +15,7 @@ ORDER BY T2.stop_sequence;
 
 WORKS WELL
 
-SELECT T2.arrival_time, T2.departure_time 
+SELECT T2.arrival_time, T2.arrival_time_seconds  
 FROM 
 trips as T1
 JOIN

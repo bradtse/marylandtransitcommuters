@@ -14,7 +14,7 @@ public class TimeFragment extends TransitFragment {
 	public void setAdapter() {
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, android.R.layout.simple_list_item_1, 
-					profile.getTimesCol("arrival_time")));
+					profile.getTimesList()));
 	}
 
 	@Override

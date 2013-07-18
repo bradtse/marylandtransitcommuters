@@ -24,7 +24,7 @@ public class StopFragment extends TransitFragment {
 	public void setAdapter() {
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, android.R.layout.simple_list_item_1, 
-					profile.getStopsCol("stop_name")));
+					profile.getStopsCol(SearchData.STOP_NAME)));
 		mList.setOnItemClickListener(new ItemClickListener());
 	}
 

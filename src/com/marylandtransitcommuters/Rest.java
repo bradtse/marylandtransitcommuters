@@ -79,15 +79,11 @@ public class Rest {
  	 * @return a JSON Array representation of the server response, null on failure
 	 */
 	private static JSONArray responseToJSON(HttpURLConnection conn) {
-		StringBuilder response = new StringBuilder();
 		JSONArray json = null;
-		Scanner s;
 		try {
-			s = new Scanner(conn.getInputStream(), "UTF-8");
-			while(s.hasNext() != false) {
-				response.append(s.next());
-			}
-			json = new JSONArray(response.toString());
+			Scanner s = new Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
+			String str = s.hasNext() ? s.next() : "";
+			json = new JSONArray(str);
 		} catch (JSONException e) {
 			Log.d(MainActivity.TAG, "responseToJSON failed: " + e.getMessage());
 		} catch (IOException e) {
