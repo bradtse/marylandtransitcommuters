@@ -13,11 +13,14 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class Rest {
+/**
+ * Helper class to send data to the server
+ */
+public class RestHelper {
 //	private static final String WEBSITE = "http://android:test@bradleytse.com/testing/transitapi.php";
 	private static final String WEBSITE = "http://bradleytse.com/transit/gtfsapi.php";
 	
-	private Rest() {}
+	private RestHelper() {}
 	
 	/* I think I am going to use post for queries also */
 	public static JSONArray post(JSONObject data) {
@@ -28,7 +31,7 @@ public class Rest {
 		conn.disconnect();
 		
 		Log.d(MainActivity.TAG, "Response code: " + String.valueOf(responseCode));
-//		Log.d(MainActivity.TAG, json.toString());
+		Log.d(MainActivity.TAG, json.toString());
 		return json;
 	}
 	

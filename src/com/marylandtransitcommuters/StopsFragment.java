@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class StopFragment extends TransitFragment {
+public class StopsFragment extends TransitFragment {
 	public static final String TAG = "stops";
 
 	@Override
@@ -25,8 +25,7 @@ public class StopFragment extends TransitFragment {
 	public void setAdapter() {
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, android.R.layout.simple_list_item_1, 
-					profile.getStopsCol(SearchData.STOP_NAME)));
-		mList.setOnItemClickListener(new ItemClickListener());
+					profile.getStopsList()));
 	}
 
 	@Override
@@ -35,6 +34,6 @@ public class StopFragment extends TransitFragment {
 		
 		profile.setIndex(position, TransitService.Type.STOPS);
 		
-		replaceFragment(new TimeFragment(), "stops", "time");
+		replaceFragment(new TimesFragment(), "stops", "time");
 	}
 }

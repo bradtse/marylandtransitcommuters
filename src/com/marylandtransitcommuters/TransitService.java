@@ -9,6 +9,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.util.Log;
 
 /**
  * Used for contacting the server and retrieving data
@@ -18,7 +19,7 @@ public class TransitService extends IntentService {
 	public static final int FINISH = 1;
 	
 	public enum Type {
-		ROUTES, STOPS, TIMES, DIRECTION;
+		ROUTES, STOPS, TIMES, DIRECTIONS;
 		public static final String KEY = "type";
 	}
 	
@@ -38,13 +39,14 @@ public class TransitService extends IntentService {
 	
 	private void restHelper(Type type) {
 		try {
-			SearchData profile = SearchData.getInstance();
+			CurrentSearch profile = CurrentSearch.getInstance();
 			JSONObject data = new JSONObject();
-			data.put(SearchData.ROUTE_ID, profile.getRouteId());
-			data.put(SearchData.DIR_ID, profile.getDirection());
-			data.put(SearchData.STOP_ID, profile.getStopId());
+			data.put(CurrentSearch.ROUTE_ID, profile.getRouteId());
+			data.put(CurrentSearch.DIR_ID, profile.getDirectionId());
+			data.put(CurrentSearch.STOP_ID, profile.getStopId());
 			data.put(Type.KEY, type.name().toLowerCase(Locale.US));
-			profile.setData(Rest.post(data), type);
+			Log.d(MainActivity.TAG, data.toString());
+			profile.setData(RestHelper.post(data), type);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

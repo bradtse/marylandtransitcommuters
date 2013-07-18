@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class TimeFragment extends TransitFragment {
+public class TimesFragment extends TransitFragment {
 	public static final String TAG = "times";
 	
 	@Override
@@ -24,6 +24,7 @@ public class TimeFragment extends TransitFragment {
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, android.R.layout.simple_list_item_1, 
 					profile.getTimesList()));
+		mList.setOnItemClickListener(null); // turn off 
 		mList.setEmptyView((TextView) rootView.findViewById(R.id.empty));
 	}
 

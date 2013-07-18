@@ -15,6 +15,13 @@ FROM
 routes
 WHERE route_type = 3;";
 
+$directionsQuery = "
+SELECT DISTINCT trip_id, trip_headsign, direction_id
+FROM
+trips
+WHERE route_id = :routeid 
+GROUP BY trip_headsign;";
+
 $stopsQuery = "
 SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T3.stop_name
 FROM

@@ -1,5 +1,18 @@
 NOT IN PERFECT ORDER
 
+reset query cache;
+
+SELECT route_id, route_short_name, route_long_name
+FROM
+routes
+WHERE route_type = 3;
+
+SELECT DISTINCT trip_id, trip_headsign, direction_id
+FROM
+trips
+WHERE route_id = 6122
+GROUP BY trip_headsign;
+
 SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T3.stop_name 
 FROM 
 trips AS T1

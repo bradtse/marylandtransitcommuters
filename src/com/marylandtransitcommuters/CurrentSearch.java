@@ -19,29 +19,31 @@ import android.util.Log;
 /*
  * Singleton containing info on the current search being done
  */
-public final class SearchData {
+public final class CurrentSearch {
 	public static final String KEY = "profile";
 	public static final String ROUTE_SHORT_NAME = "route_short_name";
 	public static final String ROUTE_LONG_NAME = "route_long_name";
+	public static final String TRIP_HEADSIGN = "trip_headsign";
 	public static final String STOP_NAME = "stop_name";
 	public static final String ARRIVAL_TIME = "arrival_time";
 	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
 	public static final String STOP_ID = "stop_id";
 	public static final String ROUTE_ID = "route_id";
 	public static final String DIR_ID = "direction_id";
-	private static SearchData instance;
-	private int direction = -1;
+	private static CurrentSearch instance;
+	private int directionIndex = -1;
 	private int routeIndex = -1;
 	private int stopIndex = -1;
 	private JSONArray routesData;
+	private JSONArray directionsData;
 	private JSONArray stopsData;
 	private JSONArray timesData;
 
-	private SearchData() {}
+	private CurrentSearch() {}
 	
-	public static SearchData getInstance() {
+	public static CurrentSearch getInstance() {
 		if (instance == null) {
-			instance = new SearchData();
+			instance = new CurrentSearch();
 		}
 		return instance;
 	}
@@ -54,8 +56,8 @@ public final class SearchData {
 			case STOPS:
 				this.stopIndex = index;
 				break;
-			case DIRECTION:
-				this.direction = index;
+			case DIRECTIONS:
+				this.directionIndex = index;
 			default:	
 		}
 	}
@@ -64,6 +66,9 @@ public final class SearchData {
 		switch(type) {
 			case ROUTES:
 				this.routesData = json;
+				break;
+			case DIRECTIONS:
+				this.directionsData = json;
 				break;
 			case STOPS:
 				this.stopsData = json;
@@ -78,7 +83,7 @@ public final class SearchData {
 	public String getRouteId() {
 		if (routesData != null) {
 			try {
-				return routesData.getJSONObject(routeIndex).getString("route_id");
+				return routesData.getJSONObject(routeIndex).getString(ROUTE_ID);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -126,21 +131,41 @@ public final class SearchData {
 		return longName;
 	}
 	
-	public int getDirection() {
-		return this.direction;
-	}
-
-	public String[] getStopsCol(String key) {
-		ArrayList<String> keyList = new ArrayList<String>();
-		for (int i = 0; i < stopsData.length(); i++) {
+	public String getDirectionId() {
+		if (directionsData != null) {
 			try {
-				keyList.add(stopsData.getJSONObject(i).getString(key));
+				return directionsData.getJSONObject(directionIndex).getString(DIR_ID);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} 
+		return null;
+	}
+	
+	public String[] getDirsList() {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < directionsData.length(); i++) {
+			try {
+				list.add(directionsData.getJSONObject(i).getString(TRIP_HEADSIGN));
 			} catch (JSONException e) {
 				Log.d(MainActivity.TAG, e.getMessage());
 			}
 		}
-		String[] finArr = new String[keyList.size()];
-		return keyList.toArray(finArr);
+		String[] empty = new String[list.size()];
+		return list.toArray(empty);
+	}
+
+	public String[] getStopsList() {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < stopsData.length(); i++) {
+			try {
+				list.add(stopsData.getJSONObject(i).getString(STOP_NAME));
+			} catch (JSONException e) {
+				Log.d(MainActivity.TAG, e.getMessage());
+			}
+		}
+		String[] empty = new String[list.size()];
+		return list.toArray(empty);
 	}
 	
 	public String getStopId() {
@@ -175,8 +200,8 @@ public final class SearchData {
 				Log.d(MainActivity.TAG, e.getMessage());
 			}
 		}
-		String[] finArr = new String[list.size()];
-		return list.toArray(finArr);
+		String[] empty = new String[list.size()];
+		return list.toArray(empty);
 	}
 
 	private String timeUntilArrival(int currTimeSecs, int arrivalTimeSecs) {

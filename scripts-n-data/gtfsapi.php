@@ -8,7 +8,7 @@
  * Author: Bradley Tse
  */
     
-include './sqlhelper.php';
+include './gtfshelper.php';
 
 // Gets the php's input stream, which should contain the json string. Then
 // use json_decode to convert it to an associative array. 
@@ -35,6 +35,11 @@ $stop_id = $json['stop_id'];
 
 if ($type == "routes") {
     queryDB($routesQuery);
+} else if ($type == "directions") {
+    $keys = array(
+                    ":routeid" => $route_id
+                    );
+    queryDB($directionsQuery, $keys);
 } else if ($type == "stops") {
     $keys = array(
                     ":routeid" => $route_id,

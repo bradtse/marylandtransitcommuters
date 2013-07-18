@@ -21,7 +21,7 @@ import android.widget.TextView;
 /**
  * The fragment showing the list of all available routes
  */
-public class RouteFragment extends TransitFragment {
+public class RoutesFragment extends TransitFragment {
 	public static final String TAG = "routes";
     
 	@Override
@@ -43,14 +43,14 @@ public class RouteFragment extends TransitFragment {
 					context, 
 					list,
 					R.layout.routes_listview_row,
-					new String[] {SearchData.ROUTE_SHORT_NAME, SearchData.ROUTE_LONG_NAME},
+					new String[] {CurrentSearch.ROUTE_SHORT_NAME, CurrentSearch.ROUTE_LONG_NAME},
 					new int[] {R.id.route_short_name, R.id.route_long_name}
 					) {
 			@Override 
 			public View getView(int pos, View convertView, ViewGroup parent) {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
-				String longName = list.get(pos).get(SearchData.ROUTE_LONG_NAME);
+				String longName = list.get(pos).get(CurrentSearch.ROUTE_LONG_NAME);
 				if (longName.contains(" to ")) {
 					SpannableStringBuilder result = new SpannableStringBuilder(longName);
 					int index = longName.indexOf(" to ");
@@ -67,7 +67,6 @@ public class RouteFragment extends TransitFragment {
 				return view;
 			}
 		});
-		mList.setOnItemClickListener(new ItemClickListener());		
 	}
 
 	@Override
@@ -76,6 +75,6 @@ public class RouteFragment extends TransitFragment {
 		
 		profile.setIndex(position, TransitService.Type.ROUTES);
 		
-		replaceFragment(new DirectionFragment(), TAG, DirectionFragment.TAG);
+		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}
 }

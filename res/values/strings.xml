@@ -18,10 +18,5 @@
         <item>Bus</item>
         <item>Train</item>
     </string-array>
-    
-    <string-array name="direction">
-        <item>AM (Inbound)</item>
-        <item>PM (Outbound)</item>
-    </string-array>
 
 </resources>

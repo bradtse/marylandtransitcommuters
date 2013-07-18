@@ -20,7 +20,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	Context context;
 	View rootView;
 	ListView mList;
-	SearchData profile;
+	CurrentSearch profile;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -28,9 +28,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		if (alive == false) {
+//		if (savedInstanceState == null) {
 			context = getActivity();
-			profile = SearchData.getInstance();
+			profile = CurrentSearch.getInstance();
 			
 			// Set up the progress dialog
 			progressDialog = new ProgressDialog(context);
@@ -50,7 +50,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-//		if (alive == false) {
+//		if (savedInstanceState == null) {
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			mReceiver = new TransitReceiver(new Handler());
 			mReceiver.setReceiver(this);
@@ -81,6 +81,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				progressDialog.show();
 				break;
 			case TransitService.FINISH:
+				mList.setOnItemClickListener(new ItemClickListener());
 				setAdapter();
 				progressDialog.dismiss();
 				break;
