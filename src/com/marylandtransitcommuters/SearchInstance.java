@@ -13,14 +13,17 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.marylandtransitcommuters.service.TransitService;
 
 import android.util.Log;
 
-/*
- * Singleton containing info on the current search being done
+/**
+ * Singleton containing info on the current search being done. Also contains
+ * a bunch of methods that allow you to add/get data.
  */
-public final class CurrentSearch {
-	public static final String KEY = "profile";
+public final class SearchInstance {
 	public static final String ROUTE_SHORT_NAME = "route_short_name";
 	public static final String ROUTE_LONG_NAME = "route_long_name";
 	public static final String TRIP_HEADSIGN = "trip_headsign";
@@ -30,44 +33,33 @@ public final class CurrentSearch {
 	public static final String STOP_ID = "stop_id";
 	public static final String ROUTE_ID = "route_id";
 	public static final String DIR_ID = "direction_id";
-	private static CurrentSearch instance;
-	private int directionIndex = -1;
-	private int routeIndex = -1;
-	private int stopIndex = -1;
+	
+	private static SearchInstance instance;
+	private String routeId;
+	private String routeShortName;
+	private String directionId;
+	private String stopId;
 	private JSONArray routesData;
 	private JSONArray directionsData;
 	private JSONArray stopsData;
 	private JSONArray timesData;
 
-	private CurrentSearch() {}
+	private SearchInstance() {}
 	
-	public static CurrentSearch getInstance() {
+	public static SearchInstance getInstance() {
 		if (instance == null) {
-			instance = new CurrentSearch();
+			instance = new SearchInstance();
 		}
 		return instance;
 	}
-
-	public void setIndex(int index, TransitService.Type type) {
-		switch(type) {
-			case ROUTES:
-				this.routeIndex = index;
-				break;
-			case STOPS:
-				this.stopIndex = index;
-				break;
-			case DIRECTIONS:
-				this.directionIndex = index;
-			default:	
-		}
-	}
 	
-	public void setData(JSONArray json, TransitService.Type type) {
+	public void setData(TransitService.DataType type, JSONArray json) {
 		switch(type) {
 			case ROUTES:
 				this.routesData = json;
 				break;
 			case DIRECTIONS:
+				formatData(json);
 				this.directionsData = json;
 				break;
 			case STOPS:
@@ -80,25 +72,52 @@ public final class CurrentSearch {
 		}
 	}
 	
-	public String getRouteId() {
-		if (routesData != null) {
+	/**
+	 * Cleans up the trip_headsign column 
+	 * @param json the JSON to format
+	 * @return the formatted JSON array
+	 */
+	private void formatData(JSONArray json) {
+		for (int i = 0; i < json.length(); i++) {
+			String headsign = null;
+			JSONObject temp = null;
 			try {
-				return routesData.getJSONObject(routeIndex).getString(ROUTE_ID);
+				temp = json.getJSONObject(i);
+				headsign = temp.getString(TRIP_HEADSIGN);
+				if (headsign.contains(routeShortName) == true) {
+					headsign = headsign.replaceFirst(routeShortName, "to");
+					temp.put(TRIP_HEADSIGN, headsign);
+					json.put(i, temp);
+				}
 			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} 
-		return null;
+				Log.d(MainActivity.TAG, "formatData() failed: " + e.getMessage());
+			}		
+		}
+	}
+	
+	/*
+	 * Route methods
+	 */
+	
+	public void setRouteId(int index) {
+		try {
+			routeShortName = routesData.getJSONObject(index).getString(ROUTE_SHORT_NAME);
+			routeId = routesData.getJSONObject(index).getString(ROUTE_ID);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getRouteId() {
+		return routeId;
 	}
 	
 	public ArrayList<HashMap<String, String>> getRoutesList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; i < routesData.length(); i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
-			String shortName = getShortName(i);
-			String longName = getLongName(i);
-			map.put(ROUTE_SHORT_NAME, shortName);
-			map.put(ROUTE_LONG_NAME, longName);
+			map.put(ROUTE_SHORT_NAME, getShortName(i));
+			map.put(ROUTE_LONG_NAME, getLongName(i));
 			list.add(map);
 		}
 		return list;
@@ -131,18 +150,23 @@ public final class CurrentSearch {
 		return longName;
 	}
 	
-	public String getDirectionId() {
-		if (directionsData != null) {
-			try {
-				return directionsData.getJSONObject(directionIndex).getString(DIR_ID);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} 
-		return null;
+	/*
+	 * Direction methods
+	 */
+	
+	public void setDirectionId(int index) {
+		try {
+			directionId = directionsData.getJSONObject(index).getString(DIR_ID);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public String[] getDirsList() {
+	public String getDirectionId() {
+		return directionId;
+	}
+	
+	public String[] getDirectionsList() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < directionsData.length(); i++) {
 			try {
@@ -154,7 +178,23 @@ public final class CurrentSearch {
 		String[] empty = new String[list.size()];
 		return list.toArray(empty);
 	}
+	
+	/*
+	 * Stop methods
+	 */
 
+	public void setStopId(int index) {
+		try {
+			stopId = stopsData.getJSONObject(index).getString(STOP_ID);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getStopId() {
+		return stopId;
+	}
+	
 	public String[] getStopsList() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < stopsData.length(); i++) {
@@ -168,16 +208,9 @@ public final class CurrentSearch {
 		return list.toArray(empty);
 	}
 	
-	public String getStopId() {
-		if (stopsData != null) {
-			try {
-				return stopsData.getJSONObject(stopIndex).getString(STOP_ID);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+	/*
+	 * Time methods
+	 */
 
 	public String[] getTimesList() {
 		ArrayList<String> list = new ArrayList<String>();
@@ -212,10 +245,10 @@ public final class CurrentSearch {
 				.appendSuffix(" day", " days")
 				.appendSeparator(" and ")
 				.appendHours()
-				.appendSuffix(" hour", " hours")
+				.appendSuffix(" hr", " hrs")
 				.appendSeparator(" and " )
 				.appendMinutes()
-				.appendSuffix(" minute", " minutes")
+				.appendSuffix(" min", " mins")
 				.toFormatter();
 		return dhm.print(period.normalizedStandard());
 	}

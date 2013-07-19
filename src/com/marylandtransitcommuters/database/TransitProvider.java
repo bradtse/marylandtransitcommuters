@@ -1,4 +1,14 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.database;
+
+import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.database.TransitContract.Agency;
+import com.marylandtransitcommuters.database.TransitContract.Calendar;
+import com.marylandtransitcommuters.database.TransitContract.CalendarDates;
+import com.marylandtransitcommuters.database.TransitContract.Routes;
+import com.marylandtransitcommuters.database.TransitContract.Shapes;
+import com.marylandtransitcommuters.database.TransitContract.StopTimes;
+import com.marylandtransitcommuters.database.TransitContract.Stops;
+import com.marylandtransitcommuters.database.TransitContract.Trips;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

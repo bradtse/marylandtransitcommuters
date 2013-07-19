@@ -4,27 +4,19 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
+    <!--
+        Theme customizations available in newer API levels can go in
+        res/values-vXX/styles.xml, while customizations related to
+        backward-compatibility can go here.
+    -->
 
-    <style name="Theme.MyTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/Widget.MyTheme.ActionBar</item>
-<!--         <item name="android:actionBarStyle">@style/Widget.MyTheme.ActionBar</item> -->
+    <style name="Theme.MyTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/MyTheme.ActionBarStyle</item>
     </style>
     
-    <style name="Widget.MyTheme.ActionBar" parent="Widget.Sherlock.ActionBar">
-        <item name="android:background">#ffffffff</item>
-        <item name="background">#ffffffff</item>
-    </style>
-    
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="MyTheme.ActionBarStyle" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">#151312</item>
+        <item name="android:background">#151312</item>
     </style>
     
     <!-- ListView Item style -->

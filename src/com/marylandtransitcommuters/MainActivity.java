@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.marylandtransitcommuters.fragments.RoutesFragment;
 
 /**
  * The main activity
@@ -46,7 +47,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
         setUpNavDrawer();   
         if (savedInstanceState == null) {
-        	initializeFragments();
+        	addRoutesFragment();
         }
     }
  
@@ -113,13 +114,13 @@ public class MainActivity extends SherlockFragmentActivity {
      */
     
     /**
-     *  Initialize the main frame layout with the route fragment
+     *  Initialize the main frame layout with the routes fragment
      */
-    private void initializeFragments() {
-		Fragment routeFrag = new RoutesFragment();
+    private void addRoutesFragment() {
+		Fragment routesFrag = new RoutesFragment();
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(R.id.content_frame, routeFrag, RoutesFragment.TAG);
+		ft.add(R.id.content_frame, routesFrag, RoutesFragment.TAG);
 		ft.commit();
     }
     

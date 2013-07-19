@@ -1,8 +1,11 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.database;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.database.TransitContract.Routes;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.database;
 
 import android.content.ContentResolver;
 import android.net.Uri;

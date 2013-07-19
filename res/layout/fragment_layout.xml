@@ -19,7 +19,9 @@
     <ListView
         android:id="@+id/fragment_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent" 
+        android:background="#E9E5D9" />
+    
     <TextView 
         android:id="@+id/empty"
         android:layout_width="match_parent"

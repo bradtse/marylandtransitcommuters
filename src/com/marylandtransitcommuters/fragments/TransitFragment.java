@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,12 +15,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.SearchInstance;
+import com.marylandtransitcommuters.receiver.TransitReceiver;
+import com.marylandtransitcommuters.service.TransitService;
 
+/**
+ * Parent class for each fragment
+ */
 public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver	{
 	Context context;
 	View rootView;
 	ListView mList;
-	CurrentSearch profile;
+	SearchInstance profile;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -30,7 +37,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		super.onCreate(savedInstanceState);
 //		if (savedInstanceState == null) {
 			context = getActivity();
-			profile = CurrentSearch.getInstance();
+			profile = SearchInstance.getInstance();
 			
 			// Set up the progress dialog
 			progressDialog = new ProgressDialog(context);
@@ -56,7 +63,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			mReceiver.setReceiver(this);
 			
 			Intent intent  = new Intent(context, TransitService.class);
-			intent.putExtra("receiver", mReceiver);
+			intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 			setServiceType(intent);
 			context.startService(intent);
 			alive = true;
@@ -81,7 +88,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				progressDialog.show();
 				break;
 			case TransitService.FINISH:
-				mList.setOnItemClickListener(new ItemClickListener());
+				mList.setOnItemClickListener(new ListItemClickListener());
 				setAdapter();
 				progressDialog.dismiss();
 				break;
@@ -94,7 +101,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 */
 	public abstract void setAdapter();
 
-    class ItemClickListener implements ListView.OnItemClickListener {
+    class ListItemClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
@@ -108,19 +115,27 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      */
     public abstract void selectItem(int position);
     
-    public void replaceFragment(Fragment fragment, String currFragTag, String nextFragTag) {
+    /**
+     * Replaces the current fragment with the new one provided
+     * Uses hide() and add() instead of replace() in order to maintain state of the
+     * fragment that is replaced.
+     * @param newFragment the new fragment that will replace the current one
+     * @param currFragTag the tag of the current fragment
+     * @param newFragTag the tag of the new fragment
+     */
+    public void replaceFragment(Fragment newFragment, String currFragTag, String newFragTag) {
     	FragmentManager fm = getFragmentManager();
-    	Fragment nextFrag = fm.findFragmentByTag(nextFragTag);
+    	Fragment newFrag = fm.findFragmentByTag(newFragTag);
     	Fragment currFrag = fm.findFragmentByTag(currFragTag);
     	
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
 							   R.animator.slide_in_left, R.animator.slide_out_right);
 		ft.hide(currFrag);
-		if (nextFrag != null) {
-			ft.remove(nextFrag);
+		if (newFrag != null) {
+			ft.remove(newFrag);
 		} 
-		ft.add(R.id.content_frame, fragment, nextFragTag);
+		ft.add(R.id.content_frame, newFragment, newFragTag);
 		ft.addToBackStack(null);
 		ft.commit();
     }

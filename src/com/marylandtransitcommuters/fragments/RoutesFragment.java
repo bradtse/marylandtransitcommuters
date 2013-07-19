@@ -1,8 +1,17 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.fragments;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.SearchInstance;
+import com.marylandtransitcommuters.R.id;
+import com.marylandtransitcommuters.R.layout;
+import com.marylandtransitcommuters.R.string;
+import com.marylandtransitcommuters.service.TransitService;
+import com.marylandtransitcommuters.service.TransitService.DataType;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,7 +42,7 @@ public class RoutesFragment extends TransitFragment {
 	
 	@Override
 	public void setServiceType(Intent intent) {
-		intent.putExtra(TransitService.Type.KEY, TransitService.Type.ROUTES);
+		intent.putExtra(TransitService.DataType.KEY, TransitService.DataType.ROUTES);
 	}
 
 	@Override
@@ -43,14 +52,15 @@ public class RoutesFragment extends TransitFragment {
 					context, 
 					list,
 					R.layout.routes_listview_row,
-					new String[] {CurrentSearch.ROUTE_SHORT_NAME, CurrentSearch.ROUTE_LONG_NAME},
+					new String[] {SearchInstance.ROUTE_SHORT_NAME, SearchInstance.ROUTE_LONG_NAME},
 					new int[] {R.id.route_short_name, R.id.route_long_name}
-					) {
+					) 
+		{
 			@Override 
 			public View getView(int pos, View convertView, ViewGroup parent) {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
-				String longName = list.get(pos).get(CurrentSearch.ROUTE_LONG_NAME);
+				String longName = list.get(pos).get(SearchInstance.ROUTE_LONG_NAME);
 				if (longName.contains(" to ")) {
 					SpannableStringBuilder result = new SpannableStringBuilder(longName);
 					int index = longName.indexOf(" to ");
@@ -70,10 +80,10 @@ public class RoutesFragment extends TransitFragment {
 	}
 
 	@Override
-	public void selectItem(int position) {
-		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(position));
+	public void selectItem(int index) {
+		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(index));
 		
-		profile.setIndex(position, TransitService.Type.ROUTES);
+		profile.setRouteId(index);
 		
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}

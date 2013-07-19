@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.rest;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,12 +11,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.marylandtransitcommuters.MainActivity;
+
 import android.util.Log;
 
 /**
  * Helper class to send data to the server
  */
-public class RestHelper {
+public final class RestHelper {
 //	private static final String WEBSITE = "http://android:test@bradleytse.com/testing/transitapi.php";
 	private static final String WEBSITE = "http://bradleytse.com/transit/gtfsapi.php";
 	

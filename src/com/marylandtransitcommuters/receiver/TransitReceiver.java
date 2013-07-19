@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters;
+package com.marylandtransitcommuters.receiver;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +9,7 @@ import android.os.ResultReceiver;
  * a callback
  */
 public class TransitReceiver extends ResultReceiver {
+	public static final String RECEIVER = "receiver";
 	private Receiver mReceiver;
 	
 	public TransitReceiver(Handler handler) {
