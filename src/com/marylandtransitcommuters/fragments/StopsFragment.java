@@ -10,6 +10,11 @@ import com.marylandtransitcommuters.service.TransitService.DataType;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +38,29 @@ public class StopsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
+		final String[] list = profile.getStopsList();
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, R.layout.transit_listview_row, 
-					profile.getStopsList()) 
+					list) 
 		{
 			@Override
 			public View getView(int pos, View convertView, ViewGroup parent) {
 				View view = super.getView(pos, convertView, parent);
+				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
+				String direction = list[pos];
+				
+				if (direction.contains("&")) {
+					int index = direction.indexOf("&");
+					SpannableString result = new SpannableString(direction);
+				
+					result.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+								index, index+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					result.setSpan(new RelativeSizeSpan(0.8f), index, index+1, 
+								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					result.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+1,
+								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					tv.setText(result);
+				} 
 				return view;
 			}
 		});
@@ -47,7 +68,7 @@ public class StopsFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
-		Log.d(MainActivity.TAG, "Item selected: " + String.valueOf(index));
+		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
 		profile.setStopId(index);
 		

@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.marylandtransitcommuters.R;
-import com.marylandtransitcommuters.SearchInstance;
+import com.marylandtransitcommuters.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.service.TransitService;
 
@@ -27,7 +27,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	Context context;
 	View rootView;
 	ListView mList;
-	SearchInstance profile;
+	TransitData profile;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -37,7 +37,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		super.onCreate(savedInstanceState);
 //		if (savedInstanceState == null) {
 			context = getActivity();
-			profile = SearchInstance.getInstance();
+			profile = TransitData.getInstance();
 			
 			// Set up the progress dialog
 			progressDialog = new ProgressDialog(context);
@@ -110,7 +110,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
     }
     
     /**
-     * Action to take when item in list is selected
+     * Does something when item in ListView is selected
      * @param position index of item selected
      */
     public abstract void selectItem(int position);

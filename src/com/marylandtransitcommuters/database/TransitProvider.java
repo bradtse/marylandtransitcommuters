@@ -47,7 +47,7 @@ public class TransitProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		Log.d(MainActivity.TAG, "TransitProvider onCreate()");
+		Log.d(MainActivity.LOG_TAG, "TransitProvider onCreate()");
 		mTransitDatabase = new TransitDatabase(getContext());
 		return true;
 	}
@@ -95,7 +95,7 @@ public class TransitProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, 
 						String[] selectionArgs, String sortOrder) {
-		Log.d(MainActivity.TAG, "TransitProvider query()");
+		Log.d(MainActivity.LOG_TAG, "TransitProvider query()");
 		switch(sUriMatcher.match(uri)) {
 			case GET_ROUTES_LIST:
 				return mTransitDatabase.getList(TransitContract.Routes.TABLE_NAME, 

@@ -32,8 +32,8 @@ public final class RestHelper {
 		int responseCode = getResponseCode(conn);
 		conn.disconnect();
 		
-		Log.d(MainActivity.TAG, "Response code: " + String.valueOf(responseCode));
-		Log.d(MainActivity.TAG, json.toString());
+		Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
+		Log.d(MainActivity.LOG_TAG, json.toString());
 		return json;
 	}
 	
@@ -56,7 +56,7 @@ public final class RestHelper {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestMethod("POST");
 		} catch (IOException e) {
-			Log.d(MainActivity.TAG, "setupConnection failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "setupConnection failed: " + e.getMessage());
 		}
 		return conn;
 	}
@@ -74,7 +74,7 @@ public final class RestHelper {
 			bw.flush();
 			bw.close(); 
 		} catch (IOException e) {
-			Log.d(MainActivity.TAG, "sendData failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "sendData failed: " + e.getMessage());
 		}
 	}
 	
@@ -90,9 +90,9 @@ public final class RestHelper {
 			String str = s.hasNext() ? s.next() : "";
 			json = new JSONArray(str);
 		} catch (JSONException e) {
-			Log.d(MainActivity.TAG, "responseToJSON failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "responseToJSON failed: " + e.getMessage());
 		} catch (IOException e) {
-			Log.d(MainActivity.TAG, "responseToJSON failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "responseToJSON failed: " + e.getMessage());
 		}
 		return json;
 	}
@@ -106,7 +106,7 @@ public final class RestHelper {
 		try {
 			return conn.getResponseCode();
 		} catch (IOException e) {
-			Log.d(MainActivity.TAG, "getResponseCode failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "getResponseCode failed: " + e.getMessage());
 		}
 		return -1;
 	}
