@@ -1,2 +1,2 @@
-The master branch is actually "webservice", I just haven't gotten around to
+The master branch is actually the "webservice" branch, I just haven't gotten around to
 merging them yet
