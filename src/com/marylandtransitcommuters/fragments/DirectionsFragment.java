@@ -1,14 +1,5 @@
 package com.marylandtransitcommuters.fragments;
 
-import com.marylandtransitcommuters.MainActivity;
-import com.marylandtransitcommuters.R;
-import com.marylandtransitcommuters.TransitData;
-import com.marylandtransitcommuters.R.id;
-import com.marylandtransitcommuters.R.layout;
-import com.marylandtransitcommuters.R.string;
-import com.marylandtransitcommuters.service.TransitService;
-import com.marylandtransitcommuters.service.TransitService.DataType;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -22,9 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.service.TransitService;
+
 /**
- * The fragment that allows the user to select whether they want AM (inbound) or
- * PM (outbound) times to be shown.
+ * The fragment that allows the user to select which direction they are 
+ * traveling
  */
 public class DirectionsFragment extends TransitFragment {
 	public static final String TAG = "direction";

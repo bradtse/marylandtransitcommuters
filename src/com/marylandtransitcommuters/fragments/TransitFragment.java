@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
@@ -93,6 +95,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				progressDialog.dismiss();
 				break;
 			default:
+				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");
 		}
 	}
 	
@@ -122,6 +125,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * @param newFragment the new fragment that will replace the current one
      * @param currFragTag the tag of the current fragment
      * @param newFragTag the tag of the new fragment
+     * FIXME I think this is causing a memory leak
      */
     public void replaceFragment(Fragment newFragment, String currFragTag, String newFragTag) {
     	FragmentManager fm = getFragmentManager();

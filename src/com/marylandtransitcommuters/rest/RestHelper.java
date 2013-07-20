@@ -16,7 +16,7 @@ import com.marylandtransitcommuters.MainActivity;
 import android.util.Log;
 
 /**
- * Helper class to send data to the server
+ * Helper class to send data to the server via POST method
  */
 public final class RestHelper {
 //	private static final String WEBSITE = "http://android:test@bradleytse.com/testing/transitapi.php";
@@ -24,7 +24,11 @@ public final class RestHelper {
 	
 	private RestHelper() {}
 	
-	/* I think I am going to use post for queries also */
+	/**
+	 * Sends data to query the server and returns the response in JSONArray form
+	 * @param data the data needed to query the database
+	 * @return a JSONArray containing the response from the server
+	 */
 	public static JSONArray post(JSONObject data) {
 		HttpURLConnection conn = setupConnection(WEBSITE);
 		sendData(data, conn);

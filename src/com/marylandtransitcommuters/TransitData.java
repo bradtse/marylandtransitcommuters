@@ -289,6 +289,14 @@ public final class TransitData {
 		return list.toArray(empty);
 	}
 
+	/**
+	 * A helper function that returns a formatted string of time until the next arrival.
+	 * Ex: "2 hrs and 3 mins"
+	 * @param currTimeSecs the current time in seconds
+	 * @param arrivalTimeSecs the bus's arrival time in seconds
+	 * @return a formatted period of time until arrival
+	 * FIXME not handling all cases properly
+	 */
 	private String timeUntilArrival(int currTimeSecs, int arrivalTimeSecs) {
 		Seconds seconds = Seconds.seconds(arrivalTimeSecs - currTimeSecs);
 		Period period = new Period(seconds);
@@ -305,6 +313,12 @@ public final class TransitData {
 		return dhm.print(period.normalizedStandard());
 	}
 	
+	/**
+	 * Returns a human readable clock time from the arrival time in seconds
+	 * @param arrivalTimeSecs the arrival time in seconds
+	 * @return a string of the clock time
+	 * FIXME not handling all cases properly
+	 */
 	private String clockTime(int arrivalTimeSecs) {
 		Seconds seconds = Seconds.seconds(arrivalTimeSecs);
 		int hours = seconds.toStandardHours().getHours() % 24;

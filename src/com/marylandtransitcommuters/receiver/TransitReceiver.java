@@ -5,8 +5,9 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 
 /**
- * Allows the IntentService to let the main ui thread know it finished through
- * a callback
+ * Callback interface for the IntentService to let the main UI thread know it finished.
+ * Any class that wishes to receive a result from the IntentService should
+ * implement Receiver.
  */
 public class TransitReceiver extends ResultReceiver {
 	public static final String RECEIVER = "receiver";
