@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
@@ -65,6 +66,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			setupReceiver();
 			startIntentService();
+			setHasOptionsMenu(true);
 			
 			alive = true;
 //		} 

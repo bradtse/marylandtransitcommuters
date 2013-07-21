@@ -15,8 +15,8 @@
     </style>
     
     <style name="MyTheme.ActionBarStyle" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="background">#151312</item>
-        <item name="android:background">#151312</item>
+        <item name="background">#262626</item>
+        <item name="android:background">#262626</item>
     </style>
     
     <!-- ListView Item style -->
