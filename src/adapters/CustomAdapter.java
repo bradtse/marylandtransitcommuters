@@ -1,32 +1,30 @@
 package adapters;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import android.content.Context;
+import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.widget.Checkable;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.net.Uri;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 
 import dataobjects.Route;
-import dataobjects.TransitData;
 
 /**
  * Essentially the same thing as a Simple Adapter with the filter and getView changed.

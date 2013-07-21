@@ -26,14 +26,11 @@ import android.util.Log;
  * FIXME I want to update this so that each piece of data is its own object
  */
 public final class TransitData {
-	public static final String ROUTE_SHORT_NAME = "route_short_name";
-	public static final String ROUTE_LONG_NAME = "route_long_name";
 	public static final String TRIP_HEADSIGN = "trip_headsign";
 	public static final String STOP_NAME = "stop_name";
 	public static final String ARRIVAL_TIME = "arrival_time";
 	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
 	public static final String STOP_ID = "stop_id";
-	public static final String ROUTE_ID = "route_id";
 	public static final String DIR_ID = "direction_id";	
 	private static TransitData instance;
 	

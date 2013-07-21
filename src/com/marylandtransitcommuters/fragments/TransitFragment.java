@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -48,7 +47,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			context = getActivity();
 			data = TransitData.getInstance();
 			setupProgressDialog();
-			setHasOptionsMenu(true); // Force redraw of action bar menu
+			setHasOptionsMenu(true); // Force onCreateOptionsMenu to be called
 //		}
 	}
 	
@@ -94,9 +93,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		search = (SearchView) searchItem.getActionView();
-		
-		search.setIconifiedByDefault(false);
 	}
+	
 	/**
 	 * Add the appropriate service type to the intent 
 	 * @param intent the intent to add the service type to

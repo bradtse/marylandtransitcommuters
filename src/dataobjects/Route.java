@@ -37,8 +37,16 @@ public class Route {
 	 * @param routeId The route_id of the route that was selected
 	 */
 	public void selectRoute(String routeId) {
-		this.routeId = new String(routeId);
+		this.routeId = routeId;
 		setNames();
+	}
+	
+	/**
+	 * Returns the raw data
+	 * @return A JSONArray
+	 */
+	public JSONArray getRawData() {
+		return rawData;
 	}
 
 	/**
@@ -161,7 +169,7 @@ public class Route {
 		} else if (sn.charAt(0) == '0') {
 			pretty = sn.substring(1);
 		} else {
-			pretty = new String(sn);
+			pretty = sn;
 		}
 		
 		return pretty;
@@ -193,8 +201,8 @@ public class Route {
 				String ln = route.getString(LONG_NAME);
 				
 				if (id.equals(routeId)) {
-					this.shortName = new String(sn);
-					this.longName = new String(ln);
+					this.shortName = sn;
+					this.longName = ln;
 					break;
 				}
 			}

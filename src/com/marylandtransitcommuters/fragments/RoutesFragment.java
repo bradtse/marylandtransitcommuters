@@ -1,13 +1,13 @@
 package com.marylandtransitcommuters.fragments;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import adapters.CustomAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -18,7 +18,6 @@ import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.service.TransitService;
 
 import dataobjects.Route;
-import dataobjects.TransitData;
 
 /**
  * The fragment showing the list of all available routes
@@ -44,7 +43,6 @@ public class RoutesFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		Log.d(MainActivity.LOG_TAG, "Attempting to set adapter");
 		adapter = new CustomAdapter(
 				context, 
 				data.getRoutesList(),
@@ -54,16 +52,21 @@ public class RoutesFragment extends TransitFragment {
 				);
 	
 		mList.setAdapter(adapter);
-		Log.d(MainActivity.LOG_TAG, "Finished setting adapter");
 	}
 
 	@Override
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
+		// Clear SearchView text
+		search.setQuery("", false);
+//		search.clearFocus();
+		
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+		
 		HashMap<String, String> map = (HashMap<String, String>) adapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
-		Log.d(MainActivity.LOG_TAG, "RouteID: " + routeId);
 		
 		data.selectRoute(routeId);
 		

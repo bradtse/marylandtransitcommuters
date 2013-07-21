@@ -139,6 +139,11 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
+		MenuItem searchItem = menu.findItem(R.id.menu_search);
+		SearchView search = (SearchView) searchItem.getActionView();
+		
+		search.setIconifiedByDefault(false);
+		
         return super.onCreateOptionsMenu(menu);
     }
     

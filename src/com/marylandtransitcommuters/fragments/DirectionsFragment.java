@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.service.TransitService;
@@ -28,6 +30,7 @@ public class DirectionsFragment extends TransitFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
 		text.setText(R.string.direction_header);
+				
 		super.onActivityCreated(savedInstanceState);
 	}
 	
@@ -70,5 +73,12 @@ public class DirectionsFragment extends TransitFragment {
 		data.setDirectionId(index);
 		
 		replaceFragment(new StopsFragment(), TAG, StopsFragment.TAG);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		search.setQueryHint("Filter direction");	
 	}
 }
