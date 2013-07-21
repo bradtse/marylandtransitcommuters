@@ -82,7 +82,11 @@ public class RoutesFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
-		data.setRouteId(index);
+		HashMap<String, String> map = (HashMap<String, String>) adapter.getItem(index);
+		String routeId = map.get(TransitData.ROUTE_ID);
+		Log.d(MainActivity.LOG_TAG, "RouteID: " + routeId);
+		
+		data.setRouteId(routeId);
 		
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}

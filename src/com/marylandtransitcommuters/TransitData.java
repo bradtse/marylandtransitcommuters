@@ -22,6 +22,7 @@ import android.util.Log;
 /**
  * Singleton containing info on the current search being done. Also contains
  * a bunch of methods that allow you to add/get data.
+ * FIXME I want to update this so that each piece of data is its own object
  */
 public final class TransitData {
 	public static final String ROUTE_SHORT_NAME = "route_short_name";
@@ -36,7 +37,6 @@ public final class TransitData {
 	private static TransitData instance;
 	
 	private String routeId;
-	private String routeShortName;
 	private String directionId;
 	private String stopId;
 	private JSONArray routesData;
@@ -88,12 +88,15 @@ public final class TransitData {
 	 * FIXME not handling all cases properly. Ex: Route 3X and 40
 	 */
 	private JSONArray fixDirectionsData(JSONArray data) {
+		String routeShortName = getShortName(routeId);
 		for (int i = 0; i < data.length(); i++) {
 			String headsign = null;
 			JSONObject temp = null;
+			
 			try {
 				temp = data.getJSONObject(i);
 				headsign = temp.getString(TRIP_HEADSIGN);
+				
 				if (headsign.contains(routeShortName) == true) {
 					headsign = headsign.replaceFirst(routeShortName, "to");
 					temp.put(TRIP_HEADSIGN, headsign);
@@ -114,17 +117,28 @@ public final class TransitData {
 	 * Sets the RouteId that is associated with the route/item that was selected
 	 * @param index the index of the route/item that was selected from the ListView
 	 */
-	public void setRouteId(int index) {
-		try {
-			routeShortName = routesData.getJSONObject(index).getString(ROUTE_SHORT_NAME);
-			routeId = routesData.getJSONObject(index).getString(ROUTE_ID);
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setRouteId() failed: " + e.getMessage());
-		}
+	public void setRouteId(String routeId) {
+		this.routeId = routeId;
 	}
 	
 	public String getRouteId() {
 		return routeId;
+	}
+	
+	public String getShortName(String routeId) {
+		try {
+			for (int i = 0; i < routesData.length(); i++) {
+				JSONObject route = routesData.getJSONObject(i);
+				String id = route.getString(ROUTE_ID);
+				
+				if (id.equals(routeId)) {
+					return route.getString(ROUTE_SHORT_NAME);
+				}
+			}
+		} catch (JSONException e) {
+			Log.d(MainActivity.LOG_TAG, e.getMessage());
+		}
+		return null;
 	}
 	
 	/**
@@ -140,6 +154,7 @@ public final class TransitData {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; i < routesData.length(); i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
+			map.put(ROUTE_ID, getRouteIdHelper(i));
 			map.put(ROUTE_SHORT_NAME, getShortName(i));
 			map.put(ROUTE_LONG_NAME, getLongName(i));
 			list.add(map);
@@ -147,6 +162,16 @@ public final class TransitData {
 		return list;
 	}
 	
+	private String getRouteIdHelper(int index) {
+		String routeId = null;
+		try {
+			routeId = routesData.getJSONObject(index).getString(ROUTE_ID);
+		} catch (JSONException e) {
+			Log.d(MainActivity.LOG_TAG, e.getMessage());
+		}
+		return routeId;
+	}
+
 	/**
 	 * Returns the route's short name that correlates with the index parameter
 	 * @param index the index of the route we are interested in
