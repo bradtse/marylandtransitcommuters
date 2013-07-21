@@ -7,9 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.marylandtransitcommuters.MainActivity;
-import com.marylandtransitcommuters.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.rest.RestHelper;
+
+import dataobjects.Route;
+import dataobjects.TransitData;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -49,13 +51,17 @@ public class TransitService extends IntentService {
 	 */
 	private void serviceHelper(DataType type) {
 		try {
+			Log.d(MainActivity.LOG_TAG, "Inside serviceHelper()");
 			TransitData profile = TransitData.getInstance();
 			JSONObject data = new JSONObject();
-			data.put(TransitData.ROUTE_ID, profile.getRouteId());
+			
+			data.put(Route.ROUTE_ID, profile.getRouteId());
 			data.put(TransitData.DIR_ID, profile.getDirectionId());
 			data.put(TransitData.STOP_ID, profile.getStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
+			
 			Log.d(MainActivity.LOG_TAG, data.toString());
+			
 			JSONArray results = RestHelper.post(data);
 			profile.setData(type, results);
 		} catch (JSONException e) {

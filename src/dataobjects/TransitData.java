@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters;
+package dataobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.service.TransitService;
 
 import android.util.Log;
@@ -36,10 +37,9 @@ public final class TransitData {
 	public static final String DIR_ID = "direction_id";	
 	private static TransitData instance;
 	
-	private String routeId;
 	private String directionId;
 	private String stopId;
-	private JSONArray routesData;
+	private Route route;
 	private JSONArray directionsData;
 	private JSONArray stopsData;
 	private JSONArray timesData;
@@ -65,7 +65,7 @@ public final class TransitData {
 	public void setData(TransitService.DataType type, JSONArray data) {
 		switch (type) {
 			case ROUTES:
-				this.routesData = data;
+				this.route = new Route(data);
 				break;
 			case DIRECTIONS:
 				this.directionsData = fixDirectionsData(data);
@@ -88,17 +88,20 @@ public final class TransitData {
 	 * FIXME not handling all cases properly. Ex: Route 3X and 40
 	 */
 	private JSONArray fixDirectionsData(JSONArray data) {
-		String routeShortName = getShortName(routeId);
+		String routeShortName = getRouteShortName();
+		Log.d(MainActivity.LOG_TAG, routeShortName);
 		for (int i = 0; i < data.length(); i++) {
 			String headsign = null;
 			JSONObject temp = null;
 			
 			try {
 				temp = data.getJSONObject(i);
+				String s = temp.getString(DIR_ID);
+				int direction = Integer.valueOf(s);
 				headsign = temp.getString(TRIP_HEADSIGN);
 				
 				if (headsign.contains(routeShortName) == true) {
-					headsign = headsign.replaceFirst(routeShortName, "to");
+					headsign = headsign.replaceFirst(routeShortName, "towards");
 					temp.put(TRIP_HEADSIGN, headsign);
 					data.put(i, temp);
 				}
@@ -106,6 +109,7 @@ public final class TransitData {
 				Log.d(MainActivity.LOG_TAG, "formatData() failed: " + e.getMessage());
 			}		
 		}
+		
 		return data;
 	}
 	
@@ -113,102 +117,26 @@ public final class TransitData {
 	 * Route methods
 	 */
 	
-	/**
-	 * Sets the RouteId that is associated with the route/item that was selected
-	 * @param index the index of the route/item that was selected from the ListView
-	 */
-	public void setRouteId(String routeId) {
-		this.routeId = routeId;
+	public void selectRoute(String routeId) {
+		route.selectRoute(routeId);
 	}
 	
 	public String getRouteId() {
-		return routeId;
+		return (route == null) ? null : route.getRouteId();
 	}
 	
-	public String getShortName(String routeId) {
-		try {
-			for (int i = 0; i < routesData.length(); i++) {
-				JSONObject route = routesData.getJSONObject(i);
-				String id = route.getString(ROUTE_ID);
-				
-				if (id.equals(routeId)) {
-					return route.getString(ROUTE_SHORT_NAME);
-				}
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, e.getMessage());
-		}
-		return null;
+	public String getRouteShortName() {
+		return (route == null) ? null : route.getShortName();
 	}
 	
-	/**
-	 * This method is created specifically to work with the SimpleAdapter that the
-	 * RoutesFragment is using. The SimpleAdapter requires an ArrayList of HashMaps, where each
-	 * HashMap correlates to a row in the ListView. Each HashMap contains a key->value
-	 * pair for each piece of data that you wish to display. In this case I have two
-	 * key->value pairs per HashMap, which correlates to the route's short and long name.
-	 * @return an ArrayList of HashMaps containing the short and long names for
-	 * every route
-	 */
+	public String getRouteLongName() {
+		return (route == null) ? null : route.getLongName();
+	}
+	
 	public ArrayList<HashMap<String, String>> getRoutesList() {
-		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		for (int i = 0; i < routesData.length(); i++) {
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put(ROUTE_ID, getRouteIdHelper(i));
-			map.put(ROUTE_SHORT_NAME, getShortName(i));
-			map.put(ROUTE_LONG_NAME, getLongName(i));
-			list.add(map);
-		}
-		return list;
-	}
-	
-	private String getRouteIdHelper(int index) {
-		String routeId = null;
-		try {
-			routeId = routesData.getJSONObject(index).getString(ROUTE_ID);
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, e.getMessage());
-		}
-		return routeId;
+		return (route == null) ? null : route.getRoutesList();
 	}
 
-	/**
-	 * Returns the route's short name that correlates with the index parameter
-	 * @param index the index of the route we are interested in
-	 * @return the route's short name
-	 */
-	private String getShortName(int index) {
-		String shortName = null;
-		try {
-			shortName = routesData.getJSONObject(index).getString(ROUTE_SHORT_NAME);
-			if (shortName == "null") {
-				shortName = "N/A";
-			} else if (shortName.charAt(0) == '0') {
-				shortName = shortName.substring(1);
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, e.getMessage());
-		}
-		return shortName;
-	}
-	
-	/**
-	 * Returns the route's long name that correlates with the index parameter
-	 * @param index the index of the route we are interested in
-	 * @return the route's long name
-	 */
-	private String getLongName(int index) {
-		String longName = null;
-		try {
-			longName = routesData.getJSONObject(index).getString(ROUTE_LONG_NAME);
-			longName = longName.replaceAll("\\s*-\\s*", " to ");
-			longName = longName.replaceAll(" TO ", " to ");
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, e.getMessage());
-		}
-		return longName;
-	}
-	
 	/*
 	 * Direction methods
 	 */

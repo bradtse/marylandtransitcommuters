@@ -6,6 +6,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -21,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
-import com.marylandtransitcommuters.TransitData;
+
+import dataobjects.Route;
+import dataobjects.TransitData;
 
 /**
  * Essentially the same thing as a Simple Adapter with the filter and getView changed.
@@ -115,7 +119,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
 		TextView tv = (TextView) view.findViewById(R.id.route_long_name);
 		
 		Map<String, String> map = (Map<String, String>) mData.get(position);
-		String longName = map.get(TransitData.ROUTE_LONG_NAME);
+		String longName = map.get(Route.LONG_NAME);
 		
 		if (longName.contains(" to ")) {
 			int index = longName.indexOf(" to ") + 1;
@@ -129,6 +133,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			tv.setText(colored);
 		} 
+		
 		return view;
     }
 

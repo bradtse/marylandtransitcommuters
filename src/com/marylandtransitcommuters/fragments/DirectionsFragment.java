@@ -47,15 +47,15 @@ public class DirectionsFragment extends TransitFragment {
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				String direction = list[pos];
 				
-				if (direction.contains("to ")) {
-					int index = direction.indexOf("to ");
+				if (direction.contains("towards ")) {
+					int index = direction.indexOf("towards ");
 					SpannableString result = new SpannableString(direction);
 				
 					result.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
-								index, index+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new RelativeSizeSpan(0.8f), index, index+2, 
+								index, index+7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					result.setSpan(new RelativeSizeSpan(0.8f), index, index+7, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+2,
+					result.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+7,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(result);
 				} 

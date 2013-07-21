@@ -26,8 +26,8 @@
         </activity>
         
         <!-- Provides search suggestions for words and their definitions. -->
-        <provider android:name="com.marylandtransitcommuters.database.TransitProvider"
-                  android:authorities="com.marylandtransitcommuters.TransitProvider" />
+<!--         <provider android:name="com.marylandtransitcommuters.database.TransitProvider" -->
+<!--                   android:authorities="com.marylandtransitcommuters.TransitProvider" /> -->
         
         <service android:name="com.marylandtransitcommuters.service.TransitService" />
         

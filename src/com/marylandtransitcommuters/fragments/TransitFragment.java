@@ -17,11 +17,16 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
-import com.marylandtransitcommuters.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.service.TransitService;
+
+import dataobjects.TransitData;
 
 /**
  * Parent class for each fragment
@@ -31,6 +36,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected View rootView;
 	protected ListView mList;
 	protected TransitData data;
+	protected SearchView search;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -42,6 +48,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			context = getActivity();
 			data = TransitData.getInstance();
 			setupProgressDialog();
+			setHasOptionsMenu(true); // Force redraw of action bar menu
 //		}
 	}
 	
@@ -66,7 +73,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			setupReceiver();
 			startIntentService();
-			setHasOptionsMenu(true);
 			
 			alive = true;
 //		} 
@@ -85,10 +91,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		MenuItem searchItem = menu.findItem(R.id.menu_search);
+		search = (SearchView) searchItem.getActionView();
+		
+		search.setIconifiedByDefault(false);
 	}
-	
 	/**
 	 * Add the appropriate service type to the intent 
 	 * @param intent the intent to add the service type to
@@ -147,11 +155,14 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
 							   R.animator.slide_in_left, R.animator.slide_out_right);
-		ft.hide(currFrag);
+		
 		if (newFrag != null) {
 			ft.remove(newFrag);
 		} 
+		
+		ft.hide(currFrag);
 		ft.add(R.id.content_frame, newFragment, newFragTag);
+		
 		ft.addToBackStack(null);
 		ft.commit();
     }
