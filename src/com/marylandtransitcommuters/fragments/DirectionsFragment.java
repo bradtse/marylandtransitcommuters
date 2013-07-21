@@ -38,7 +38,7 @@ public class DirectionsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		final String[] list = profile.getDirectionsList();
+		final String[] list = data.getDirectionsList();
 		mList.setAdapter(new ArrayAdapter<String>(context, 
 						 R.layout.transit_listview_row, list) {
 			@Override
@@ -67,7 +67,7 @@ public class DirectionsFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 				
-		profile.setDirectionId(index);
+		data.setDirectionId(index);
 		
 		replaceFragment(new StopsFragment(), TAG, StopsFragment.TAG);
 	}

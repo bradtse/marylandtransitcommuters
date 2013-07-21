@@ -26,10 +26,10 @@ import com.marylandtransitcommuters.service.TransitService;
  * Parent class for each fragment
  */
 public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver	{
-	Context context;
-	View rootView;
-	ListView mList;
-	TransitData profile;
+	protected Context context;
+	protected View rootView;
+	protected ListView mList;
+	protected TransitData data;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -39,13 +39,15 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		super.onCreate(savedInstanceState);
 //		if (savedInstanceState == null) {
 			context = getActivity();
-			profile = TransitData.getInstance();
-			
-			// Set up the progress dialog
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setTitle("Retrieving data from server");
-			progressDialog.setMessage("Please wait");
+			data = TransitData.getInstance();
+			setupProgressDialog();
 //		}
+	}
+	
+	private void setupProgressDialog() {
+		progressDialog = new ProgressDialog(context);
+		progressDialog.setTitle("Retrieving data from server");
+		progressDialog.setMessage("Please wait");
 	}
 	
 	@Override
@@ -61,15 +63,23 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		
 //		if (savedInstanceState == null) {
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
-			mReceiver = new TransitReceiver(new Handler());
-			mReceiver.setReceiver(this);
+			setupReceiver();
+			startIntentService();
 			
-			Intent intent  = new Intent(context, TransitService.class);
-			intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
-			setServiceType(intent);
-			context.startService(intent);
 			alive = true;
 //		} 
+	}
+	
+	private void setupReceiver() {
+		mReceiver = new TransitReceiver(new Handler());
+		mReceiver.setReceiver(this);
+	}
+	
+	private void startIntentService() {
+		Intent intent  = new Intent(context, TransitService.class);
+		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
+		setServiceType(intent);
+		context.startService(intent);
 	}
 	
 	@Override
@@ -85,7 +95,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		switch(resultCode) {
+		switch (resultCode) {
 			case TransitService.START:
 				progressDialog.show();
 				break;

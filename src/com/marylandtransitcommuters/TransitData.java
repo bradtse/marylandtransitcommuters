@@ -51,7 +51,10 @@ public final class TransitData {
 	 * @return the singleton instance
 	 */
 	public static TransitData getInstance() {
-		return (instance == null) ? (instance = new TransitData()) : instance;
+		if (instance == null) {
+			instance = new TransitData();
+		}
+		return instance;
 	}
 	
 	/**
@@ -60,7 +63,7 @@ public final class TransitData {
 	 * @param data the JSONArray containing the data
 	 */
 	public void setData(TransitService.DataType type, JSONArray data) {
-		switch(type) {
+		switch (type) {
 			case ROUTES:
 				this.routesData = data;
 				break;

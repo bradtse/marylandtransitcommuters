@@ -2,6 +2,7 @@ package com.marylandtransitcommuters.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,11 +15,19 @@ public class TimesFragment extends TransitFragment {
 	public static final String TAG = "times";
 	
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.times_fragment_layout, container, false);
+		return rootView;
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		TextView text = (TextView) rootView.findViewById(R.id.times_fragment_header);
 		text.setText(R.string.times_header);
 		super.onActivityCreated(savedInstanceState);
 	}
+	
 	@Override
 	public void setServiceType(Intent intent) {
 		intent.putExtra(TransitService.DataType.KEY, TransitService.DataType.TIMES);
@@ -28,7 +37,7 @@ public class TimesFragment extends TransitFragment {
 	public void setAdapter() {
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, R.layout.transit_listview_row, 
-					profile.getTimesList()) 
+					data.getTimesList()) 
 		{
 			@Override
 			public View getView(int pos, View convertView, ViewGroup parent) {

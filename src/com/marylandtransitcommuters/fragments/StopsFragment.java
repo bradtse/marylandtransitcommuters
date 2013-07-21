@@ -34,7 +34,7 @@ public class StopsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		final String[] list = profile.getStopsList();
+		final String[] list = data.getStopsList();
 		mList.setAdapter(new ArrayAdapter<String>(
 					context, R.layout.transit_listview_row, 
 					list) 
@@ -66,7 +66,7 @@ public class StopsFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
-		profile.setStopId(index);
+		data.setStopId(index);
 		
 		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
 	}
