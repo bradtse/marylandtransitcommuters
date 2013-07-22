@@ -48,7 +48,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			context = getActivity();
 			data = TransitData.getInstance();
 			setupProgressDialog();
-			setHasOptionsMenu(true); // Force onCreateOptionsMenu to be called
 //		}
 	}
 	
@@ -110,6 +109,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			case TransitService.FINISH:
 				mList.setOnItemClickListener(new ListItemClickListener());
 				setAdapter();
+				setHasOptionsMenu(true); // Force onCreateOptionsMenu to be called
 				progressDialog.dismiss();
 				break;
 			default:
@@ -126,7 +126,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-//			resetSearchView();
+			resetSearchView();
 			selectItem(position);
 		}
     }

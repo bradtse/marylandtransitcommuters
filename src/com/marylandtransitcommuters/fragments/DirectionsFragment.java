@@ -91,7 +91,7 @@ public class DirectionsFragment extends TransitFragment {
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);
-				
+
 		data.setDirection(directionId);
 		
 		replaceFragment(new StopsFragment(), TAG, StopsFragment.TAG);
@@ -111,7 +111,7 @@ public class DirectionsFragment extends TransitFragment {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-//				adapter.getFilter().filter(newText);
+				adapter.getFilter().filter(newText);
 				return false;
 			}
 		});
