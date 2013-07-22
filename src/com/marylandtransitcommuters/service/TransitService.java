@@ -8,8 +8,9 @@ import org.json.JSONObject;
 
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
-import com.marylandtransitcommuters.rest.RestHelper;
+import com.marylandtransitcommuters.util.RestHelper;
 
+import dataobjects.Direction;
 import dataobjects.Route;
 import dataobjects.TransitData;
 
@@ -38,8 +39,11 @@ public class TransitService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		final ResultReceiver mReceiver = intent.getParcelableExtra(TransitReceiver.RECEIVER);
+		
 		mReceiver.send(START, Bundle.EMPTY);
+		
 		serviceHelper((DataType) intent.getSerializableExtra(DataType.KEY));
+		
 		mReceiver.send(FINISH, Bundle.EMPTY);
 	}
 	
@@ -51,12 +55,11 @@ public class TransitService extends IntentService {
 	 */
 	private void serviceHelper(DataType type) {
 		try {
-			Log.d(MainActivity.LOG_TAG, "Inside serviceHelper()");
 			TransitData profile = TransitData.getInstance();
 			JSONObject data = new JSONObject();
 			
 			data.put(Route.ROUTE_ID, profile.getRouteId());
-			data.put(TransitData.DIR_ID, profile.getDirectionId());
+			data.put(Direction.DIR_ID, profile.getDirectionId());
 			data.put(TransitData.STOP_ID, profile.getStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			

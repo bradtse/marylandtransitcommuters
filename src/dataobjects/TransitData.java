@@ -2,6 +2,8 @@ package dataobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -13,12 +15,11 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.service.TransitService;
-
-import android.util.Log;
 
 /**
  * Singleton containing info on the current search being done. Also contains
@@ -26,18 +27,15 @@ import android.util.Log;
  * FIXME I want to update this so that each piece of data is its own object
  */
 public final class TransitData {
-	public static final String TRIP_HEADSIGN = "trip_headsign";
 	public static final String STOP_NAME = "stop_name";
 	public static final String ARRIVAL_TIME = "arrival_time";
 	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
 	public static final String STOP_ID = "stop_id";
-	public static final String DIR_ID = "direction_id";	
 	private static TransitData instance;
 	
-	private String directionId;
 	private String stopId;
 	private Route route;
-	private JSONArray directionsData;
+	private Direction direction;
 	private JSONArray stopsData;
 	private JSONArray timesData;
 
@@ -65,7 +63,7 @@ public final class TransitData {
 				this.route = new Route(data);
 				break;
 			case DIRECTIONS:
-				this.directionsData = fixDirectionsData(data);
+				this.direction = new Direction(data);
 				break;
 			case STOPS:
 				this.stopsData = data;
@@ -78,43 +76,11 @@ public final class TransitData {
 		}
 	}
 	
-	/**
-	 * Removes unnecessary text from the direction's trip_headsign column
-	 * @param data the JSONArray containing the data that needs to be fixed
-	 * @return the fixed JSONArray
-	 * FIXME not handling all cases properly. Ex: Route 3X and 40
-	 */
-	private JSONArray fixDirectionsData(JSONArray data) {
-		String routeShortName = getRouteShortName();
-		Log.d(MainActivity.LOG_TAG, routeShortName);
-		for (int i = 0; i < data.length(); i++) {
-			String headsign = null;
-			JSONObject temp = null;
-			
-			try {
-				temp = data.getJSONObject(i);
-				String s = temp.getString(DIR_ID);
-				int direction = Integer.valueOf(s);
-				headsign = temp.getString(TRIP_HEADSIGN);
-				
-				if (headsign.contains(routeShortName) == true) {
-					headsign = headsign.replaceFirst(routeShortName, "towards");
-					temp.put(TRIP_HEADSIGN, headsign);
-					data.put(i, temp);
-				}
-			} catch (JSONException e) {
-				Log.d(MainActivity.LOG_TAG, "formatData() failed: " + e.getMessage());
-			}		
-		}
-		
-		return data;
-	}
-	
 	/*
 	 * Route methods
 	 */
 	
-	public void selectRoute(String routeId) {
+	public void setRoute(String routeId) {
 		route.selectRoute(routeId);
 	}
 	
@@ -138,37 +104,20 @@ public final class TransitData {
 	 * Direction methods
 	 */
 	
-	/**
-	 * Sets the DirectionId that is associated with the direction/item that was selected
-	 * @param index the index of the direction/item that was selected from the ListView
-	 */
-	public void setDirectionId(int index) {
-		try {
-			directionId = directionsData.getJSONObject(index).getString(DIR_ID);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public void setDirection(String dirId) {
+		direction.selectDirection(dirId);
 	}
 	
 	public String getDirectionId() {
-		return directionId;
+		return (direction == null) ? null : direction.getDirectionId();
 	}
 	
-	/**
-	 * Returns a list of directions for the current route
-	 * @return the String array containing a list of directions
-	 */
-	public String[] getDirectionsList() {
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < directionsData.length(); i++) {
-			try {
-				list.add(directionsData.getJSONObject(i).getString(TRIP_HEADSIGN));
-			} catch (JSONException e) {
-				Log.d(MainActivity.LOG_TAG, e.getMessage());
-			}
-		}
-		String[] empty = new String[list.size()];
-		return list.toArray(empty);
+	public String getDirectionHeadsign() {
+		return (direction == null) ? null : direction.getHeadsign();
+	}
+	
+	public ArrayList<HashMap<String, String>> getDirectionsList() {
+		return (direction == null) ? null : direction.getDirectionsList();
 	}
 	
 	/*

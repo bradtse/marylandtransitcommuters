@@ -1,4 +1,4 @@
-package com.marylandtransitcommuters.rest;
+package com.marylandtransitcommuters.util;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

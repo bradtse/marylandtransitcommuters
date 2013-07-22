@@ -16,7 +16,7 @@ routes
 WHERE route_type = 3;";
 
 $directionsQuery = "
-SELECT trip_id, trip_headsign, direction_id
+SELECT trip_headsign, direction_id
 FROM
 trips
 WHERE route_id = :routeid 

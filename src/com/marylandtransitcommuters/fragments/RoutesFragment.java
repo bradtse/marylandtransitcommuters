@@ -1,6 +1,6 @@
 package com.marylandtransitcommuters.fragments;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import adapters.CustomSimpleAdapter;
 import android.content.Intent;
@@ -55,10 +55,10 @@ public class RoutesFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
-		HashMap<String, String> map = (HashMap<String, String>) adapter.getItem(index);
+		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
 		
-		data.selectRoute(routeId);
+		data.setRoute(routeId);
 			
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}

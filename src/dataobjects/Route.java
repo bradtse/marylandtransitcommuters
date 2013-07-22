@@ -10,11 +10,13 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.util.Cloner;
 
 public class Route {
 	public static final String ROUTE_ID = "route_id";
 	public static final String SHORT_NAME = "route_short_name";
 	public static final String LONG_NAME = "route_long_name";
+	private static final String[] keys = {ROUTE_ID, SHORT_NAME, LONG_NAME};
 	
 	private JSONArray rawData; // The raw data response from the server
 	private JSONArray prettyData; // Prettier data. Mostly everything will use this.
@@ -111,7 +113,7 @@ public class Route {
 	 * @return A prettified copy of the route's raw data
 	 */
 	private JSONArray prettify(JSONArray data) {
-		JSONArray pretty = deepClone(data);
+		JSONArray pretty = Cloner.deepCloneJSON(data, keys);
 		
 		for (int i = 0; i < pretty.length(); i++) {
 			try {
@@ -132,28 +134,6 @@ public class Route {
 		}
 		
 		return pretty;
-	}
-	
-	/**
-	 * Creates a deep clone of the JSONArray provided
-	 * @param json The JSONArray to clone
-	 * @return The cloned JSONArray
-	 */
-	private JSONArray deepClone(JSONArray json) {
-		final String[] keys = {ROUTE_ID, SHORT_NAME, LONG_NAME};
-		JSONArray clone = new JSONArray();
-		
-		for (int i = 0; i < json.length(); i++) {
-			try {
-				JSONObject original = json.getJSONObject(i);
-				JSONObject copy = new JSONObject(original, keys);
-				clone.put(copy);			
-			} catch (JSONException e) {
-				Log.d(MainActivity.LOG_TAG, "deepClone() failed: " + e.getMessage());
-			}
-		}
-		
-		return clone;
 	}
 	
 	/**
