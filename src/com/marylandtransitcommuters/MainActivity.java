@@ -151,7 +151,7 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-    	menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+    	menu.findItem(R.id.menu_search).setVisible(!drawerOpen);
     	return super.onPrepareOptionsMenu(menu);
     }
 

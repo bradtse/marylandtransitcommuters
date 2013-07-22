@@ -2,12 +2,10 @@ package com.marylandtransitcommuters.fragments;
 
 import java.util.HashMap;
 
-import adapters.CustomAdapter;
-import android.content.Context;
+import adapters.CustomSimpleAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -25,11 +23,10 @@ import dataobjects.Route;
 public class RoutesFragment extends TransitFragment {
 	public static final String TAG = "routes";
 	
-	private CustomAdapter adapter;
+	private CustomSimpleAdapter adapter;
     
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "Got into onActivityCreated of Routes");
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
 		text.setText(R.string.routes_header);
 		
@@ -43,7 +40,7 @@ public class RoutesFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		adapter = new CustomAdapter(
+		adapter = new CustomSimpleAdapter(
 				context, 
 				data.getRoutesList(),
 				R.layout.routes_listview_row,
@@ -57,13 +54,6 @@ public class RoutesFragment extends TransitFragment {
 	@Override
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
-		
-		// Clear SearchView text
-		search.setQuery("", false);
-//		search.clearFocus();
-		
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 		
 		HashMap<String, String> map = (HashMap<String, String>) adapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);

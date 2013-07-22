@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -93,6 +94,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		search = (SearchView) searchItem.getActionView();
+		
+		// Reset the SearchView's text and hide keyboard
+		search.setQuery("", false);
+		search.clearFocus();
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 	}
 	
 	/**

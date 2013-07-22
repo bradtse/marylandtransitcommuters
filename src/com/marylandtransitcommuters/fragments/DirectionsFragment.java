@@ -1,5 +1,7 @@
 package com.marylandtransitcommuters.fragments;
 
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -15,9 +17,12 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.service.TransitService;
+
+import dataobjects.TransitData;
 
 /**
  * The fragment that allows the user to select which direction they are 
@@ -25,6 +30,8 @@ import com.marylandtransitcommuters.service.TransitService;
  */
 public class DirectionsFragment extends TransitFragment {
 	public static final String TAG = "direction";
+	
+	private ArrayAdapter adapter;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -41,14 +48,15 @@ public class DirectionsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		final String[] list = data.getDirectionsList();
-		mList.setAdapter(new ArrayAdapter<String>(context, 
-						 R.layout.transit_listview_row, list) {
+		adapter = new ArrayAdapter<String>(context, 
+						 R.layout.transit_listview_row, 
+						 data.getDirectionsList()) {
 			@Override
 			public View getView(int pos, View convertView, ViewGroup parent) {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
-				String direction = list[pos];
+				
+				String direction = (String) adapter.getItem(pos);
 				
 				if (direction.contains("towards ")) {
 					int index = direction.indexOf("towards ");
@@ -64,7 +72,9 @@ public class DirectionsFragment extends TransitFragment {
 				} 
 				return view;
 			}
-		});
+		};
+		
+		mList.setAdapter(adapter);
 	}
 	
 	public void selectItem(int index) {
@@ -80,5 +90,18 @@ public class DirectionsFragment extends TransitFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		search.setQueryHint("Filter direction");	
+//		search.setOnQueryTextListener(new OnQueryTextListener() {
+//
+//			@Override
+//			public boolean onQueryTextSubmit(String query) {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean onQueryTextChange(String newText) {
+//				adapter.getFilter().filter(newText);
+//				return false;
+//			}
+//		});
 	}
 }

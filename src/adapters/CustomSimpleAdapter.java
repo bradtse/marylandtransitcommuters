@@ -49,7 +49,7 @@ import dataobjects.Route;
  * </ul>
  * If no appropriate binding can be found, an {@link IllegalStateException} is thrown.
  */
-public class CustomAdapter extends BaseAdapter implements Filterable {
+public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
     private int[] mTo;
     private String[] mFrom;
     private ViewBinder mViewBinder;
@@ -78,7 +78,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
      *        TextViews. The first N views in this list are given the values of the first N columns
      *        in the from parameter.
      */
-    public CustomAdapter(Context context, List<? extends Map<String, ?>> data,
+    public CustomSimpleAdapter(Context context, List<? extends Map<String, ?>> data,
             int resource, String[] from, int[] to) {
         mData = data;
         mResource = mDropDownResource = resource;
