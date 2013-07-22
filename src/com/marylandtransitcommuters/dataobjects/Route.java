@@ -1,4 +1,4 @@
-package dataobjects;
+package com.marylandtransitcommuters.dataobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;

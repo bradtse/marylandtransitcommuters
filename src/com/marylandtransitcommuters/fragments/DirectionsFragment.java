@@ -20,9 +20,9 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.dataobjects.Direction;
 import com.marylandtransitcommuters.service.TransitService;
 
-import dataobjects.Direction;
 
 /**
  * The fragment that allows the user to select which direction they are 
@@ -54,7 +54,8 @@ public class DirectionsFragment extends TransitFragment {
 				R.layout.fragment_listview_row, 
 				new String[] {Direction.TRIP_HEADSIGN},
 				new int[] {R.id.transit_list_item}
-				) {
+				)
+		{
 			
 			@Override
 			public View getView(int pos, View convertView, ViewGroup parent) {

@@ -1,4 +1,4 @@
-package adapters;
+package com.marylandtransitcommuters.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.dataobjects.Route;
 
-import dataobjects.Route;
 
 /**
  * Essentially the same thing as a Simple Adapter with the filter and getView changed.

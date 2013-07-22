@@ -23,10 +23,10 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.service.TransitService;
 
-import dataobjects.TransitData;
 
 /**
  * Parent class for each fragment
@@ -73,7 +73,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			setupReceiver();
 			startIntentService();
-			
 			alive = true;
 //		} 
 	}
@@ -127,7 +126,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			resetSearchView();
+//			resetSearchView();
 			selectItem(position);
 		}
     }

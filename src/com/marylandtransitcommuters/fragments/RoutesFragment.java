@@ -2,7 +2,6 @@ package com.marylandtransitcommuters.fragments;
 
 import java.util.Map;
 
-import adapters.CustomSimpleAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +12,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.adapters.CustomSimpleAdapter;
+import com.marylandtransitcommuters.dataobjects.Route;
 import com.marylandtransitcommuters.service.TransitService;
 
-import dataobjects.Route;
 
 /**
  * The fragment showing the list of all available routes

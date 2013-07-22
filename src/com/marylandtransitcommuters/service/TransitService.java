@@ -7,12 +7,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.dataobjects.Direction;
+import com.marylandtransitcommuters.dataobjects.Route;
+import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.util.RestHelper;
 
-import dataobjects.Direction;
-import dataobjects.Route;
-import dataobjects.TransitData;
 
 import android.app.IntentService;
 import android.content.Intent;
