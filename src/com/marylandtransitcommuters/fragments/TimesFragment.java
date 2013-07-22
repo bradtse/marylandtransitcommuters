@@ -36,7 +36,7 @@ public class TimesFragment extends TransitFragment {
 	@Override
 	public void setAdapter() {
 		mList.setAdapter(new ArrayAdapter<String>(
-					context, R.layout.transit_listview_row, 
+					context, R.layout.fragment_listview_row, 
 					data.getTimesList()) 
 		{
 			@Override

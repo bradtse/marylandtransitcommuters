@@ -59,7 +59,7 @@ public class RoutesFragment extends TransitFragment {
 		String routeId = map.get(Route.ROUTE_ID);
 		
 		data.selectRoute(routeId);
-		
+			
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}
 	

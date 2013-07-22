@@ -9,7 +9,7 @@
 	<TextView android:id="@+id/route_short_name" 
 		android:textSize="25sp" 
 		android:textStyle="bold" 
-		android:textColor="#d24939" 
+		android:textColor="@color/route_shortname_text" 
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:paddingRight="15dp" />
@@ -18,6 +18,6 @@
 		android:textSize="20sp"
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
-		android:textColor="#403500"/>
+		android:textColor="@color/route_longname_text"/>
 	
 </LinearLayout>

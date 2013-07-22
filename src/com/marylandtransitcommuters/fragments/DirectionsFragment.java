@@ -1,7 +1,5 @@
 package com.marylandtransitcommuters.fragments;
 
-import java.util.Map;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -17,12 +15,9 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.service.TransitService;
-
-import dataobjects.TransitData;
 
 /**
  * The fragment that allows the user to select which direction they are 
@@ -49,7 +44,7 @@ public class DirectionsFragment extends TransitFragment {
 	@Override
 	public void setAdapter() {
 		adapter = new ArrayAdapter<String>(context, 
-						 R.layout.transit_listview_row, 
+						 R.layout.fragment_listview_row, 
 						 data.getDirectionsList()) {
 			@Override
 			public View getView(int pos, View convertView, ViewGroup parent) {

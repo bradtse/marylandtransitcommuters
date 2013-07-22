@@ -12,15 +12,15 @@
         android:gravity="center"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:background="#4A6870"
+        android:textColor="@color/fragment_header_text"
+        android:background="@color/fragment_header_background"
         android:padding="10dp" />
     
     <ListView
         android:id="@+id/fragment_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" 
-        android:background="#E9E5D9" />
+        android:background="@color/fragment_listview_background" />
     
     <TextView 
         android:id="@+id/empty"

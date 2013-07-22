@@ -94,12 +94,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		search = (SearchView) searchItem.getActionView();
-		
-		// Reset the SearchView's text and hide keyboard
-		search.setQuery("", false);
-		search.clearFocus();
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 	}
 	
 	/**
@@ -133,12 +127,24 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			resetSearchView();
 			selectItem(position);
 		}
     }
     
     /**
-     * Does something when item in ListView is selected
+     * Resets the SearchView for the next fragment, which includes removing the
+     * text and minimizing the soft keyboard.
+     */
+    public void resetSearchView() {
+    	search.setQuery("", false);
+		search.clearFocus();
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+    }
+    
+    /**
+     * Takes appropriate action when item in ListView is selected
      * @param position index of item selected
      */
     public abstract void selectItem(int position);

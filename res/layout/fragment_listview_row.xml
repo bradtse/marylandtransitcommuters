@@ -4,6 +4,6 @@
         android:textSize="20sp"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
-        android:textColor="#403500" 
+        android:textColor="@color/fragment_listview_text" 
         android:padding="13dp" />
 

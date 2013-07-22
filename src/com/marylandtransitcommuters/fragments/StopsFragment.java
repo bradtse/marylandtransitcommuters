@@ -36,7 +36,7 @@ public class StopsFragment extends TransitFragment {
 	public void setAdapter() {
 		final String[] list = data.getStopsList();
 		mList.setAdapter(new ArrayAdapter<String>(
-					context, R.layout.transit_listview_row, 
+					context, R.layout.fragment_listview_row, 
 					list) 
 		{
 			@Override
