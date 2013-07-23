@@ -7,7 +7,7 @@
     android:padding="10dp" >
     
 	<TextView android:id="@+id/route_short_name" 
-		android:textSize="25sp" 
+		android:textSize="15sp" 
 		android:textStyle="bold" 
 		android:textColor="@color/route_shortname_text" 
 		android:layout_width="wrap_content" 
@@ -15,7 +15,7 @@
 		android:paddingRight="15dp" />
 	
 	<TextView android:id="@+id/route_long_name"
-		android:textSize="20sp"
+		android:textSize="15sp"
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:textColor="@color/route_longname_text"/>

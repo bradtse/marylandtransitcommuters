@@ -15,7 +15,9 @@
         android:textColor="@color/fragment_header_text"
         android:background="@color/fragment_header_background"
         android:padding="10dp" />
-    
+  
+    <include layout="@layout/header_border" />
+         
     <LinearLayout 
         android:id="@+id/times_info_header"
         android:layout_width="fill_parent"

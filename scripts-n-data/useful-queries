@@ -2,16 +2,38 @@ NOT IN PERFECT ORDER
 
 reset query cache;
 
+                    ROUTES QUERY
+
 SELECT route_id, route_short_name, route_long_name
 FROM
 routes
 WHERE route_type = 3;
 
-SELECT DISTINCT trip_id, trip_headsign, direction_id
+
+                    DIRECTIONS QUERY
+
+SELECT trip_headsign, direction_id
 FROM
 trips
 WHERE route_id = 6122
-GROUP BY trip_headsign;
+GROUP BY direction_id;
+
+                    FINAL STOP QUERY
+        
+SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T3.stop_name 
+FROM 
+trips AS T1
+JOIN
+stop_times AS T2
+    ON T1.trip_id=T2.trip_id AND T1.route_id = 6122 AND T1.direction_id = 0
+JOIN 
+stops AS T3
+    ON T2.stop_id=T3.stop_id
+GROUP BY T3.stop_id
+ORDER BY T2.stop_sequence;
+
+
+                    START STOP QUERY
 
 SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T3.stop_name 
 FROM 
@@ -26,7 +48,7 @@ GROUP BY T3.stop_id
 ORDER BY T2.stop_sequence;
 
 
-WORKS WELL
+                    ARRIVAL TIMES QUERY
 
 SELECT T2.arrival_time, T2.arrival_time_seconds  
 FROM 

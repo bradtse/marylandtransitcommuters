@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="window_color">#ffE9E5D9</color>
-    <color name="actionbar_color">#ff262626</color>
-    <color name="fragment_header_text">#000000</color>
-    <color name="fragment_header_background">#4A6870</color>
-    <color name="fragment_listview_background">#E9E5D9</color>
+    <color name="window_color">#ffe0e0e0</color>
+    <color name="actionbar_color">#ff87a813</color>
+    <color name="drawer_color">#262626</color>
+    <color name="fragment_header_text">#dddddd</color>
+    <color name="fragment_header_background">#474747</color>
+    <color name="fragment_listview_background">#e0e0e0</color>
     <color name="route_shortname_text">#d24939</color>
     <color name="route_longname_text">#403500</color>
     <color name="fragment_listview_text">#403500</color>
+    <color name="fragment_listview_even_background">#d2d0d1</color>
 </resources>

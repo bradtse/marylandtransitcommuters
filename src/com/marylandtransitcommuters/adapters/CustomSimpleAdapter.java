@@ -50,6 +50,7 @@ import com.marylandtransitcommuters.dataobjects.Route;
  * If no appropriate binding can be found, an {@link IllegalStateException} is thrown.
  */
 public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
+    private Context mContext;
     private int[] mTo;
     private String[] mFrom;
     private ViewBinder mViewBinder;
@@ -80,6 +81,7 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
      */
     public CustomSimpleAdapter(Context context, List<? extends Map<String, ?>> data,
             int resource, String[] from, int[] to) {
+    	mContext = context;
         mData = data;
         mResource = mDropDownResource = resource;
         mFrom = from;
@@ -131,6 +133,12 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			tv.setText(colored);
 		} 
+		
+		if (position % 2 == 0) {
+			view.setBackgroundResource(R.color.fragment_listview_even_background);
+		} else {
+			view.setBackgroundResource(R.color.fragment_listview_background);
+		}
 		
 		return view;
     }

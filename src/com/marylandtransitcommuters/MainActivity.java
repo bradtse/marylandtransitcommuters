@@ -1,6 +1,7 @@
 package com.marylandtransitcommuters;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -92,7 +95,7 @@ public class MainActivity extends SherlockFragmentActivity {
      * @return A new ActionBarDrawerToggle object
      */
     private ActionBarDrawerToggle getActionBarDrawerToggle() {
-    	return new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,	
+    	return new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer_white,	
     									R.string.drawer_open, R.string.drawer_close) {
         	public void onDrawerClosed(View view) {
         		getSupportActionBar().setTitle(mTitle);
@@ -145,6 +148,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		
 		// Forces the SearchView to stay open
 		search.setIconifiedByDefault(false);
+		
+		// Set the text color for the SearchView
+		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);
+		searchText.setHintTextColor(Color.WHITE);
+		searchText.setTextColor(Color.WHITE);
 		
         return super.onCreateOptionsMenu(menu);
     }

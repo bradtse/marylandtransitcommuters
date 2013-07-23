@@ -1,5 +1,5 @@
 package com.marylandtransitcommuters.dataobjects;
 
-public class DepartureStop {
+public class StartStop {
 
 }

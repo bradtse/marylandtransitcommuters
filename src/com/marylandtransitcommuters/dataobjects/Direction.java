@@ -96,9 +96,9 @@ public class Direction {
 				tempHeadsign = tempHeadsign.replaceFirst(REGEX, GLUE + " ");
 				
 				if (dirId.equals(ZERO)) {
-					tempHeadsign = "Outbound ".concat(tempHeadsign);
+					tempHeadsign = "INBOUND ".concat(tempHeadsign);
 				} else if (dirId.equals(ONE)) {
-					tempHeadsign = "Inbound ".concat(tempHeadsign);
+					tempHeadsign = "OUTBOUND ".concat(tempHeadsign);
 				}
 				
 				direction.put(TRIP_HEADSIGN, tempHeadsign);
