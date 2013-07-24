@@ -23,6 +23,9 @@ public class TimesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
+		
+		setupInfoTextViews();
+		
 		return rootView;
 	}
 	
@@ -31,6 +34,23 @@ public class TimesFragment extends TransitFragment {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
 		text.setText(R.string.times_header);
 		super.onActivityCreated(savedInstanceState);
+	}
+	
+	private void setupInfoTextViews() {
+		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
+		String direction = "Direction: " + data.getDirectionHeadsign();
+		String startStop = "Start Stop: " + data.getStartStopName();
+		String finalStop = "Final Stop: " + data.getFinalStopName();
+		
+		TextView routeText = (TextView) rootView.findViewById(R.id.times_route);
+		TextView dirText = (TextView) rootView.findViewById(R.id.times_direction);
+		TextView startText = (TextView) rootView.findViewById(R.id.times_start_stop);
+		TextView finalText = (TextView) rootView.findViewById(R.id.times_final_stop);
+
+		routeText.setText(route);
+		dirText.setText(direction);
+		startText.setText(startStop);
+		finalText.setText(finalStop);
 	}
 	
 	@Override
@@ -43,7 +63,7 @@ public class TimesFragment extends TransitFragment {
 		adapter = new CustomSimpleAdapter(
 					context, 
 					data.getTimesList(),
-					R.layout.times_listview_row,
+					R.layout.times_list_row,
 					new String[] {Time.ARRIVAL_TIME},
 					new int[] {R.id.time_list_item}
 					)

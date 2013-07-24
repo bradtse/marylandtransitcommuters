@@ -48,7 +48,7 @@ public class RoutesFragment extends TransitFragment {
 		adapter = new CustomSimpleAdapter(
 				context, 
 				data.getRoutesList(),
-				R.layout.routes_listview_row,
+				R.layout.routes_list_row,
 				new String[] {Route.SHORT_NAME, Route.LONG_NAME},
 				new int[] {R.id.route_short_name, R.id.route_long_name}
 				) 

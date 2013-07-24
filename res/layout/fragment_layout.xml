@@ -9,7 +9,7 @@
     
     <include layout="@layout/result_count" />
     
-    <include layout="@layout/header_border" />
+    <include layout="@layout/fragment_header_border" />
     
     <ListView
         android:id="@+id/fragment_list"

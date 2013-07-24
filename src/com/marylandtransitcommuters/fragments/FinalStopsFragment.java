@@ -43,7 +43,7 @@ public class FinalStopsFragment extends TransitFragment {
 		adapter = new CustomSimpleAdapter(
 					context, 
 					data.getFinalStopsList(),
-					R.layout.fragment_listview_row, 
+					R.layout.fragment_list_row, 
 					new String[] {FinalStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
 					) 

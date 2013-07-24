@@ -4,7 +4,7 @@
     <color name="actionbar_color">#ff5c6d7e</color>
     <color name="drawer_color">#474747</color>
     <color name="drawer_text">#dddddd</color>
-    <color name="fragment_header_text">#dddddd</color>
+    <color name="fragment_header_text">#fc6822</color>
     <color name="fragment_header_background">#474747</color>
     <color name="fragment_listview_background">#e0e0e0</color>
     <color name="route_shortname_text">#d24939</color>

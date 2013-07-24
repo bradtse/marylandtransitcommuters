@@ -9,18 +9,38 @@
   
     <include layout="@layout/result_count" />
     
-    <include layout="@layout/header_border" />
+    <include layout="@layout/fragment_header_border" />
          
     <LinearLayout 
         android:id="@+id/times_info_header"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
         
         <TextView
             android:id="@+id/times_route" 
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:textSize="@dimen/time_info_font_size" />
+        
+        <TextView
+            android:id="@+id/times_direction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:textSize="@dimen/time_info_font_size" />
+        
+        <TextView
+            android:id="@+id/times_start_stop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:textSize="@dimen/time_info_font_size" />
+        
+        <TextView
+            android:id="@+id/times_final_stop"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="ROUTE NAME GOES HERE" />
+            android:textSize="@dimen/time_info_font_size" />
+        
     </LinearLayout>
     
     <ListView

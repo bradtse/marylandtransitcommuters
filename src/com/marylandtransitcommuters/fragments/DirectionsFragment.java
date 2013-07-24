@@ -48,7 +48,7 @@ public class DirectionsFragment extends TransitFragment {
 		adapter = new CustomSimpleAdapter(
 				context, 
 				data.getDirectionsList(),
-				R.layout.fragment_listview_row, 
+				R.layout.fragment_list_row, 
 				new String[] {Direction.TRIP_HEADSIGN},
 				new int[] {R.id.transit_list_item}
 				)
