@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>   
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/transit_list_item"
-        android:textSize="15sp"
+        android:textSize="@dimen/listview_font_size"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:textColor="@color/fragment_listview_text"

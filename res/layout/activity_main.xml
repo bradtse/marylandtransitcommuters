@@ -20,6 +20,7 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/white" 
         android:dividerHeight="0dp"
-        android:background="@color/drawer_color" />
+        android:background="@color/drawer_color" 
+        android:overScrollFooter="@null" />
 
 </android.support.v4.widget.DrawerLayout >

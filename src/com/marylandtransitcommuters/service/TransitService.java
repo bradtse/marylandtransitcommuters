@@ -71,7 +71,7 @@ public class TransitService extends IntentService {
 			JSONArray results = RestHelper.post(data);
 			profile.setData(type, results);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.d(MainActivity.LOG_TAG, "serviceHelper() failed: " + e.getMessage());
 		}
 	}
 }

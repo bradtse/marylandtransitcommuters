@@ -22,7 +22,7 @@ public class TimesFragment extends TransitFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.times_fragment_layout, container, false);
+		rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
 		return rootView;
 	}
 	

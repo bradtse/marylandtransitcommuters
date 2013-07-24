@@ -136,8 +136,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				progressDialog.show();
 				break;
 			case TransitService.FINISH:
-				setupFragment();
 				progressDialog.dismiss();
+				setupFragment();
 				break;
 			default:
 				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");
@@ -211,7 +211,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		if (newFrag != null) {
 			ft.remove(newFrag);
 		} 
-		
+				
 		ft.hide(currFrag);
 		ft.add(R.id.content_frame, newFragment, newFragTag);
 		

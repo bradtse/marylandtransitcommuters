@@ -86,7 +86,7 @@ public class Time {
 				.appendSuffix(" min", " mins")
 				.toFormatter();
 		return dhm.print(period.normalizedStandard());
-	}
+	}	
 	
 	/**
 	 * Returns a human readable clock time from the arrival time in seconds
