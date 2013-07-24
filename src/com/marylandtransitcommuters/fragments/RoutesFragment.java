@@ -4,7 +4,14 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -22,9 +29,7 @@ import com.marylandtransitcommuters.service.TransitService;
  */
 public class RoutesFragment extends TransitFragment {
 	public static final String TAG = "routes";
-	
-	private CustomSimpleAdapter adapter;
-    
+	    
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
@@ -46,7 +51,33 @@ public class RoutesFragment extends TransitFragment {
 				R.layout.routes_listview_row,
 				new String[] {Route.SHORT_NAME, Route.LONG_NAME},
 				new int[] {R.id.route_short_name, R.id.route_long_name}
-				);
+				) 
+		{
+	
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				View view = super.getView(position, convertView, parent);
+				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
+				
+				Map<String, String> map = (Map<String, String>) adapter.getItem(position);
+				String longName = map.get(Route.LONG_NAME);
+				
+				if (longName.contains(" to ")) {
+					int index = longName.indexOf(" to ") + 1;
+					SpannableString colored = new SpannableString(longName);
+				
+					colored.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+								index, index+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					colored.setSpan(new RelativeSizeSpan(0.8f), index, index+2, 
+								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					colored.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+2,
+								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					tv.setText(colored);
+				} 
+			
+				return view;
+			}
+		};
 	
 		mList.setAdapter(adapter);
 	}
@@ -66,20 +97,6 @@ public class RoutesFragment extends TransitFragment {
 	@Override
 	public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-
 		search.setQueryHint("Filter by route # or name");
-		search.setOnQueryTextListener(new OnQueryTextListener() {
-			
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				return false;
-			}
-			
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				adapter.getFilter().filter(newText);
-				return false;
-			}
-		});
 	}
 }

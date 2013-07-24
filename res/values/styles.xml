@@ -10,17 +10,19 @@
         backward-compatibility can go here.
     -->
 
+    <!-- The main application theme -->
     <style name="Theme.MyTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarStyle">@style/MyTheme.ActionBarStyle</item>
         <item name="android:windowBackground">@color/window_color</item>
     </style>
     
+    <!-- ActionBar style -->
     <style name="MyTheme.ActionBarStyle" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="background">@color/actionbar_color</item>
         <item name="android:background">@color/actionbar_color</item>
     </style>
     
-    <!-- ListView Item style -->
+    <!-- Draewr ListView Item style -->
     <style name="ListViewItem" >
        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -30,7 +32,7 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingTop">16dp</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/drawer_text</item>
     </style>
 
 </resources>

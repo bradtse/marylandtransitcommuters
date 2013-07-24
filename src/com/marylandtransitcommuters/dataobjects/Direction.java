@@ -16,7 +16,8 @@ public class Direction {
 	public static final String DIR_ID = "direction_id";
 	public static final String TRIP_HEADSIGN = "trip_headsign";
 	public static final String GLUE = "to";
-	private static final String[] keys = {DIR_ID, TRIP_HEADSIGN};
+	public static final String KEY = DIR_ID;
+	private static final String[] KEYS = {DIR_ID, TRIP_HEADSIGN};
 	private static final String ZERO = "0";
 	private static final String ONE = "1";
 	
@@ -85,7 +86,7 @@ public class Direction {
 		String shortName = curr.getRouteShortName();
 		final String REGEX = "^.*\\s*" + shortName + "\\s*";
 		
-		JSONArray pretty = Cloner.deepCloneJSON(data, keys);
+		JSONArray pretty = Cloner.deepCloneJSON(data, KEYS);
 
 		for (int i = 0; i < pretty.length(); i++) {
 			try {

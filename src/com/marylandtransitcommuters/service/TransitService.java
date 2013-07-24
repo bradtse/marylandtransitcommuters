@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.dataobjects.Direction;
+import com.marylandtransitcommuters.dataobjects.FinalStop;
 import com.marylandtransitcommuters.dataobjects.Route;
+import com.marylandtransitcommuters.dataobjects.StartStop;
 import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.util.RestHelper;
@@ -28,7 +30,7 @@ public class TransitService extends IntentService {
 	public static final int FINISH = 1;
 	
 	public enum DataType {
-		ROUTES, STOPS, TIMES, DIRECTIONS;
+		ROUTES, FINALSTOPS, STARTSTOPS, TIMES, DIRECTIONS;
 		public static final String KEY = "type";
 	}
 	
@@ -58,9 +60,10 @@ public class TransitService extends IntentService {
 			TransitData profile = TransitData.getInstance();
 			JSONObject data = new JSONObject();
 			
-			data.put(Route.ROUTE_ID, profile.getRouteId());
-			data.put(Direction.DIR_ID, profile.getDirectionId());
-			data.put(TransitData.STOP_ID, profile.getStopId());
+			data.put(Route.KEY, profile.getRouteId());
+			data.put(Direction.KEY, profile.getDirectionId());
+			data.put(FinalStop.KEY, profile.getFinalStopId());
+			data.put(StartStop.KEY,  profile.getStartStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			
 			Log.d(MainActivity.LOG_TAG, data.toString());

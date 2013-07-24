@@ -10,6 +10,7 @@
         <item name="android:windowBackground">@color/window_color</item>
     </style>
     
+    <!-- ActionBar style -->
     <style name="MyTheme.ActionBarStyle" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="background">@color/actionbar_color</item>
         <item name="android:background">@color/actionbar_color</item>

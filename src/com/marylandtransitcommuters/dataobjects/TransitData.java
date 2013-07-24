@@ -25,17 +25,13 @@ import com.marylandtransitcommuters.service.TransitService;
  * FIXME I want to update this so that each piece of data is its own object
  */
 public final class TransitData {
-	public static final String STOP_NAME = "stop_name";
-	public static final String ARRIVAL_TIME = "arrival_time";
-	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
-	public static final String STOP_ID = "stop_id";
 	private static TransitData instance;
 	
-	private String stopId;
 	private Route route;
 	private Direction direction;
-	private JSONArray stopsData;
-	private JSONArray timesData;
+	private FinalStop finalStop;
+	private StartStop startStop;
+	private Time time;
 
 	private TransitData() {}
 	
@@ -63,11 +59,14 @@ public final class TransitData {
 			case DIRECTIONS:
 				this.direction = new Direction(data);
 				break;
-			case STOPS:
-				this.stopsData = data;
+			case FINALSTOPS:
+				this.finalStop = new FinalStop(data);
+				break;
+			case STARTSTOPS:
+				this.startStop = new StartStop(data);
 				break;
 			case TIMES:
-				this.timesData = data;
+				this.time = new Time(data);
 				break;
 			default:
 				Log.d(MainActivity.LOG_TAG, "setData() should never use default case");
@@ -119,115 +118,50 @@ public final class TransitData {
 	}
 	
 	/*
-	 * Stop methods
+	 * Final Stop methods
 	 */
 
-	/**
-	 * Sets the StopId that is associated with the stop/item that was selected
-	 * @param index the index of the stop/item that was selected from the ListView
-	 */
-	public void setStopId(int index) {
-		try {
-			stopId = stopsData.getJSONObject(index).getString(STOP_ID);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public void setFinalStop(String stopId) {
+		finalStop.selectStop(stopId);
 	}
 	
-	public String getStopId() {
-		return stopId;
+	public String getFinalStopId() {
+		return (finalStop == null) ? null : finalStop.getStopId();
 	}
 	
-	/**
-	 * Returns a list of stops for the current route
-	 * @return the String array containing a list of stops
+	public String getFinalStopName() {
+		return (finalStop == null) ? null : finalStop.getStopName();
+	}
+	
+	public ArrayList<HashMap<String, String>> getFinalStopsList() {
+		return (finalStop == null) ? null : finalStop.getStopsList();
+	}
+	
+	/*
+	 * Start Stop methods
 	 */
-	public String[] getStopsList() {
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < stopsData.length(); i++) {
-			try {
-				list.add(stopsData.getJSONObject(i).getString(STOP_NAME));
-			} catch (JSONException e) {
-				Log.d(MainActivity.LOG_TAG, e.getMessage());
-			}
-		}
-		String[] empty = new String[list.size()];
-		return list.toArray(empty);
+	
+	public void setStartStop(String stopId) {
+		startStop.selectStop(stopId);
+	}
+	
+	public String getStartStopId() {
+		return (startStop == null) ? null : startStop.getStopId();
+	}
+	
+	public String getStartStopName() {
+		return (startStop == null) ? null : startStop.getStopName();
+	}
+	
+	public ArrayList<HashMap<String, String>> getStartStopsList() {
+		return (startStop == null) ? null : startStop.getStopsList();
 	}
 	
 	/*
 	 * Time methods
 	 */
 
-	/**
-	 * Returns a list of times for the current route, direction, and stop
-	 * @return the String array containing a list of times
-	 * FIXME
-	 */
-	public String[] getTimesList() {
-		ArrayList<String> list = new ArrayList<String>();
-		DateTime dt = new DateTime();
-		int currTimeSecs = dt.getSecondOfDay();
-		for (int i = 0; i < timesData.length(); i++) {
-			try {
-				int arrivalTimeSecs = Integer.parseInt(timesData.getJSONObject(i).getString(ARRIVAL_TIME_SECONDS));
-				if (arrivalTimeSecs < currTimeSecs) {
-					continue;
-				}
-
-				StringBuilder result = new StringBuilder();
-				result.append(timeUntilArrival(currTimeSecs, arrivalTimeSecs));
-				result.append(" until " );
-				result.append(clockTime(arrivalTimeSecs));
-				
-				list.add(result.toString());
-			} catch (JSONException e) {
-				Log.d(MainActivity.LOG_TAG, e.getMessage());
-			}
-		}
-		String[] empty = new String[list.size()];
-		return list.toArray(empty);
-	}
-
-	/**
-	 * A helper function that returns a formatted string of time until the next arrival.
-	 * Ex: "2 hrs and 3 mins"
-	 * @param currTimeSecs the current time in seconds
-	 * @param arrivalTimeSecs the bus's arrival time in seconds
-	 * @return a formatted period of time until arrival
-	 * FIXME not handling all cases properly
-	 */
-	private String timeUntilArrival(int currTimeSecs, int arrivalTimeSecs) {
-		Seconds seconds = Seconds.seconds(arrivalTimeSecs - currTimeSecs);
-		Period period = new Period(seconds);
-		PeriodFormatter dhm = new PeriodFormatterBuilder()
-				.appendDays()
-				.appendSuffix(" day", " days")
-				.appendSeparator(" and ")
-				.appendHours()
-				.appendSuffix(" hr", " hrs")
-				.appendSeparator(" and " )
-				.appendMinutes()
-				.appendSuffix(" min", " mins")
-				.toFormatter();
-		return dhm.print(period.normalizedStandard());
-	}
-	
-	/**
-	 * Returns a human readable clock time from the arrival time in seconds
-	 * @param arrivalTimeSecs the arrival time in seconds
-	 * @return a string of the clock time
-	 * FIXME not handling all cases properly
-	 */
-	private String clockTime(int arrivalTimeSecs) {
-		Seconds seconds = Seconds.seconds(arrivalTimeSecs);
-		int hours = seconds.toStandardHours().getHours() % 24;
-//		if (hours >= 24) {
-//			hours = hours - 24;
-//		}
-		int minutes = seconds.toStandardMinutes().getMinutes() % 60;
-		LocalTime lt = new LocalTime(hours, minutes);
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm");
-		return fmt.print(lt);
+	public ArrayList<HashMap<String, String>> getTimesList() {
+		return (time == null) ? null : time.getTimesList();
 	}
 }

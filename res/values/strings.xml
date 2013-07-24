@@ -10,7 +10,8 @@
     <string name="pm">PM</string>
     <string name="routes_header">Choose Desired Route</string>
     <string name="direction_header">Choose Your Direction</string>
-    <string name="stops_header">Choose Boarding Stop</string>
+    <string name="final_stop_header">Choose Final Stop</string>
+    <string name="start_stop_header">Choose Starting Stop</string>
     <string name="times_header">Time Until Next Bus</string>
     <string name="menu_search">Search</string>
         

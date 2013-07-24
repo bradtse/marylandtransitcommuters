@@ -22,7 +22,7 @@ trips
 WHERE route_id = :routeid 
 GROUP BY direction_id;";
 
-$stopsQuery = "
+$finalStopsQuery = "
 SELECT T3.stop_id, T2.trip_id, T2.stop_sequence, T3.stop_name
 FROM
 trips AS T1
@@ -35,17 +35,36 @@ stops AS T3
 GROUP BY T3.stop_id
 ORDER BY T2.stop_sequence;";
 
-$timesQuery = "
-SELECT T2.arrival_time, T2.arrival_time_seconds, T2.departure_time, T2.departure_time_seconds 
-FROM
+$startStopsQuery = "
+SELECT T4.stop_id, T2.trip_id, T3.stop_sequence, T4.stop_name
+FROM 
+stop_times AS T2 
+JOIN
 trips as T1
+ ON T1.trip_id = T2.trip_id AND T1.route_id = :routeid AND T2.stop_id = :finalstopid AND T1.direction_id = :directionid
 JOIN
-stop_times as T2
-    on T1.trip_id = T2.trip_id AND T1.route_id = :routeid AND T1.direction_id = :directionid
+stop_times as T3
+ ON T2.trip_id = T3.trip_id
 JOIN
-stops as T3
-    on T2.stop_id = T3.stop_id and T2.stop_id = :stopid
-ORDER BY T2.arrival_time;";
+stops as T4
+ ON T4.stop_id = T3.stop_id
+GROUP BY T4.stop_id
+ORDER BY T3.stop_sequence;";
+
+$timesQuery = "
+SELECT T3.arrival_time, T3.arrival_time_seconds
+FROM 
+stop_times AS T2 
+JOIN
+trips as T1
+ ON T1.trip_id = T2.trip_id AND T2.stop_id = :finalstopid AND T1.route_id = :routeid
+JOIN
+stop_times as T3
+ ON T2.trip_id = T3.trip_id AND T3.stop_id = :startstopid
+JOIN
+stops as T4
+ ON T4.stop_id = T3.stop_id
+ORDER BY T3.arrival_time_seconds;";
 
 /*
  * Helper functions

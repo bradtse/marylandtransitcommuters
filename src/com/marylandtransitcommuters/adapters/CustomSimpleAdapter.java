@@ -50,7 +50,6 @@ import com.marylandtransitcommuters.dataobjects.Route;
  * If no appropriate binding can be found, an {@link IllegalStateException} is thrown.
  */
 public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
-    private Context mContext;
     private int[] mTo;
     private String[] mFrom;
     private ViewBinder mViewBinder;
@@ -81,7 +80,6 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
      */
     public CustomSimpleAdapter(Context context, List<? extends Map<String, ?>> data,
             int resource, String[] from, int[] to) {
-    	mContext = context;
         mData = data;
         mResource = mDropDownResource = resource;
         mFrom = from;
@@ -115,32 +113,14 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
      * @see android.widget.Adapter#getView(int, View, ViewGroup)
      */
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = createViewFromResource(position, convertView, parent, mResource);
-		TextView tv = (TextView) view.findViewById(R.id.route_long_name);
-		
-		Map<String, String> map = (Map<String, String>) mData.get(position);
-		String longName = map.get(Route.LONG_NAME);
-		
-		if (longName.contains(" to ")) {
-			int index = longName.indexOf(" to ") + 1;
-			SpannableString colored = new SpannableString(longName);
-		
-			colored.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
-						index, index+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			colored.setSpan(new RelativeSizeSpan(0.8f), index, index+2, 
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			colored.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+2,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			tv.setText(colored);
-		} 
-		
+    	View view = createViewFromResource(position, convertView, parent, mResource);
 		if (position % 2 == 0) {
-			view.setBackgroundResource(R.color.fragment_listview_even_background);
+			view.setBackgroundResource(R.drawable.list_row_even_selector);
 		} else {
-			view.setBackgroundResource(R.color.fragment_listview_background);
+			view.setBackgroundResource(R.drawable.list_row_selector);
 		}
-		
-		return view;
+	
+        return view;
     }
 
     private View createViewFromResource(int position, View convertView,
@@ -379,8 +359,9 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
                     	StringBuilder combined = new StringBuilder();
                         int len = mTo.length;
 
-                        for (int j=0; j<len; j++) {
-                            combined.append((String)h.get(mFrom[j])).append(" ");
+                        combined.append((String) h.get(mFrom[0]));
+                        for (int j=1; j<len; j++) {
+                            combined.append(" ").append((String)h.get(mFrom[j]));
                         }
                         
                         String c = combined.toString().toLowerCase();

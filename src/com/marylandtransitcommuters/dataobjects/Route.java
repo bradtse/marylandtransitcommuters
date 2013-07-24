@@ -16,7 +16,8 @@ public class Route {
 	public static final String ROUTE_ID = "route_id";
 	public static final String SHORT_NAME = "route_short_name";
 	public static final String LONG_NAME = "route_long_name";
-	private static final String[] keys = {ROUTE_ID, SHORT_NAME, LONG_NAME};
+	public static final String KEY = ROUTE_ID;
+	private static final String[] KEYS = {ROUTE_ID, SHORT_NAME, LONG_NAME};
 	
 	private JSONArray rawData; // The raw data response from the server
 	private JSONArray prettyData; // Prettier data. Mostly everything will use this.
@@ -113,7 +114,7 @@ public class Route {
 	 * @return A prettified copy of the route's raw data
 	 */
 	private JSONArray prettify(JSONArray data) {
-		JSONArray pretty = Cloner.deepCloneJSON(data, keys);
+		JSONArray pretty = Cloner.deepCloneJSON(data, KEYS);
 		
 		for (int i = 0; i < pretty.length(); i++) {
 			try {
@@ -187,7 +188,7 @@ public class Route {
 				}
 			}
 		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setShortName() failed: " + e.getMessage());
+			Log.d(MainActivity.LOG_TAG, "setNames() failed: " + e.getMessage());
 		}
 	}
 }

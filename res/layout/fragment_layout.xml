@@ -4,17 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:orientation="vertical" >
+
+    <include layout="@layout/fragment_header" />
     
-    <TextView 
-        android:id="@+id/fragment_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="@color/fragment_header_text"
-        android:background="@color/fragment_header_background"
-        android:padding="10dp" />
+    <include layout="@layout/result_count" />
     
     <include layout="@layout/header_border" />
     

@@ -14,8 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -149,7 +149,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		// Forces the SearchView to stay open
 		search.setIconifiedByDefault(false);
 		
-		// Set the text color for the SearchView
+		// Sets the text color for the SearchView
 		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);
 		searchText.setHintTextColor(Color.WHITE);
 		searchText.setTextColor(Color.WHITE);

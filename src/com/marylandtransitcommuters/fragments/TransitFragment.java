@@ -15,14 +15,17 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.adapters.CustomSimpleAdapter;
 import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
 import com.marylandtransitcommuters.service.TransitService;
@@ -37,6 +40,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected ListView mList;
 	protected TransitData data;
 	protected SearchView search;
+	protected CustomSimpleAdapter adapter;
 	private boolean alive = false;
 	private TransitReceiver mReceiver;
 	private ProgressDialog progressDialog;
@@ -51,6 +55,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 //		}
 	}
 	
+	/**
+	 * Sets up the progress dialog
+	 */
 	private void setupProgressDialog() {
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setTitle("Retrieving data from server");
@@ -76,11 +83,17 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 //		} 
 	}
 	
+	/**
+	 * Sets up the callback receiver
+	 */
 	private void setupReceiver() {
 		mReceiver = new TransitReceiver(new Handler());
 		mReceiver.setReceiver(this);
 	}
 	
+	/**
+	 * Starts the new intent service 
+	 */
 	private void startIntentService() {
 		Intent intent  = new Intent(context, TransitService.class);
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
@@ -90,8 +103,24 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// Keeps a reference to the SearchView for subclasses to use
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		search = (SearchView) searchItem.getActionView();
+		
+		// Sets up the SearchViews filter
+		search.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				adapter.getFilter().filter(newText);
+				return false;
+			}
+		});
 	}
 	
 	/**
@@ -107,9 +136,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				progressDialog.show();
 				break;
 			case TransitService.FINISH:
-				mList.setOnItemClickListener(new ListItemClickListener());
-				setAdapter();
-				setHasOptionsMenu(true); // Force onCreateOptionsMenu to be called
+				setupFragment();
 				progressDialog.dismiss();
 				break;
 			default:
@@ -118,7 +145,22 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Set up the ListView
+	 * Sets up the fragment after the data comes back
+	 */
+	private void setupFragment() {
+		mList.setOnItemClickListener(new ListItemClickListener());
+		setAdapter();
+		
+		// Forces the options menu to be redrawn so I can re-setup the SearchView
+		setHasOptionsMenu(true); 
+		
+		// Adds the result count 
+		TextView text = (TextView) rootView.findViewById(R.id.results);
+		text.setText(String.valueOf(adapter.getCount()) + " results");
+	}
+	
+	/**
+	 * Set up the adapter for the ListView
 	 */
 	public abstract void setAdapter();
 
