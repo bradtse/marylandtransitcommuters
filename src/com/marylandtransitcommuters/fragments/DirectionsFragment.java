@@ -43,9 +43,9 @@ public class DirectionsFragment extends TransitFragment {
 	}
 	
 	private void setupInfoTextViews() {
-		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
+		String route = data.getRouteShortName() + " " + data.getRouteLongName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
 
 		routeText.setText(route);
 	}

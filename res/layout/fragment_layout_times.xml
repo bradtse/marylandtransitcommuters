@@ -11,7 +11,7 @@
     
     <include layout="@layout/fragment_header_border" />
     
-    <LinearLayout style="@style/InfoStyle" >
+    <RelativeLayout style="@style/InfoStyle" >
         
 	    <include layout="@layout/info_route" />
 	    
@@ -21,7 +21,7 @@
 	    
 	    <include layout="@layout/info_finalstop" />
 	    
-    </LinearLayout>    
+    </RelativeLayout>    
     
     <include layout="@layout/fragment_header_border" />
     

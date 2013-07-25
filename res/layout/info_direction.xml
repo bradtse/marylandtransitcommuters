@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/info_direction"
-        android:layout_width="fill_parent"
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView 
+        android:id="@+id/info_direction_title" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:textSize="@dimen/info_font_size" />
+        android:textStyle="bold"
+        android:textSize="@dimen/info_font_size"
+        android:text="@string/direction"
+        android:layout_below="@+id/info_route_title"/>
+    
+	<TextView 
+        android:id="@+id/info_direction_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:textSize="@dimen/info_font_size" 
+        android:layout_toRightOf="@id/info_direction_title"
+        android:layout_below="@+id/info_route_data" />
+</merge>

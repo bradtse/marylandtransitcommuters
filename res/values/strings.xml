@@ -18,6 +18,10 @@
         There are currently no arrival predictions for this stop. This is most
         likely because this route\'s last trip has already passed by your start stop.
     </string>
+    <string name="route">Route:\u0020 </string>
+    <string name="direction">Direction:\u0020</string>
+    <string name="finalstop">Final Stop:\u0020</string>
+    <string name="startstop">Start stop:\u0020</string>
         
     <!-- Items added to nav drawer -->
     <string-array name="items">

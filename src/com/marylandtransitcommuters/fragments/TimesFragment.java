@@ -30,15 +30,15 @@ public class TimesFragment extends TransitFragment {
 	}
 	
 	private void setupInfoTextViews() {
-		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
-		String direction = "Direction: " + data.getDirectionHeadsign();
-		String startStop = "Start Stop: " + data.getStartStopName();
-		String finalStop = "Final Stop: " + data.getFinalStopName();
+		String route = data.getRouteShortName() + " " + data.getRouteLongName();
+		String direction = data.getDirectionHeadsign();
+		String startStop = data.getStartStopName();
+		String finalStop = data.getFinalStopName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
-		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction);
-		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop);
-		TextView finalText = (TextView) rootView.findViewById(R.id.info_final_stop);
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
+		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction_data);
+		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop_data);
+		TextView finalText = (TextView) rootView.findViewById(R.id.info_final_stop_data);
 
 		routeText.setText(route);
 		dirText.setText(direction);

@@ -38,11 +38,11 @@ public class StartStopsFragment extends TransitFragment {
 	}
 	
 	private void setupInfoTextViews() {
-		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
-		String direction = "Direction: " + data.getDirectionHeadsign();
+		String route = data.getRouteShortName() + " " + data.getRouteLongName();
+		String direction = data.getDirectionHeadsign();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
-		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction);
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
+		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction_data);
 
 		routeText.setText(route);
 		dirText.setText(direction);

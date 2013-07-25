@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/info_route" 
-        android:layout_width="fill_parent"
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView 
+        android:id="@id/info_route_title" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:textSize="@dimen/info_font_size" />
+        android:textStyle="bold"
+        android:textSize="@dimen/info_font_size"
+        android:text="@string/route" />
+    
+	<TextView 
+        android:id="@id/info_route_data" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:textSize="@dimen/info_font_size" 
+        android:layout_toRightOf="@id/info_route_title"/>
+
+</merge>

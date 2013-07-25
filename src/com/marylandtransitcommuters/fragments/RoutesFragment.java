@@ -35,9 +35,6 @@ public class RoutesFragment extends TransitFragment {
 							 Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_layout_routes, 
 									container, false);
-
-		
-		
 		return rootView;
 	}
 	
