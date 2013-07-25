@@ -25,6 +25,7 @@ public class Direction {
 	private JSONArray prettyData; // Prettier data. Mostly everything will use this.
 	private String directionId;
 	private String headsign;
+	private ArrayList<HashMap<String, String>> dirsList;
 	
 	/**
 	 * Constructor
@@ -33,6 +34,7 @@ public class Direction {
 	public Direction(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = prettify(data);
+		this.dirsList = createDirectionsList();
 	}
 	
 	public void setDirectionInfo(String dirId, String headSign) {
@@ -53,6 +55,10 @@ public class Direction {
 	}
 	
 	public ArrayList<HashMap<String, String>> getDirectionsList() {
+		return dirsList;
+	}
+	
+	private ArrayList<HashMap<String, String>> createDirectionsList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
 		for (int i = 0; i < prettyData.length(); i++) {

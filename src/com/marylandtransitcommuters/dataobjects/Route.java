@@ -24,6 +24,7 @@ public class Route {
 	private String routeId; // dataset unique
 	private String shortName;
 	private String longName;
+	private ArrayList<HashMap<String, String>> routesList;
 	
 	/**
 	 * Constructor
@@ -32,6 +33,7 @@ public class Route {
 	public Route(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = prettify(data);
+		this.routesList = createRoutesList();
 	}
 
 	/**
@@ -85,6 +87,10 @@ public class Route {
 	 * @return an ArrayList of HashMaps 
 	 */
 	public ArrayList<HashMap<String, String>> getRoutesList() {
+		return routesList;
+	}
+	
+	private ArrayList<HashMap<String, String>> createRoutesList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
 		for (int i = 0; i < prettyData.length(); i++) {

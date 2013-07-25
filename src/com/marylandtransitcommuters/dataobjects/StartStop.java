@@ -21,10 +21,12 @@ public class StartStop {
 	private JSONArray prettyData;
 	private String stopId;
 	private String stopName;
+	private ArrayList<HashMap<String, String>> startStopsList;
 	
 	public StartStop(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;
+		this.startStopsList = createStopsList();
 	}
 	
 	public void setStopInfo(String stopId, String stopName) {
@@ -45,6 +47,10 @@ public class StartStop {
 	}
 	
 	public ArrayList<HashMap<String, String>> getStopsList() {
+		return startStopsList;
+	}
+	
+	private ArrayList<HashMap<String, String>> createStopsList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
 		for (int i = 0; i < prettyData.length(); i++) {

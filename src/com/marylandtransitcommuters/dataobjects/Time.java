@@ -25,10 +25,16 @@ public class Time {
 	
 	private JSONArray rawData;
 	private JSONArray prettyData;
+	private ArrayList<HashMap<String, String>> timesList;
 	
 	public Time(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;
+		this.timesList = createTimesList();
+	}
+	
+	public ArrayList<HashMap<String, String>> getTimesList() {
+		return timesList;
 	}
 	
 	/**
@@ -36,7 +42,7 @@ public class Time {
 	 * @return the String array containing a list of times
 	 * FIXME
 	 */
-	public ArrayList<HashMap<String, String>> getTimesList() {
+	private ArrayList<HashMap<String, String>> createTimesList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		DateTime dt = new DateTime();
 		int currTimeSecs = dt.getSecondOfDay();

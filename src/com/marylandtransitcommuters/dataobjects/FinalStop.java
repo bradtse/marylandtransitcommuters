@@ -24,10 +24,12 @@ public class FinalStop {
 	private String stopId;
 	private String stopName;
 	private String stopSequence;
+	private ArrayList<HashMap<String, String>> finalStopsList;
 	
 	public FinalStop(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;
+		this.finalStopsList = createStopsList();
 	}
 	
 	public void setStopInfo(String stopId, String stopName, String stopSequence) {
@@ -53,6 +55,10 @@ public class FinalStop {
 	}
 	
 	public ArrayList<HashMap<String, String>> getStopsList() {
+		return finalStopsList;
+	}
+	
+	private ArrayList<HashMap<String, String>> createStopsList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
 		for (int i = 0; i < prettyData.length(); i++) {
@@ -75,4 +81,5 @@ public class FinalStop {
 		
 		return list;
 	}
+	
 }
