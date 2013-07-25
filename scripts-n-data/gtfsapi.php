@@ -32,6 +32,7 @@ $type = $json['type'];
 $route_id = $json['route_id'];
 $direction_id = $json['direction_id'];
 $final_stop_id = $json['final_stop_id'];
+$final_stop_seq = $json['final_stop_seq'];
 $start_stop_id = $json['start_stop_id'];
 
 if ($type == "routes") {
@@ -51,6 +52,7 @@ if ($type == "routes") {
     $keys = array(
                     ":routeid" => $route_id,
                     ":directionid" => $direction_id,
+                    ":finalstopseq" => $final_stop_seq,
                     ":finalstopid" => $final_stop_id
                     );
     queryDB($startStopsQuery, $keys);

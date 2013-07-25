@@ -60,9 +60,13 @@ public class TransitService extends IntentService {
 			TransitData profile = TransitData.getInstance();
 			JSONObject data = new JSONObject();
 			
+			// Adds all of the data that will be sent to the server. Some of the 
+			// fields might be empty sometimes but TransitData handles null 
+			// cases already and the server ignores any empty fields
 			data.put(Route.KEY, profile.getRouteId());
 			data.put(Direction.KEY, profile.getDirectionId());
-			data.put(FinalStop.KEY, profile.getFinalStopId());
+			data.put(FinalStop.STOP_KEY, profile.getFinalStopId());
+			data.put(FinalStop.SEQ_KEY, profile.getFinalStopSeq());
 			data.put(StartStop.KEY,  profile.getStartStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			

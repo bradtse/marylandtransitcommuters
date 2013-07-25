@@ -15,7 +15,8 @@ public class FinalStop {
 	public static final String STOP_NAME = "stop_name";
 	public static final String STOP_ID = "stop_id";
 	public static final String STOP_SEQ = "stop_sequence";
-	public static final String KEY = "final_stop_id";
+	public static final String STOP_KEY = "final_stop_id";
+	public static final String SEQ_KEY = "final_stop_seq";
 	public static final String GLUE = "&";
 
 	private JSONArray rawData;
