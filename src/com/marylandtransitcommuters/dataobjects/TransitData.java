@@ -3,16 +3,7 @@ package com.marylandtransitcommuters.dataobjects;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-import org.joda.time.Period;
-import org.joda.time.Seconds;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import android.util.Log;
 
