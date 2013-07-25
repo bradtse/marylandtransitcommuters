@@ -14,6 +14,10 @@
     <string name="start_stop_header">Choose Starting Stop</string>
     <string name="times_header">Time Until Next Bus</string>
     <string name="menu_search">Search</string>
+    <string name="empty_time_fragment">
+        There are currently no arrival predictions for this stop. This is most
+        likely because this route\'s last trip has already passed by your start stop.
+    </string>
         
     <!-- Items added to nav drawer -->
     <string-array name="items">

@@ -61,6 +61,7 @@ public class DirectionsFragment extends TransitFragment {
 				
 				Map<String, String> map = (Map<String, String>) adapter.getItem(pos);
 				String headsign = map.get(Direction.TRIP_HEADSIGN);
+				int color = getResources().getColor(R.color.glue_color);
 				
 				if (headsign.contains(Direction.GLUE)) {
 					int start = headsign.indexOf(Direction.GLUE);
@@ -71,7 +72,7 @@ public class DirectionsFragment extends TransitFragment {
 								start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					result.setSpan(new RelativeSizeSpan(0.8f), start, end, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new ForegroundColorSpan(0xFFED4035), start, end,
+					result.setSpan(new ForegroundColorSpan(color), start, end,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(result);
 				} 

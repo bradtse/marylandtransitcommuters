@@ -85,7 +85,6 @@ public class Direction {
 	 * Removes unnecessary text from the direction's trip_headsign column
 	 * @param data the JSONArray containing the data that needs to be fixed
 	 * @return the fixed JSONArray
-	 * FIXME not handling all cases properly. Ex: Route 3X and 40
 	 */
 	private JSONArray prettify(JSONArray data) {
 		TransitData curr = TransitData.getInstance();

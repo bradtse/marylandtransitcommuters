@@ -60,6 +60,7 @@ public class RoutesFragment extends TransitFragment {
 				
 				Map<String, String> map = (Map<String, String>) adapter.getItem(position);
 				String longName = map.get(Route.LONG_NAME);
+				int color = getResources().getColor(R.color.glue_color);
 				
 				if (longName.contains(" to ")) {
 					int index = longName.indexOf(" to ") + 1;
@@ -69,7 +70,7 @@ public class RoutesFragment extends TransitFragment {
 								index, index+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					colored.setSpan(new RelativeSizeSpan(0.8f), index, index+2, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					colored.setSpan(new ForegroundColorSpan(0xFFED4035), index, index+2,
+					colored.setSpan(new ForegroundColorSpan(color), index, index+2,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(colored);
 				} 

@@ -11,4 +11,5 @@
     <color name="route_longname_text">#403500</color>
     <color name="fragment_listview_text">#403500</color>
     <color name="fragment_listview_even_background">#d2d0d1</color>
+    <color name="glue_color">#FFED4035</color>
 </resources>
