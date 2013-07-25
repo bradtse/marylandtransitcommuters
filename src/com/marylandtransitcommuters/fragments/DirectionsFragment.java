@@ -88,8 +88,9 @@ public class DirectionsFragment extends TransitFragment {
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);
+		String headSign = map.get(Direction.TRIP_HEADSIGN);
 
-		data.setDirection(directionId);
+		data.selectDirection(directionId, headSign);
 		
 		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
 	}

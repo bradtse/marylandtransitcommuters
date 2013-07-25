@@ -75,6 +75,7 @@ public class TimesFragment extends TransitFragment {
 			}
 		};
 		
+		mList.setAdapter(adapter);
 		mList.setEmptyView((TextView) rootView.findViewById(R.id.empty));
 	}
 	

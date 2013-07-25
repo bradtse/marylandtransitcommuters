@@ -21,8 +21,8 @@ import com.marylandtransitcommuters.service.TransitService;
 
 /**
  * Singleton containing info on the current search being done. Also contains
- * a bunch of methods that allow you to add/get data.
- * FIXME I want to update this so that each piece of data is its own object
+ * a bunch of methods that allow you to add/get data. Acts as the interface
+ * to the each of the objects.
  */
 public final class TransitData {
 	private static TransitData instance;
@@ -77,8 +77,8 @@ public final class TransitData {
 	 * Route methods
 	 */
 	
-	public void setRoute(String routeId) {
-		route.selectRoute(routeId);
+	public void selectRoute(String routeId, String shortName, String longName) {
+		route.setRouteInfo(routeId, shortName, longName);
 	}
 	
 	public String getRouteId() {
@@ -101,8 +101,8 @@ public final class TransitData {
 	 * Direction methods
 	 */
 	
-	public void setDirection(String dirId) {
-		direction.selectDirection(dirId);
+	public void selectDirection(String dirId, String headSign) {
+		direction.setDirectionInfo(dirId, headSign);
 	}
 	
 	public String getDirectionId() {
@@ -121,8 +121,8 @@ public final class TransitData {
 	 * Final Stop methods
 	 */
 
-	public void setFinalStop(String stopId) {
-		finalStop.selectStop(stopId);
+	public void setFinalStop(String stopId, String stopName, String stopSequence) {
+		finalStop.setStopInfo(stopId, stopName, stopSequence);
 	}
 	
 	public String getFinalStopId() {
@@ -133,6 +133,10 @@ public final class TransitData {
 		return (finalStop == null) ? null : finalStop.getStopName();
 	}
 	
+	public String getFinalStopSeq() {
+		return (finalStop == null) ? null : finalStop.getStopSequence();
+	}
+	
 	public ArrayList<HashMap<String, String>> getFinalStopsList() {
 		return (finalStop == null) ? null : finalStop.getStopsList();
 	}
@@ -141,8 +145,8 @@ public final class TransitData {
 	 * Start Stop methods
 	 */
 	
-	public void setStartStop(String stopId) {
-		startStop.selectStop(stopId);
+	public void selectStartStop(String stopId, String shortName) {
+		startStop.setStopInfo(stopId, shortName);
 	}
 	
 	public String getStartStopId() {

@@ -14,6 +14,7 @@ import com.marylandtransitcommuters.MainActivity;
 public class FinalStop {
 	public static final String STOP_NAME = "stop_name";
 	public static final String STOP_ID = "stop_id";
+	public static final String STOP_SEQ = "stop_sequence";
 	public static final String KEY = "final_stop_id";
 	public static final String GLUE = "&";
 
@@ -21,15 +22,17 @@ public class FinalStop {
 	private JSONArray prettyData;
 	private String stopId;
 	private String stopName;
+	private String stopSequence;
 	
 	public FinalStop(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;
 	}
 	
-	public void selectStop(String stopId) {
+	public void setStopInfo(String stopId, String stopName, String stopSequence) {
 		this.stopId = stopId;
-		setName();
+		this.stopName = stopName;
+		this.stopSequence = stopSequence;
 	}
 	
 	public JSONArray getRawData() {
@@ -44,6 +47,10 @@ public class FinalStop {
 		return stopName;
 	}
 	
+	public String getStopSequence() {
+		return stopSequence;
+	}
+	
 	public ArrayList<HashMap<String, String>> getStopsList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
@@ -54,9 +61,11 @@ public class FinalStop {
 				
 				String id = stop.getString(STOP_ID);
 				String sn = stop.getString(STOP_NAME);
+				String ss = stop.getString(STOP_SEQ);
 				
 				map.put(STOP_ID, id);
 				map.put(STOP_NAME, sn);
+				map.put(STOP_SEQ, ss);
 				list.add(map);
 			} catch (JSONException e) {
 				Log.d(MainActivity.LOG_TAG, "getStopsList() failed: " + e.getMessage());
@@ -64,22 +73,5 @@ public class FinalStop {
 		}
 		
 		return list;
-	}
-	
-	private void setName() {
-		try {
-			for (int i=0; i < prettyData.length(); i++) {
-				JSONObject route = prettyData.getJSONObject(i);
-				String id = route.getString(STOP_ID);
-				String sn = route.getString(STOP_NAME);
-				
-				if (id.equals(stopId)) {
-					this.stopName = sn;
-					break;
-				}
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setName() failed: " + e.getMessage());
-		}
 	}
 }

@@ -35,9 +35,9 @@ public class Direction {
 		this.prettyData = prettify(data);
 	}
 	
-	public void selectDirection(String dirId) {
+	public void setDirectionInfo(String dirId, String headSign) {
 		this.directionId = dirId;
-		setHeadSign();
+		this.headsign = headSign;
 	}
 	
 	public JSONArray getRawData() {
@@ -111,22 +111,5 @@ public class Direction {
 		}
 		
 		return pretty;
-	}
-	
-	private void setHeadSign() {
-		try {
-			for (int i=0; i < prettyData.length(); i++) {
-				JSONObject direction = prettyData.getJSONObject(i);
-				String tempHeadsign = direction.getString(TRIP_HEADSIGN);
-				String id = direction.getString(DIR_ID);
-				
-				if (id.equals(directionId)) {
-					this.headsign = tempHeadsign;
-					break;
-				}
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setHeadsign() failed: " + e.getMessage());
-		}
 	}
 }

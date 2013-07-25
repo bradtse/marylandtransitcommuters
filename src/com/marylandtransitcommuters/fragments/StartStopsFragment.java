@@ -82,8 +82,9 @@ public class StartStopsFragment extends TransitFragment {
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(StartStop.STOP_ID);
+		String stopName = map.get(StartStop.STOP_NAME);
 		
-		data.setStartStop(stopId);
+		data.selectStartStop(stopId, stopName);
 		
 		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
 	}

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.adapters.CustomSimpleAdapter;
@@ -88,8 +87,10 @@ public class RoutesFragment extends TransitFragment {
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
+		String shortName = map.get(Route.SHORT_NAME);
+		String longName = map.get(Route.LONG_NAME);
 		
-		data.setRoute(routeId);
+		data.selectRoute(routeId, shortName, longName);
 			
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}

@@ -84,8 +84,10 @@ public class FinalStopsFragment extends TransitFragment {
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);
+		String stopName = map.get(FinalStop.STOP_NAME);
+		String stopSeq = map.get(FinalStop.STOP_SEQ);
 		
-		data.setFinalStop(stopId);
+		data.setFinalStop(stopId, stopName, stopSeq);
 		
 		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
 	}

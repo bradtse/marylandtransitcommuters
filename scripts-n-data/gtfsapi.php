@@ -58,7 +58,7 @@ if ($type == "routes") {
     $keys = array(
                     ":routeid" => $route_id,
                     ":finalstopid" => $final_stop_id,
-                    ":startstopid" => $startstopid_stop_id 
+                    ":startstopid" => $start_stop_id 
                     );
     queryDB($timesQuery, $keys);
 } else {

@@ -39,9 +39,10 @@ public class Route {
 	 * from the ListView of routes.
 	 * @param routeId The route_id of the route that was selected
 	 */
-	public void selectRoute(String routeId) {
+	public void setRouteInfo(String routeId, String shortName, String longName) {
 		this.routeId = routeId;
-		setNames();
+		this.shortName = shortName;
+		this.longName = longName;
 	}
 	
 	/**
@@ -168,27 +169,5 @@ public class Route {
 		pretty = pretty.replaceAll(" TO ", " to ");
 		
 		return pretty;
-	}
-	
-	/**
-	 * Stores useful information about the route that was selected
-	 */
-	private void setNames() {
-		try {
-			for (int i=0; i < prettyData.length(); i++) {
-				JSONObject route = prettyData.getJSONObject(i);
-				String id = route.getString(ROUTE_ID);
-				String sn = route.getString(SHORT_NAME);
-				String ln = route.getString(LONG_NAME);
-				
-				if (id.equals(routeId)) {
-					this.shortName = sn;
-					this.longName = ln;
-					break;
-				}
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setNames() failed: " + e.getMessage());
-		}
 	}
 }

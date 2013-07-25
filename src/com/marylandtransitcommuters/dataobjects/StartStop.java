@@ -27,9 +27,9 @@ public class StartStop {
 		this.prettyData = data;
 	}
 	
-	public void selectStop(String stopId) {
+	public void setStopInfo(String stopId, String stopName) {
 		this.stopId = stopId;
-		setName();
+		this.stopName = stopName;
 	}
 	
 	public JSONArray getRawData() {
@@ -64,22 +64,5 @@ public class StartStop {
 		}
 		
 		return list;
-	}
-	
-	private void setName() {
-		try {
-			for (int i=0; i < prettyData.length(); i++) {
-				JSONObject route = prettyData.getJSONObject(i);
-				String id = route.getString(STOP_ID);
-				String sn = route.getString(STOP_NAME);
-				
-				if (id.equals(stopId)) {
-					this.stopName = sn;
-					break;
-				}
-			}
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "setName() failed: " + e.getMessage());
-		}
 	}
 }
