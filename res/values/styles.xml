@@ -34,5 +34,13 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:textColor">@color/drawer_text</item>
     </style>
+    
+    <!-- Fragment info layout style -->
+    <style name="InfoStyle" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">5dp</item>
+    </style>
 
 </resources>

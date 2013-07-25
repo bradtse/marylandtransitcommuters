@@ -11,11 +11,7 @@
     
     <include layout="@layout/fragment_header_border" />
     
-    <LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:padding="5dp" >
+    <LinearLayout style="@style/InfoStyle" >
         
 	    <include layout="@layout/info_route" />
 	    
