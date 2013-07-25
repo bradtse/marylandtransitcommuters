@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
- <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/results"
-        android:layout_width="fill_parent"
-        android:layout_height="20sp"
-        android:background="@color/fragment_header_background"
-        android:gravity="center"
-        android:textColor="@color/fragment_header_text"
-        android:textSize="12sp" />

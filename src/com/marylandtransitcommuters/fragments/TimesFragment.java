@@ -48,7 +48,7 @@ public class TimesFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_time);
 		text.setText(R.string.times_header);
 		super.onActivityCreated(savedInstanceState);
 	}

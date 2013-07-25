@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fragment info layout style -->
+    <style name="InfoStyle" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    
+    <!-- Result count parent style -->
+    <style name="ResultCountParent" >
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">20sp</item>
+        <item name="android:background">@color/fragment_header_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    
+    <!-- Route result count style -->
+    <style name="RouteResultCount" parent="@style/ResultCountParent" >
+        <item name="android:textColor">@color/route</item>
+    </style>
+    
+    <!-- Direction result count style -->
+    <style name="DirectionResultCount" parent="@style/ResultCountParent" >
+        <item name="android:textColor">@color/direction</item>
+    </style>
+    
+    <!-- Start Stop result count style -->
+    <style name="StartResultCount" parent="@style/ResultCountParent" >
+        <item name="android:textColor">@color/startstop</item>
+    </style>
+    
+    <!-- Final Stop result count style -->
+    <style name="FinalResultCount" parent="@style/ResultCountParent" >
+        <item name="android:textColor">@color/finalstop</item>
+    </style>
+    
+    <!-- Parent Header style -->
+    <style name="HeaderStyle" >
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:background">@color/fragment_header_background</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+      
+    <!-- Route Header style -->
+    <style name="RouteHeader" parent="@style/HeaderStyle" >
+        <item name="android:textColor">@color/route</item>
+    </style>
+    
+    <!-- Direction Header style -->
+    <style name="DirectionHeader" parent="@style/HeaderStyle" >
+        <item name="android:textColor">@color/direction</item>
+    </style>
+    
+    <!-- Start Stop Header style -->
+    <style name="StartStopHeader" parent="@style/HeaderStyle" >
+        <item name="android:textColor">@color/startstop</item>
+    </style>
+    
+    <!-- Final Stop Header style -->
+    <style name="FinalStopHeader" parent="@style/HeaderStyle" >
+        <item name="android:textColor">@color/finalstop</item>
+    </style>
+    
+    
+</resources>

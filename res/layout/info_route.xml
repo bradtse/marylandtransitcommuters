@@ -6,7 +6,8 @@
         android:layout_height="wrap_content" 
         android:textStyle="bold"
         android:textSize="@dimen/info_font_size"
-        android:text="@string/route" />
+        android:text="@string/route"
+        android:textColor="@color/route" />
     
 	<TextView 
         android:id="@id/info_route_data" 

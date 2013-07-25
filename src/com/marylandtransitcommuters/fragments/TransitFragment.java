@@ -148,7 +148,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		setHasOptionsMenu(true); 
 		
 		// Adds the result count 
-		TextView text = (TextView) rootView.findViewById(R.id.results);
+		TextView text = (TextView) rootView.findViewById(R.id.result_count);
 		text.setText(String.valueOf(adapter.getCount()) + " results");
 	}
 	

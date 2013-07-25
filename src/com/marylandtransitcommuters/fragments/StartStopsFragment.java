@@ -50,7 +50,7 @@ public class StartStopsFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_start);
 		text.setText(R.string.start_stop_header);
 		super.onActivityCreated(savedInstanceState);
 	}

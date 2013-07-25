@@ -8,11 +8,11 @@
     <string name="drawer_item_icon">Icon for drawer item</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <string name="routes_header">Choose Desired Route</string>
-    <string name="direction_header">Choose Your Direction</string>
-    <string name="final_stop_header">Choose Final Stop</string>
-    <string name="start_stop_header">Choose Start Stop</string>
-    <string name="times_header">Time Until Next Bus</string>
+    <string name="routes_header">Route</string>
+    <string name="direction_header">Direction</string>
+    <string name="final_stop_header">Departing Stop</string>
+    <string name="start_stop_header">Boarding Stop</string>
+    <string name="times_header">Predictions</string>
     <string name="menu_search">Search</string>
     <string name="empty_time_fragment">
         There are currently no arrival predictions for this stop. This is most

@@ -7,6 +7,7 @@
         android:textStyle="bold"
         android:textSize="@dimen/info_font_size"
         android:text="@string/finalstop"
+        android:textColor="@color/finalstop"
         android:layout_below="@+id/info_start_stop_title" />
 
 	<TextView 

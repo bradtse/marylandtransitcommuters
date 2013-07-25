@@ -52,7 +52,7 @@ public class DirectionsFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_direction);
 		text.setText(R.string.direction_header);
 				
 		super.onActivityCreated(savedInstanceState);

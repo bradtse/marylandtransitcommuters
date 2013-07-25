@@ -53,7 +53,7 @@ public class FinalStopsFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_final);
 		text.setText(R.string.final_stop_header);
 		
 		super.onActivityCreated(savedInstanceState);
