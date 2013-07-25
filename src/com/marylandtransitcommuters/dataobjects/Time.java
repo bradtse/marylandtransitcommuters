@@ -50,9 +50,9 @@ public class Time {
 			try {
 				HashMap<String, String> map = new HashMap<String, String>();
 				int arrivalTimeSecs = Integer.parseInt(rawData.getJSONObject(i).getString(ARRIVAL_TIME_SECONDS));
-				if (arrivalTimeSecs < currTimeSecs) {
-					continue;
-				}
+//				if (arrivalTimeSecs < currTimeSecs) {
+//					continue;
+//				}
 
 				StringBuilder result = new StringBuilder();
 				result.append(timeUntilArrival(currTimeSecs, arrivalTimeSecs));
@@ -108,7 +108,7 @@ public class Time {
 //		}
 		int minutes = seconds.toStandardMinutes().getMinutes() % 60;
 		LocalTime lt = new LocalTime(hours, minutes);
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm");
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("h:mm");
 		return fmt.print(lt);
 	}
 

@@ -22,7 +22,7 @@ trips
 WHERE route_id = :routeid 
 GROUP BY direction_id;";
 
-$finalStopsQuery = "
+$startStopsQuery = "
 SELECT T3.stop_id, T2.stop_sequence, T3.stop_name
 FROM
 trips AS T1
@@ -35,17 +35,17 @@ stops AS T3
 GROUP BY T3.stop_id
 ORDER BY T2.stop_sequence;";
 
-$startStopsQuery = "
+$finalStopsQuery = "
 SELECT T4.stop_id, T4.stop_name
 FROM 
 stop_times AS T2 
 JOIN
 trips as T1
  ON T1.trip_id = T2.trip_id AND T1.route_id = :routeid AND 
-    T2.stop_id = :finalstopid AND T1.direction_id = :directionid
+    T2.stop_id = :startstopid AND T1.direction_id = :directionid
 JOIN
 stop_times as T3
- ON T2.trip_id = T3.trip_id AND T3.stop_sequence < :finalstopseq
+ ON T2.trip_id = T3.trip_id AND T3.stop_sequence > :startstopseq
 JOIN
 stops as T4
  ON T4.stop_id = T3.stop_id

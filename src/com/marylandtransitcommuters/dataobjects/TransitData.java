@@ -20,8 +20,8 @@ public final class TransitData {
 	
 	private Route route;
 	private Direction direction;
-	private FinalStop finalStop;
 	private StartStop startStop;
+	private FinalStop finalStop;
 	private Time time;
 
 	private TransitData() {}
@@ -50,11 +50,11 @@ public final class TransitData {
 			case DIRECTIONS:
 				this.direction = new Direction(data);
 				break;
-			case FINALSTOPS:
-				this.finalStop = new FinalStop(data);
-				break;
 			case STARTSTOPS:
 				this.startStop = new StartStop(data);
+				break;
+			case FINALSTOPS:
+				this.finalStop = new FinalStop(data);
 				break;
 			case TIMES:
 				this.time = new Time(data);
@@ -107,37 +107,13 @@ public final class TransitData {
 	public ArrayList<HashMap<String, String>> getDirectionsList() {
 		return (direction == null) ? null : direction.getDirectionsList();
 	}
-	
-	/*
-	 * Final Stop methods
-	 */
-
-	public void setFinalStop(String stopId, String stopName, String stopSequence) {
-		finalStop.setStopInfo(stopId, stopName, stopSequence);
-	}
-	
-	public String getFinalStopId() {
-		return (finalStop == null) ? null : finalStop.getStopId();
-	}
-	
-	public String getFinalStopName() {
-		return (finalStop == null) ? null : finalStop.getStopName();
-	}
-	
-	public String getFinalStopSeq() {
-		return (finalStop == null) ? null : finalStop.getStopSequence();
-	}
-	
-	public ArrayList<HashMap<String, String>> getFinalStopsList() {
-		return (finalStop == null) ? null : finalStop.getStopsList();
-	}
-	
+		
 	/*
 	 * Start Stop methods
 	 */
 	
-	public void selectStartStop(String stopId, String shortName) {
-		startStop.setStopInfo(stopId, shortName);
+	public void selectStartStop(String stopId, String shortName, String stopSeq) {
+		startStop.setStopInfo(stopId, shortName, stopSeq);
 	}
 	
 	public String getStartStopId() {
@@ -148,9 +124,34 @@ public final class TransitData {
 		return (startStop == null) ? null : startStop.getStopName();
 	}
 	
+	public String getStartStopSeq() {
+		return (startStop == null) ? null : startStop.getStopSequence();
+	}
+	
 	public ArrayList<HashMap<String, String>> getStartStopsList() {
 		return (startStop == null) ? null : startStop.getStopsList();
 	}
+	
+	/*
+	 * Final Stop methods
+	 */
+
+	public void setFinalStop(String stopId, String stopName) {
+		finalStop.setStopInfo(stopId, stopName);
+	}
+	
+	public String getFinalStopId() {
+		return (finalStop == null) ? null : finalStop.getStopId();
+	}
+	
+	public String getFinalStopName() {
+		return (finalStop == null) ? null : finalStop.getStopName();
+	}
+
+	public ArrayList<HashMap<String, String>> getFinalStopsList() {
+		return (finalStop == null) ? null : finalStop.getStopsList();
+	}
+
 	
 	/*
 	 * Time methods

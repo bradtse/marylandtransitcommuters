@@ -29,28 +29,28 @@ public class TimesFragment extends TransitFragment {
 		return rootView;
 	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
-		text.setText(R.string.times_header);
-		super.onActivityCreated(savedInstanceState);
-	}
-	
 	private void setupInfoTextViews() {
 		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
 		String direction = "Direction: " + data.getDirectionHeadsign();
 		String startStop = "Start Stop: " + data.getStartStopName();
 		String finalStop = "Final Stop: " + data.getFinalStopName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.times_route);
-		TextView dirText = (TextView) rootView.findViewById(R.id.times_direction);
-		TextView startText = (TextView) rootView.findViewById(R.id.times_start_stop);
-		TextView finalText = (TextView) rootView.findViewById(R.id.times_final_stop);
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
+		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction);
+		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop);
+		TextView finalText = (TextView) rootView.findViewById(R.id.info_final_stop);
 
 		routeText.setText(route);
 		dirText.setText(direction);
 		startText.setText(startStop);
 		finalText.setText(finalStop);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
+		text.setText(R.string.times_header);
+		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override

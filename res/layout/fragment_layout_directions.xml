@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:orientation="vertical" >
-    
+
     <include layout="@layout/fragment_header" />
-  
+    
     <include layout="@layout/result_count" />
     
     <include layout="@layout/fragment_header_border" />
@@ -16,27 +16,14 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
 	    android:padding="5dp" >
-        
-	    <include layout="@layout/info_route" />
-	    
-	    <include layout="@layout/info_direction" />
-	    
-	    <include layout="@layout/info_startstop" />
-	    
-	    <include layout="@layout/info_finalstop" />
-	    
-    </LinearLayout>    
+    
+        <include layout="@layout/info_route" />
+    
+    </LinearLayout>
     
     <include layout="@layout/fragment_header_border" />
     
     <include layout="@layout/fragment_listview" />
-    
-    <TextView 
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp"
-        android:textSize="20sp"
-        android:textColor="@color/glue_color"
-        android:text="@string/empty_time_fragment" />
+ 
 </LinearLayout>
+

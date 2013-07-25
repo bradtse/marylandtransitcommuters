@@ -30,7 +30,7 @@ public class TransitService extends IntentService {
 	public static final int FINISH = 1;
 	
 	public enum DataType {
-		ROUTES, FINALSTOPS, STARTSTOPS, TIMES, DIRECTIONS;
+		ROUTES, STARTSTOPS, FINALSTOPS, TIMES, DIRECTIONS;
 		public static final String KEY = "type";
 	}
 	
@@ -65,9 +65,9 @@ public class TransitService extends IntentService {
 			// cases already and the server ignores any empty fields
 			data.put(Route.KEY, profile.getRouteId());
 			data.put(Direction.KEY, profile.getDirectionId());
+			data.put(StartStop.STOP_KEY,  profile.getStartStopId());
+			data.put(StartStop.SEQ_KEY, profile.getStartStopSeq());
 			data.put(FinalStop.STOP_KEY, profile.getFinalStopId());
-			data.put(FinalStop.SEQ_KEY, profile.getFinalStopSeq());
-			data.put(StartStop.KEY,  profile.getStartStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			
 			Log.d(MainActivity.LOG_TAG, data.toString());

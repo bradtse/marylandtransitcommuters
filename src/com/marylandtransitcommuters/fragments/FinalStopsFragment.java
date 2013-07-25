@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +26,31 @@ import com.marylandtransitcommuters.service.TransitService;
 public class FinalStopsFragment extends TransitFragment {
 	public static final String TAG = "finalstops";
 		
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
+									container, false);
+
+		setupInfoTextViews();
+		
+		return rootView;
+	}
+	
+	private void setupInfoTextViews() {
+		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
+		String direction = "Direction: " + data.getDirectionHeadsign();
+		String startStop = "Start Stop: " + data.getStartStopName();
+		
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
+		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction);
+		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop);
+
+		routeText.setText(route);
+		dirText.setText(direction);
+		startText.setText(startStop);
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
@@ -86,11 +112,10 @@ public class FinalStopsFragment extends TransitFragment {
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);
-		String stopSeq = map.get(FinalStop.STOP_SEQ);
 		
-		data.setFinalStop(stopId, stopName, stopSeq);
+		data.setFinalStop(stopId, stopName);
 		
-		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
+		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
 	}
 	
 	@Override

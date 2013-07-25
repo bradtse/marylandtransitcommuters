@@ -11,15 +11,20 @@
     
     <include layout="@layout/fragment_header_border" />
     
-    <ListView
-        android:id="@+id/fragment_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:overScrollFooter="@null" />
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:padding="5dp" >
     
-    <TextView 
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="No results right now" />
+	    <include layout="@layout/info_route" />
+	    
+	    <include layout="@layout/info_direction" />
+    
+    </LinearLayout>    
+    
+    <include layout="@layout/fragment_header_border" />
+    
+    <include layout="@layout/fragment_listview" />
+ 
 </LinearLayout>

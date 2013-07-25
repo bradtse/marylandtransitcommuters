@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,6 +25,28 @@ import com.marylandtransitcommuters.service.TransitService;
 
 public class StartStopsFragment extends TransitFragment {
 	public static final String TAG = "startstops";
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_layout_startstops, 
+									container, false);
+
+		setupInfoTextViews();
+		
+		return rootView;
+	}
+	
+	private void setupInfoTextViews() {
+		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
+		String direction = "Direction: " + data.getDirectionHeadsign();
+		
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
+		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction);
+
+		routeText.setText(route);
+		dirText.setText(direction);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -84,10 +107,11 @@ public class StartStopsFragment extends TransitFragment {
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(StartStop.STOP_ID);
 		String stopName = map.get(StartStop.STOP_NAME);
+		String stopSeq = map.get(StartStop.STOP_SEQ);
 		
-		data.selectStartStop(stopId, stopName);
+		data.selectStartStop(stopId, stopName, stopSeq);
 		
-		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
+		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
 	}
 	
 	@Override

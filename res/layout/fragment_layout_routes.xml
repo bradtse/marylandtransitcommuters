@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical" >
+
+    <include layout="@layout/fragment_header" />
+    
+    <include layout="@layout/result_count" />
+    
+    <include layout="@layout/fragment_header_border" />
+    
+    <include layout="@layout/fragment_listview" />
+ 
+</LinearLayout>

@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,6 +31,25 @@ import com.marylandtransitcommuters.service.TransitService;
 public class DirectionsFragment extends TransitFragment {
 	public static final String TAG = "direction";
 		
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_layout_directions, 
+									container, false);
+
+		setupInfoTextViews();
+		
+		return rootView;
+	}
+	
+	private void setupInfoTextViews() {
+		String route = "Route: " + data.getRouteShortName() + " " + data.getRouteLongName();
+		
+		TextView routeText = (TextView) rootView.findViewById(R.id.info_route);
+
+		routeText.setText(route);
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);
@@ -93,7 +113,7 @@ public class DirectionsFragment extends TransitFragment {
 
 		data.selectDirection(directionId, headSign);
 		
-		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
+		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
 	}
 	
 	@Override

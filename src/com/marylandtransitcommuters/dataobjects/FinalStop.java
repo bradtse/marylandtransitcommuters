@@ -14,16 +14,13 @@ import com.marylandtransitcommuters.MainActivity;
 public class FinalStop {
 	public static final String STOP_NAME = "stop_name";
 	public static final String STOP_ID = "stop_id";
-	public static final String STOP_SEQ = "stop_sequence";
 	public static final String STOP_KEY = "final_stop_id";
-	public static final String SEQ_KEY = "final_stop_seq";
 	public static final String GLUE = "&";
 
 	private JSONArray rawData;
 	private JSONArray prettyData;
 	private String stopId;
 	private String stopName;
-	private String stopSequence;
 	private ArrayList<HashMap<String, String>> finalStopsList;
 	
 	public FinalStop(JSONArray data) {
@@ -32,10 +29,9 @@ public class FinalStop {
 		this.finalStopsList = createStopsList();
 	}
 	
-	public void setStopInfo(String stopId, String stopName, String stopSequence) {
+	public void setStopInfo(String stopId, String stopName) {
 		this.stopId = stopId;
 		this.stopName = stopName;
-		this.stopSequence = stopSequence;
 	}
 	
 	public JSONArray getRawData() {
@@ -49,11 +45,7 @@ public class FinalStop {
 	public String getStopName() {
 		return stopName;
 	}
-	
-	public String getStopSequence() {
-		return stopSequence;
-	}
-	
+
 	public ArrayList<HashMap<String, String>> getStopsList() {
 		return finalStopsList;
 	}
@@ -68,11 +60,9 @@ public class FinalStop {
 				
 				String id = stop.getString(STOP_ID);
 				String sn = stop.getString(STOP_NAME);
-				String ss = stop.getString(STOP_SEQ);
 				
 				map.put(STOP_ID, id);
 				map.put(STOP_NAME, sn);
-				map.put(STOP_SEQ, ss);
 				list.add(map);
 			} catch (JSONException e) {
 				Log.d(MainActivity.LOG_TAG, "getStopsList() failed: " + e.getMessage());

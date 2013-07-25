@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +30,17 @@ import com.marylandtransitcommuters.service.TransitService;
 public class RoutesFragment extends TransitFragment {
 	public static final String TAG = "routes";
 	    
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.fragment_layout_routes, 
+									container, false);
+
+		
+		
+		return rootView;
+	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header);

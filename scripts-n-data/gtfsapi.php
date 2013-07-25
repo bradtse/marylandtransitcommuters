@@ -31,9 +31,9 @@ $type = $json['type'];
 // These should be checked or whitelisted 
 $route_id = $json['route_id'];
 $direction_id = $json['direction_id'];
-$final_stop_id = $json['final_stop_id'];
-$final_stop_seq = $json['final_stop_seq'];
+$start_stop_seq = $json['start_stop_seq'];
 $start_stop_id = $json['start_stop_id'];
+$final_stop_id = $json['final_stop_id'];
 
 if ($type == "routes") {
     queryDB($routesQuery);
@@ -42,20 +42,20 @@ if ($type == "routes") {
                     ":routeid" => $route_id
                     );
     queryDB($directionsQuery, $keys);
-} else if ($type == "finalstops") {
+} else if ($type == "startstops") {
     $keys = array(
                     ":routeid" => $route_id,
                     ":directionid" => $direction_id
                     );
-    queryDB($finalStopsQuery, $keys);
-} else if ($type == "startstops") {
+    queryDB($startStopsQuery, $keys);
+} else if ($type == "finalstops") {
     $keys = array(
                     ":routeid" => $route_id,
                     ":directionid" => $direction_id,
-                    ":finalstopseq" => $final_stop_seq,
-                    ":finalstopid" => $final_stop_id
+                    ":startstopseq" => $start_stop_seq,
+                    ":startstopid" => $start_stop_id
                     );
-    queryDB($startStopsQuery, $keys);
+    queryDB($finalStopsQuery, $keys);
 } else if ($type == "times") {
     $keys = array(
                     ":routeid" => $route_id,
