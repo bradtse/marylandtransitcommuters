@@ -45,6 +45,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 //		if (savedInstanceState == null) {
 			context = getActivity();
@@ -64,6 +65,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
 		
 //		if (savedInstanceState == null) {

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +38,8 @@ public class MainActivity extends SherlockFragmentActivity {
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	Log.d(LOG_TAG, "MainActivity onCreate()");
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
@@ -49,6 +51,36 @@ public class MainActivity extends SherlockFragmentActivity {
         if (savedInstanceState == null) {
         	addRoutesFragment();
         }
+    }
+    
+    @Override
+    protected void onRestart() {
+    	Log.d(LOG_TAG, "MainActivity onRestart()");
+    	super.onRestart();
+    }
+    
+    @Override
+    protected void onResume() {
+    	Log.d(LOG_TAG, "MainActivity onResume()");
+    	super.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+    	Log.d(LOG_TAG, "MainActivity onPause()");
+    	super.onPause();
+    }
+    
+    @Override
+    protected void onStop() {
+    	Log.d(LOG_TAG, "MainActivity onStop()");
+    	super.onStop();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	Log.d(LOG_TAG, "MainActvity onDestory()");
+    	super.onDestroy();
     }
     
     /**

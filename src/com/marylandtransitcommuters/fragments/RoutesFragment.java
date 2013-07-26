@@ -33,6 +33,7 @@ public class RoutesFragment extends TransitFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView()");
 		rootView = inflater.inflate(R.layout.fragment_layout_routes, 
 									container, false);
 		return rootView;
@@ -40,9 +41,9 @@ public class RoutesFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "RoutesFragment onActivityCreated()");
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_route);
 		text.setText(R.string.routes_header);
-		
 		super.onActivityCreated(savedInstanceState);
 	}
 	

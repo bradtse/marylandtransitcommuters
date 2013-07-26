@@ -70,7 +70,7 @@ public class TransitService extends IntentService {
 			data.put(FinalStop.STOP_KEY, profile.getFinalStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			
-			Log.d(MainActivity.LOG_TAG, data.toString());
+//			Log.d(MainActivity.LOG_TAG, data.toString());
 			
 			JSONArray results = RestHelper.post(data);
 			profile.setData(type, results);

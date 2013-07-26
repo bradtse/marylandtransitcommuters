@@ -56,7 +56,7 @@ public final class RestHelper {
 			}
 			
 			int responseCode = getResponseCode(conn);
-			Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
+//			Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
 			if (responseCode == -1) {
 				success = false;
 				failCount++;
@@ -150,7 +150,7 @@ public final class RestHelper {
 		try {
 			Scanner s = new Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
 			String str = s.hasNext() ? s.next() : "";
-			Log.d(MainActivity.LOG_TAG, str.toString());
+//			Log.d(MainActivity.LOG_TAG, str.toString());
 			json = new JSONArray(str);
 		} catch (JSONException e) {
 			Log.d(MainActivity.LOG_TAG, "responseToJSON failed (JSONException): " + e.getMessage());

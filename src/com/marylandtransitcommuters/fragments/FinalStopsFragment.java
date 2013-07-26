@@ -29,6 +29,7 @@ public class FinalStopsFragment extends TransitFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onCreateView()");
 		rootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
 									container, false);
 
@@ -53,6 +54,7 @@ public class FinalStopsFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onActivityCreated()");
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_final);
 		text.setText(R.string.final_stop_header);
 		

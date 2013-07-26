@@ -34,6 +34,7 @@ public class DirectionsFragment extends TransitFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView()");
 		rootView = inflater.inflate(R.layout.fragment_layout_directions, 
 									container, false);
 
@@ -52,6 +53,7 @@ public class DirectionsFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onActivityCreated()");
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_direction);
 		text.setText(R.string.direction_header);
 				

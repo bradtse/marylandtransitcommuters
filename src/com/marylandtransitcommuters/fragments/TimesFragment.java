@@ -2,6 +2,7 @@ package com.marylandtransitcommuters.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
+import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
 import com.marylandtransitcommuters.adapters.CustomSimpleAdapter;
 import com.marylandtransitcommuters.dataobjects.Time;
@@ -22,6 +24,7 @@ public class TimesFragment extends TransitFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
 		rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
 		
 		setupInfoTextViews();
@@ -48,6 +51,7 @@ public class TimesFragment extends TransitFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "TimesFragment onActivityCreated()");
 		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_time);
 		text.setText(R.string.times_header);
 		super.onActivityCreated(savedInstanceState);
