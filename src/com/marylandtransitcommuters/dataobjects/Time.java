@@ -13,6 +13,7 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -45,23 +46,21 @@ public class Time {
 	private ArrayList<HashMap<String, String>> createTimesList() {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		DateTime dt = new DateTime();
-		int currTimeSecs = dt.getSecondOfDay();
+		int current = dt.getSecondOfDay();
 		
 		for (int i = 0; i < rawData.length(); i++) {
 			try {
 				HashMap<String, String> map = new HashMap<String, String>();
-				int arrivalTimeSecs = Integer.parseInt(rawData.getJSONObject(i).getString(ARRIVAL_TIME_SECONDS));
-//				if (arrivalTimeSecs < currTimeSecs) {
+				JSONObject json = rawData.getJSONObject(i);
+				String secs = json.getString(ARRIVAL_TIME_SECONDS);
+				int arrival = Integer.parseInt(secs);
+				
+//				if (arrival < currTimeSecs) {
 //					continue;
 //				}
-
-				StringBuilder result = new StringBuilder();
-				result.append(timeUntilArrival(currTimeSecs, arrivalTimeSecs));
-				result.append(" until " );
-				result.append(clockTime(arrivalTimeSecs));
 				
-				map.put(ARRIVAL_TIME, result.toString());
-				
+				String result = getBusTime(arrival, current);
+				map.put(ARRIVAL_TIME, result);
 				list.add(map);
 			} catch (JSONException e) {
 				Log.d(MainActivity.LOG_TAG, e.getMessage());
@@ -72,7 +71,32 @@ public class Time {
 	}
 	
 	/**
-	 * A helper function that returns a formatted string of time until the next arrival.
+	 * Returns the final string for the bus. I mainly created this helper method
+	 * for testing purposes.
+	 * @return A String in the form of "<period> until <clocktime>"
+	 */
+	public String getBusTime(int arrival, int current) {
+		StringBuilder time = new StringBuilder();
+
+		String remaining = timeUntilArrival(current, arrival);
+		String clockTime = clockTime(arrival);
+		
+		if (remaining.isEmpty()) {
+			time.append("Arriving now at ");
+		} else {
+			time.append(remaining);
+			time.append(" until " );
+		}
+		
+		time.append(clockTime);
+		
+		Log.d(MainActivity.LOG_TAG, time.toString());
+		
+		return time.toString();
+	}
+	
+	/**
+	 * A helper function that returns a formatted string of the time until the next arrival.
 	 * Ex: "2 hrs and 3 mins"
 	 * @param currTimeSecs the current time in seconds
 	 * @param arrivalTimeSecs the bus's arrival time in seconds
@@ -97,20 +121,19 @@ public class Time {
 	
 	/**
 	 * Returns a human readable clock time from the arrival time in seconds
-	 * @param arrivalTimeSecs the arrival time in seconds
+	 * @param arrival the arrival time in seconds
 	 * @return a string of the clock time
 	 * FIXME not handling all cases properly
 	 */
-	private String clockTime(int arrivalTimeSecs) {
-		Seconds seconds = Seconds.seconds(arrivalTimeSecs);
+	private String clockTime(int arrival) {
+		Seconds seconds = Seconds.seconds(arrival);
 		int hours = seconds.toStandardHours().getHours() % 24;
-//		if (hours >= 24) {
-//			hours = hours - 24;
-//		}
 		int minutes = seconds.toStandardMinutes().getMinutes() % 60;
+		
 		LocalTime lt = new LocalTime(hours, minutes);
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("h:mm");
-		return fmt.print(lt);
+		
+		String clockTime = fmt.print(lt);
+		return (hours < 12) ? clockTime + " AM" : clockTime + " PM"; 
 	}
-
 }
