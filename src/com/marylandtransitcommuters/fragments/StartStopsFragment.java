@@ -75,6 +75,7 @@ public class StartStopsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				
+				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) adapter.getItem(pos);
 				String stopName = map.get(StartStop.STOP_NAME);
 				
@@ -104,6 +105,7 @@ public class StartStopsFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
+		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(StartStop.STOP_ID);
 		String stopName = map.get(StartStop.STOP_NAME);

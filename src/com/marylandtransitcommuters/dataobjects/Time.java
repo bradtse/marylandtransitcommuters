@@ -46,6 +46,7 @@ public class Time {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		DateTime dt = new DateTime();
 		int currTimeSecs = dt.getSecondOfDay();
+		
 		for (int i = 0; i < rawData.length(); i++) {
 			try {
 				HashMap<String, String> map = new HashMap<String, String>();

@@ -7,11 +7,11 @@
     
     <TextView 
         android:id="@+id/fragment_header_time"
-        style="@style/RouteHeader" />
+        style="@style/TimeHeader" />
   
     <TextView 
         android:id="@+id/result_count"
-        style="@style/RouteResultCount" />
+        style="@style/TimeResultCount" />
     
     <include layout="@layout/fragment_header_border" />
     

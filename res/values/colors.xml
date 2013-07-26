@@ -5,9 +5,10 @@
     <color name="drawer_color">#474747</color>
     <color name="drawer_text">#dddddd</color>
     <color name="route">#fc6822</color>
-    <color name="direction">#b1c5c3</color>
+    <color name="direction">#37859b</color>
     <color name="startstop">#72ae35</color>
     <color name="finalstop">#e13028</color>
+    <color name="time">#AAAAAA</color>
     <color name="fragment_header_background">#474747</color>
     <color name="fragment_listview_background">#e0e0e0</color>
     <color name="route_shortname_text">#d24939</color>

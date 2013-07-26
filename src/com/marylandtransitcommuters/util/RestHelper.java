@@ -28,16 +28,53 @@ public final class RestHelper {
 	 * Sends data to query the server and returns the response in JSONArray form
 	 * @param data the data needed to query the database
 	 * @return a JSONArray containing the response from the server
+	 * FIXME Handle what happens when null returns
 	 */
 	public static JSONArray post(JSONObject data) {
-		HttpURLConnection conn = setupConnection(WEBSITE);
-		sendData(data, conn);
-		JSONArray json = responseToJSON(conn);
-		int responseCode = getResponseCode(conn);
-		conn.disconnect();
+		JSONArray json = null;
+		boolean success = true;
+		int failCount = 0; 
 		
-		Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
-		Log.d(MainActivity.LOG_TAG, json.toString());
+		do {
+			// Prevent infinite posts
+			if (failCount > 10) {
+				return null;
+			}
+			
+			HttpURLConnection conn = setupConnection(WEBSITE);
+			if (conn == null) {
+				success = false;
+				failCount++;
+				continue;
+			}
+			
+			int rc = sendData(data, conn);
+			if (rc == -1) {
+				success = false;
+				failCount++;
+				continue;
+			}
+			
+			int responseCode = getResponseCode(conn);
+			Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
+			if (responseCode == -1) {
+				success = false;
+				failCount++;
+				continue;
+			}
+				
+			json = responseToJSON(conn);
+			if (json == null) {
+				success = false;
+				failCount++;
+				continue;
+			}
+			
+			conn.disconnect();
+			
+			success = true;
+		} while (success == false);
+		
 		return json;
 	}
 	
@@ -52,13 +89,16 @@ public final class RestHelper {
 		try {
 			url = new URL(stringURL);
 			conn = (HttpURLConnection) url.openConnection();
-//			String basicAuth = "Basic " + new String(Base64.encode(url.getUserInfo().getBytes(), 0));
+			
 			// Sets up POST settings
+//			String basicAuth = "Basic " + new String(Base64.encode(url.getUserInfo().getBytes(), 0));
 			conn.setDoOutput(true);
 //			conn.setRequestProperty("Authorization", basicAuth);
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestMethod("POST");
+			
+			conn.connect();
 		} catch (IOException e) {
 			Log.d(MainActivity.LOG_TAG, "setupConnection failed: " + e.getMessage());
 		}
@@ -69,8 +109,10 @@ public final class RestHelper {
 	 * Opens the connection and sends the data
 	 * @param data the JSON object to send
 	 * @param conn the connection to send the data to
+	 * @return 0 on success, -1 on failure
 	 */
-	private static void sendData(JSONObject data, HttpURLConnection conn) {
+	private static int sendData(JSONObject data, HttpURLConnection conn) {
+		int rc = 0;
 		try {
 			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
 			BufferedWriter bw = new BufferedWriter(out);
@@ -79,28 +121,11 @@ public final class RestHelper {
 			bw.close(); 
 		} catch (IOException e) {
 			Log.d(MainActivity.LOG_TAG, "sendData failed: " + e.getMessage());
+			rc = -1;
 		}
+		return rc;
 	}
-	
-	/**
-	 * Converts the server response to a JSON array
-	 * @param conn the connection to get the response from
- 	 * @return a JSON Array representation of the server response, null on failure
-	 */
-	private static JSONArray responseToJSON(HttpURLConnection conn) {
-		JSONArray json = null;
-		try {
-			Scanner s = new Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
-			String str = s.hasNext() ? s.next() : "";
-			json = new JSONArray(str);
-		} catch (JSONException e) {
-			Log.d(MainActivity.LOG_TAG, "responseToJSON failed: " + e.getMessage());
-		} catch (IOException e) {
-			Log.d(MainActivity.LOG_TAG, "responseToJSON failed: " + e.getMessage());
-		}
-		return json;
-	}
-	
+		
 	/**
 	 * Get the response code from the server
 	 * @param conn the connection to get the response code from
@@ -113,5 +138,25 @@ public final class RestHelper {
 			Log.d(MainActivity.LOG_TAG, "getResponseCode failed: " + e.getMessage());
 		}
 		return -1;
+	}
+	
+	/**
+	 * Converts the server response to a JSON array
+	 * @param conn the connection to get the response from
+ 	 * @return a JSON Array representation of the server response, null on failure
+	 */
+	private static JSONArray responseToJSON(HttpURLConnection conn) {
+		JSONArray json = null;
+		try {
+			Scanner s = new Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
+			String str = s.hasNext() ? s.next() : "";
+			Log.d(MainActivity.LOG_TAG, str.toString());
+			json = new JSONArray(str);
+		} catch (JSONException e) {
+			Log.d(MainActivity.LOG_TAG, "responseToJSON failed (JSONException): " + e.getMessage());
+		} catch (IOException e) {
+			Log.d(MainActivity.LOG_TAG, "responseToJSON failed (IOException): " + e.getMessage());
+		}
+		return json;
 	}
 }

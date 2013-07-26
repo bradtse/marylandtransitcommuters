@@ -10,8 +10,8 @@
     <string name="pm">PM</string>
     <string name="routes_header">Route</string>
     <string name="direction_header">Direction</string>
-    <string name="final_stop_header">Departing Stop</string>
-    <string name="start_stop_header">Boarding Stop</string>
+    <string name="final_stop_header">Final Stop</string>
+    <string name="start_stop_header">Start Stop</string>
     <string name="times_header">Predictions</string>
     <string name="menu_search">Search</string>
     <string name="empty_time_fragment">

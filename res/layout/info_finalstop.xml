@@ -8,7 +8,7 @@
         android:textSize="@dimen/info_font_size"
         android:text="@string/finalstop"
         android:textColor="@color/finalstop"
-        android:layout_below="@+id/info_start_stop_title" />
+        android:layout_below="@+id/info_start_stop_data" />
 
 	<TextView 
         android:id="@+id/info_final_stop_data"

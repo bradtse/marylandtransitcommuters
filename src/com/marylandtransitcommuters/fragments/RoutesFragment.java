@@ -67,6 +67,7 @@ public class RoutesFragment extends TransitFragment {
 				View view = super.getView(position, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
 				
+				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) adapter.getItem(position);
 				String longName = map.get(Route.LONG_NAME);
 				int color = getResources().getColor(R.color.glue_color);
@@ -95,6 +96,7 @@ public class RoutesFragment extends TransitFragment {
 	public void selectItem(int index) {
 		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
+		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
 		String shortName = map.get(Route.SHORT_NAME);

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView 
-        android:id="@id/info_start_stop_title" 
+        android:id="@+id/info_start_stop_title" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:textStyle="bold"
         android:textSize="@dimen/info_font_size"
         android:text="@string/startstop"
         android:textColor="@color/startstop"
-        android:layout_below="@+id/info_direction_title" />
+        android:layout_below="@+id/info_direction_data" />
 
 	<TextView 
         android:id="@id/info_start_stop_data"
