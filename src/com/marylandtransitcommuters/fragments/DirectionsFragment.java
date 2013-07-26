@@ -107,7 +107,7 @@ public class DirectionsFragment extends TransitFragment {
 	}
 	
 	public void selectItem(int index) {
-		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
+//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);

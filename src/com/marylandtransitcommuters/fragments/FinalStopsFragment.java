@@ -109,7 +109,7 @@ public class FinalStopsFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
-		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
+//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);

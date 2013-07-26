@@ -105,7 +105,7 @@ public class StartStopsFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
-		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
+//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) adapter.getItem(index);

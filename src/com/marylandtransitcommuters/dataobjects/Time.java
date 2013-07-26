@@ -90,7 +90,7 @@ public class Time {
 		
 		time.append(clockTime);
 		
-		Log.d(MainActivity.LOG_TAG, time.toString());
+//		Log.d(MainActivity.LOG_TAG, time.toString());
 		
 		return time.toString();
 	}
