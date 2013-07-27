@@ -10,7 +10,7 @@
         android:textColor="@color/route" />
     
 	<TextView 
-        android:id="@id/info_route_data" 
+        android:id="@+id/info_route_data" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:textSize="@dimen/info_font_size" 

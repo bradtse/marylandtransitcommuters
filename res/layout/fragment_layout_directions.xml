@@ -13,7 +13,9 @@
         android:id="@+id/result_count"
         style="@style/DirectionResultCount" />
     
-    <include layout="@layout/fragment_header_border" />
+    <View
+        android:id="@+id/header_border_1"
+        style="@style/HeaderBorder" />
     
     <RelativeLayout style="@style/InfoStyle" >
     
@@ -21,7 +23,9 @@
     
     </RelativeLayout>
     
-    <include layout="@layout/fragment_header_border" />
+    <View
+        android:id="@+id/header_border_2"
+        style="@style/HeaderBorder" />
     
     <include layout="@layout/fragment_listview" />
  
