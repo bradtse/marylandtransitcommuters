@@ -58,7 +58,7 @@ FROM
 stop_times AS T2 
 JOIN
 trips as T1
- ON T1.trip_id = T2.trip_id AND T2.stop_id = :finalstopid AND T1.route_id = :routeid
+ ON T1.trip_id = T2.trip_id AND T2.stop_id = :finalstopid AND T1.route_id = :routeid AND T1.direction_id = :directionid
 JOIN
 stop_times as T3
  ON T2.trip_id = T3.trip_id AND T3.stop_id = :startstopid

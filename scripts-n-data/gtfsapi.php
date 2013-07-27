@@ -59,6 +59,7 @@ if ($type == "routes") {
 } else if ($type == "times") {
     $keys = array(
                     ":routeid" => $route_id,
+                    ":directionid" => $direction_id,
                     ":finalstopid" => $final_stop_id,
                     ":startstopid" => $start_stop_id 
                     );
