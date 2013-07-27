@@ -40,15 +40,18 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(LOG_TAG, "MainActivity onCreate()");
     	super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mTitle = mDrawerTitle = getTitle();
-        mDrawerItems = getResources().getStringArray(R.array.items);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        setupNavDrawer();   
-        if (savedInstanceState == null) {
+    	
+        if (savedInstanceState == null) {	
+        	Log.d(LOG_TAG, "savedInstanceState is null");
+        	
+            setContentView(R.layout.activity_main);
+	
+	        mTitle = mDrawerTitle = getTitle();
+	        mDrawerItems = getResources().getStringArray(R.array.items);
+	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+	
+	        setupNavDrawer();   
         	addRoutesFragment();
         }
     }
@@ -57,6 +60,12 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onRestart() {
     	Log.d(LOG_TAG, "MainActivity onRestart()");
     	super.onRestart();
+    }
+    
+    @Override
+    protected void onStart() {
+    	Log.d(LOG_TAG, "MainActivity onStart()");
+    	super.onStart();
     }
     
     @Override
@@ -81,6 +90,24 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onDestroy() {
     	Log.d(LOG_TAG, "MainActvity onDestory()");
     	super.onDestroy();
+    }
+    
+    @Override
+	public void onBackPressed() {
+    	Log.d(LOG_TAG, "Back button pressed");
+    	super.onBackPressed();
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+    	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
+    	super.onRestoreInstanceState(inState);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
+    	super.onSaveInstanceState(outState);
     }
     
     /**

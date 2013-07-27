@@ -47,11 +47,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
-//		if (savedInstanceState == null) {
+		if (savedInstanceState == null) {
+			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
 			context = getActivity();
 			data = TransitData.getInstance();
 			setupProgressDialog();
-//		}
+		}
 	}
 	
 	/**
@@ -64,16 +65,35 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	@Override
+	public void onStop() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onStop()");
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroyView() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestoryView()");
+		super.onDestroyView();
+	}
+	
+	@Override
+	public void onDestroy() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestory()");
+		super.onDestroy();
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
 		
-//		if (savedInstanceState == null) {
+		if (savedInstanceState == null) {
+			Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated() savedInstanceState is null");
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			setupReceiver();
 			startIntentService();
 			alive = true;
-//		} 
+		} 
 	}
 	
 	/**
@@ -88,6 +108,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 * Starts the new intent service 
 	 */
 	private void startIntentService() {
+		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
 		Intent intent  = new Intent(context, TransitService.class);
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 		setServiceType(intent);
@@ -141,6 +162,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 * Sets up the fragment after the data comes back
 	 */
 	private void setupFragment() {
+		Log.d(MainActivity.LOG_TAG, "Received data from server... setting up fragment");
 		mList.setOnItemClickListener(new ListItemClickListener());
 		setAdapter();
 		
@@ -161,6 +183,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			Log.d(MainActivity.LOG_TAG, "Item " + position + " was selected...resetting SearchView");
 			resetSearchView();
 			selectItem(position);
 		}
@@ -172,7 +195,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      */
     public void resetSearchView() {
     	search.setQuery("", false);
-		search.clearFocus();
+//		search.clearFocus();
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
@@ -193,6 +216,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * FIXME I think this is causing a memory leak
      */
     public void replaceFragment(Fragment newFragment, String currFragTag, String newFragTag) {
+    	Log.d(MainActivity.LOG_TAG, "Replacing " + currFragTag + " with " + newFragTag);
     	FragmentManager fm = getFragmentManager();
     	Fragment newFrag = fm.findFragmentByTag(newFragTag);
     	Fragment currFrag = fm.findFragmentByTag(currFragTag);
@@ -200,10 +224,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
 							   R.animator.slide_in_left, R.animator.slide_out_right);
-		
-		if (newFrag != null) {
-			ft.remove(newFrag);
-		} 
 				
 		ft.hide(currFrag);
 		ft.add(R.id.content_frame, newFragment, newFragTag);
