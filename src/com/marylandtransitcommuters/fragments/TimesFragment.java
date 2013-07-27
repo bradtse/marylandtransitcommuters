@@ -25,9 +25,11 @@ public class TimesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
-		rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
-		
-		setupInfoTextViews();
+		if (savedInstanceState == null) {
+			rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
+			
+			setupInfoTextViews();
+		}
 		
 		return rootView;
 	}
@@ -52,13 +54,15 @@ public class TimesFragment extends TransitFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onActivityCreated()");
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_time);
-		text.setText(R.string.times_header);
+		if (savedInstanceState == null) {
+			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_time);
+			text.setText(R.string.times_header);
+		}
 		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override
-	public void setServiceType(Intent intent) {
+	public void setIntentServiceType(Intent intent) {
 		intent.putExtra(TransitService.DataType.KEY, TransitService.DataType.TIMES);
 	}
 
@@ -85,7 +89,6 @@ public class TimesFragment extends TransitFragment {
 	
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Keeps a reference to the SearchView for subclasses to use
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		search = (SearchView) searchItem.getActionView();
 		

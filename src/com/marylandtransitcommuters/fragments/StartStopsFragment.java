@@ -30,11 +30,13 @@ public class StartStopsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "StartStopsFragment onCreateView()");
-		rootView = inflater.inflate(R.layout.fragment_layout_startstops, 
-									container, false);
-
-		setupInfoTextViews();
-		
+		if (savedInstanceState == null) {
+			rootView = inflater.inflate(R.layout.fragment_layout_startstops, 
+										container, false);
+	
+			setupInfoTextViews();
+		}
+			
 		return rootView;
 	}
 	
@@ -52,13 +54,15 @@ public class StartStopsFragment extends TransitFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "StartStopsFragment onActivityCreated()");
-		TextView text = (TextView) rootView.findViewById(R.id.fragment_header_start);
-		text.setText(R.string.start_stop_header);
+		if (savedInstanceState == null) {
+			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_start);
+			text.setText(R.string.start_stop_header);
+		}
 		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override
-	public void setServiceType(Intent intent) {
+	public void setIntentServiceType(Intent intent) {
 		intent.putExtra(TransitService.DataType.KEY, TransitService.DataType.STARTSTOPS);
 	}
 

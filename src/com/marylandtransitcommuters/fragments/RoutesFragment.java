@@ -53,7 +53,7 @@ public class RoutesFragment extends TransitFragment {
 	}
 	
 	@Override
-	public void setServiceType(Intent intent) {
+	public void setIntentServiceType(Intent intent) {
 		intent.putExtra(TransitService.DataType.KEY, TransitService.DataType.ROUTES);
 	}
 

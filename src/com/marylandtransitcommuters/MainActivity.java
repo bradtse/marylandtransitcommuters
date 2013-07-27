@@ -1,5 +1,6 @@
 package com.marylandtransitcommuters;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,23 +36,34 @@ public class MainActivity extends SherlockFragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		Log.d(LOG_TAG, "onNewIntent called");
+		finish();
+		overridePendingTransition(0, 0);
+		
+		Intent i = new Intent(this, MainActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		startActivity(i);
+	}
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(LOG_TAG, "MainActivity onCreate()");
     	super.onCreate(savedInstanceState);
     	
+        setContentView(R.layout.activity_main);
+
+        mTitle = mDrawerTitle = getTitle();
+        mDrawerItems = getResources().getStringArray(R.array.items);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        setupNavDrawer();   
+        
         if (savedInstanceState == null) {	
         	Log.d(LOG_TAG, "savedInstanceState is null");
-        	
-            setContentView(R.layout.activity_main);
-	
-	        mTitle = mDrawerTitle = getTitle();
-	        mDrawerItems = getResources().getStringArray(R.array.items);
-	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-	
-	        setupNavDrawer();   
         	addRoutesFragment();
         }
     }
@@ -107,7 +119,8 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
-    	super.onSaveInstanceState(outState);
+//    	super.onSaveInstanceState(outState);
+    	return;
     }
     
     /**

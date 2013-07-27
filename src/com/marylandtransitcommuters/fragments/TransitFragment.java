@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +46,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
+		
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
 			context = getActivity();
@@ -86,13 +86,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
-		
+	
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated() savedInstanceState is null");
 			mList = (ListView) rootView.findViewById(R.id.fragment_list);
 			setupReceiver();
 			startIntentService();
-			alive = true;
 		} 
 	}
 	
@@ -111,7 +110,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
 		Intent intent  = new Intent(context, TransitService.class);
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
-		setServiceType(intent);
+		setIntentServiceType(intent);
 		context.startService(intent);
 	}
 	
@@ -141,7 +140,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 * Add the appropriate service type to the intent 
 	 * @param intent the intent to add the service type to
 	 */
-	public abstract void setServiceType(Intent intent);
+	public abstract void setIntentServiceType(Intent intent);
 	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
@@ -195,9 +194,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      */
     public void resetSearchView() {
     	search.setQuery("", false);
-		search.clearFocus();
-//		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
     
     /**
@@ -227,6 +223,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				
 		ft.hide(currFrag);
 		ft.add(R.id.content_frame, newFragment, newFragTag);
+	
 		
 		ft.addToBackStack(null);
 		ft.commit();
