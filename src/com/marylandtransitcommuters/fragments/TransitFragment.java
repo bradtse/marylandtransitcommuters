@@ -195,9 +195,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      */
     public void resetSearchView() {
     	search.setQuery("", false);
-//		search.clearFocus();
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+		search.clearFocus();
+//		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//		imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
     
     /**
