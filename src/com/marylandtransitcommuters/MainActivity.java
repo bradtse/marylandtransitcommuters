@@ -1,6 +1,6 @@
 package com.marylandtransitcommuters;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -39,7 +39,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private Stack<String> fragTags;
+	private ArrayDeque<String> mFragTags;
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         
         if (savedInstanceState == null) {	
         	Log.d(LOG_TAG, "savedInstanceState is null");
-        	fragTags = new Stack<String>();
+        	mFragTags = new ArrayDeque<String>();
         	performTransaction(null, RoutesFragment.TAG, new RoutesFragment(), false);
         }
     }
@@ -84,15 +84,18 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     public void performTransaction(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack) {
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
-//    	ft.replace(R.id.content_frame, mFragmentStack.push(frag));
+    	ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
+				   R.animator.slide_in_left, R.animator.slide_out_right);
     	
+    	// If there is a current fragment then hide it
     	if (currentFragTag != null) {
-    		fragTags.push(currentFragTag);
+    		mFragTags.push(currentFragTag);
 			Fragment currFrag = fm.findFragmentByTag(currentFragTag);
-	    	((TransitFragment) currFrag).setDead();
+	    	((TransitFragment) currFrag).setInvisible();
     		ft.hide(currFrag);
     	}
-    	((TransitFragment) newFrag).setAlive();
+    	
+    	((TransitFragment) newFrag).setVisible();
 		ft.add(R.id.content_frame, newFrag, newFragTag);
 		
 		if (addToBackStack == true) {
@@ -103,26 +106,66 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     
     @Override
     public void onBackPressed() {
-    	if (fragTags.size() > 0) {
+    	if (mFragTags.size() > 0) {
     		FragmentManager fm = getSupportFragmentManager();
-    		TransitFragment frag = (TransitFragment) fm.findFragmentByTag(fragTags.pop());
-    		frag.setAlive();
+    		TransitFragment frag = (TransitFragment) fm.findFragmentByTag(mFragTags.pop());
+    		frag.setVisible();
     	}
     	super.onBackPressed();
+    }
+    
+    /*
+     * Overrides for debugging the activity lifecycle
+     */
+    
+    @Override
+    protected void onRestart() {
+    	Log.d(LOG_TAG, "MainActivity onRestart()");
+    	super.onRestart();
+    }
+    
+    @Override
+    protected void onStart() {
+    	Log.d(LOG_TAG, "MainActivity onStart()");
+    	super.onStart();
+    }
+    
+    @Override
+    protected void onResume() {
+    	Log.d(LOG_TAG, "MainActivity onResume()");
+    	super.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+    	Log.d(LOG_TAG, "MainActivity onPause()");
+    	super.onPause();
+    }
+    
+    @Override
+    protected void onStop() {
+    	Log.d(LOG_TAG, "MainActivity onStop()");
+    	super.onStop();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	Log.d(LOG_TAG, "MainActvity onDestory()");
+    	super.onDestroy();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
-    	fragTags = (Stack<String>) inState.getSerializable("frags");
     	super.onRestoreInstanceState(inState);
+    	mFragTags = (ArrayDeque<String>) inState.getSerializable("frags");
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
-    	outState.putSerializable("frags", fragTags);
     	super.onSaveInstanceState(outState);
+    	outState.putSerializable("frags", mFragTags);
     }
    
     /**
@@ -175,7 +218,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
     	super.onPostCreate(savedInstanceState);
-    	
     	// Sync the toggle state after onRestoreInstanceState has occurred
     	mDrawerToggle.syncState();	
     }
@@ -210,7 +252,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-    	
     	// Hides the SearchView when the drawer is open
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
     	menu.findItem(R.id.menu_search).setVisible(!drawerOpen);

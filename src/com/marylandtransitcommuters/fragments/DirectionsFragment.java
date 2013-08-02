@@ -2,11 +2,8 @@ package com.marylandtransitcommuters.fragments;
 
 import java.util.Map;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -42,8 +39,6 @@ public class DirectionsFragment extends TransitFragment {
 		mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
 				container, false);
 		
-		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView() savedInstanceState is null");
-		
 		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
 		text.setText(R.string.direction_header);
 			
@@ -51,16 +46,10 @@ public class DirectionsFragment extends TransitFragment {
 		
 		if (savedInstanceState != null) {
 			setupFragment();
-			mAlive = savedInstanceState.getBoolean("mAlive");
-			if (mAlive == false) {
-				FragmentManager fm = getFragmentManager();
-		    	Fragment currFrag = fm.findFragmentByTag(TAG);
-				FragmentTransaction ft = fm.beginTransaction();
-				ft.hide(currFrag);
-				ft.commit();
+			mVisible = savedInstanceState.getBoolean("mAlive");
+			if (mVisible == false) {
+				hideFragment(TAG);
 			}
-		} else {
-			mAlive = true;
 		}
 
 		return mRootView;
@@ -68,9 +57,7 @@ public class DirectionsFragment extends TransitFragment {
 	
 	protected void setupBreadcrumbs() {
 		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
-		
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
-
 		routeText.setText(route);
 	}
 	
@@ -130,7 +117,6 @@ public class DirectionsFragment extends TransitFragment {
 		mData.selectDirection(directionId, headSign);
 		
 		mCallback.performTransaction(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
-//		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
 	}
 	
 	@Override

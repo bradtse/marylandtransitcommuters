@@ -46,17 +46,11 @@ public class RoutesFragment extends TransitFragment {
 			
 		if (savedInstanceState != null) {
 			setupFragment();
-			mAlive = savedInstanceState.getBoolean("mAlive");
-			if (mAlive == false) {
-				FragmentManager fm = getFragmentManager();
-		    	Fragment currFrag = fm.findFragmentByTag(TAG);
-				FragmentTransaction ft = fm.beginTransaction();
-				ft.hide(currFrag);
-				ft.commit();
+			mVisible = savedInstanceState.getBoolean("mAlive");
+			if (mVisible == false) {
+				hideFragment(TAG);
 			}
-		} else {
-			mAlive = true;
-		}
+		} 
 		
 		return mRootView;
 	}
@@ -120,7 +114,6 @@ public class RoutesFragment extends TransitFragment {
 		mData.selectRoute(routeId, shortName, longName);
 			
 		mCallback.performTransaction(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
-//		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}
 	
 	@Override

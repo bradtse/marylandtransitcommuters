@@ -42,18 +42,16 @@ public class StartStopsFragment extends TransitFragment {
 			
 		if (savedInstanceState != null) {
 			setupFragment();
-			mAlive = savedInstanceState.getBoolean("mAlive");
-			if (mAlive == false) {
+			mVisible = savedInstanceState.getBoolean("mAlive");
+			if (mVisible == false) {
 				FragmentManager fm = getFragmentManager();
 		    	Fragment currFrag = fm.findFragmentByTag(TAG);
 				FragmentTransaction ft = fm.beginTransaction();
 				ft.hide(currFrag);
 				ft.commit();
 			}
-		} else {
-			mAlive = true;
 		}
-			
+		
 		return mRootView;
 	}
 	
@@ -127,7 +125,6 @@ public class StartStopsFragment extends TransitFragment {
 		mData.selectStartStop(stopId, stopName, stopSeq);
 		
 		mCallback.performTransaction(TAG, FinalStopsFragment.TAG, new FinalStopsFragment(), true);
-//		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
 	}
 	
 	@Override
