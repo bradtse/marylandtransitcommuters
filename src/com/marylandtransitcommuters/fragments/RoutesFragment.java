@@ -39,11 +39,12 @@ public class RoutesFragment extends TransitFragment {
 		Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView()");
 		mRootView = inflater.inflate(R.layout.fragment_layout_routes, 
 									container, false);	
+		
+		super.onCreateView(inflater, container, savedInstanceState);	
+
 		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_route);
 		text.setText(R.string.routes_header);
-		
-		super.onCreateView(inflater, container, savedInstanceState);
-			
+				
 		if (savedInstanceState != null) {
 			setupFragment();
 			mVisible = savedInstanceState.getBoolean("mAlive");
@@ -51,7 +52,6 @@ public class RoutesFragment extends TransitFragment {
 				hideFragment(TAG);
 			}
 		} 
-		
 		return mRootView;
 	}
 	

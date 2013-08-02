@@ -39,19 +39,21 @@ public class DirectionsFragment extends TransitFragment {
 		mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
 				container, false);
 		
+		super.onCreateView(inflater, container, savedInstanceState);
+		
+		// Set the fragment header
 		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
 		text.setText(R.string.direction_header);
 			
-		super.onCreateView(inflater, container, savedInstanceState);
-		
+		// Only setup fragment here if it was previously destroyed and saved
 		if (savedInstanceState != null) {
 			setupFragment();
 			mVisible = savedInstanceState.getBoolean("mAlive");
+			// Hide fragment if it is supposed to be invisible
 			if (mVisible == false) {
 				hideFragment(TAG);
 			}
 		}
-
 		return mRootView;
 	}
 	
@@ -107,9 +109,7 @@ public class DirectionsFragment extends TransitFragment {
 		mList.setAdapter(mAdapter);
 	}
 	
-	public void selectItem(int index) {
-//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
-		
+	public void selectItem(int index) {		
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);
 		String headSign = map.get(Direction.TRIP_HEADSIGN);

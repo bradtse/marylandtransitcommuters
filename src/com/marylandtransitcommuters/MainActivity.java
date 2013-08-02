@@ -87,7 +87,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
 				   R.animator.slide_in_left, R.animator.slide_out_right);
     	
-    	// If there is a current fragment then hide it
+    	// If there is a current fragment in the frame layout then hide it
     	if (currentFragTag != null) {
     		mFragTags.push(currentFragTag);
 			Fragment currFrag = fm.findFragmentByTag(currentFragTag);

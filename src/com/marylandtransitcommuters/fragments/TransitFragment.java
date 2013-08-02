@@ -71,7 +71,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Sets up the callback receiver
+	 * Sets up a callback receiver
 	 */
 	private void setupTransitReceiver() {
 		mReceiver = new TransitReceiver(new Handler());
@@ -79,7 +79,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Sets up the progress dialog
+	 * Sets up a progress dialog
 	 */
 	private void setupProgressDialog() {
 		mProgDialog = new ProgressDialog(mContext);
@@ -141,8 +141,10 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 	}
 	
+	// Interface to allow fragments to communicate with its Activity
 	public interface ReplaceFragmentListener {
-		public void performTransaction(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack);
+		public void performTransaction(String currentFragTag, String newFragTag, 
+								       Fragment newFrag, boolean addToBackStack);
 	}
 	
 	@Override
@@ -185,11 +187,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/**
 	 * Sets up the fragment after the data comes back
 	 */
-	protected void setupFragment() {
+	public void setupFragment() {
 		Log.d(MainActivity.LOG_TAG, "Setting up fragment");
 		mList.setOnItemClickListener(new ListItemClickListener());
 		setAdapter();
 		
+		// Forces onCreateOptionsMenu to be called in each fragment
 		setHasOptionsMenu(true); 
 
 		// Adds the result count 
