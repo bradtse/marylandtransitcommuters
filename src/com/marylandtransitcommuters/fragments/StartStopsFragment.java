@@ -4,6 +4,9 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -25,19 +28,31 @@ import com.marylandtransitcommuters.service.TransitService;
 
 public class StartStopsFragment extends TransitFragment {
 	public static final String TAG = "startstops";
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "StartStopsFragment onCreateView()");
-//		if (savedInstanceState == null) {
-			mRootView = inflater.inflate(R.layout.fragment_layout_startstops, 
-										container, false);
-			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_start);
-			text.setText(R.string.start_stop_header);
+		mRootView = inflater.inflate(R.layout.fragment_layout_startstops, 
+									container, false);
+		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_start);
+		text.setText(R.string.start_stop_header);
+		
+		super.onCreateView(inflater, container, savedInstanceState);
 			
-			super.onCreateView(inflater, container, savedInstanceState);
-//		}
+		if (savedInstanceState != null) {
+			setupFragment();
+			mAlive = savedInstanceState.getBoolean("mAlive");
+			if (mAlive == false) {
+				FragmentManager fm = getFragmentManager();
+		    	Fragment currFrag = fm.findFragmentByTag(TAG);
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.hide(currFrag);
+				ft.commit();
+			}
+		} else {
+			mAlive = true;
+		}
 			
 		return mRootView;
 	}
@@ -111,7 +126,8 @@ public class StartStopsFragment extends TransitFragment {
 		
 		mData.selectStartStop(stopId, stopName, stopSeq);
 		
-		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
+		mCallback.performTransaction(TAG, FinalStopsFragment.TAG, new FinalStopsFragment(), true);
+//		replaceFragment(new FinalStopsFragment(), TAG, FinalStopsFragment.TAG);
 	}
 	
 	@Override

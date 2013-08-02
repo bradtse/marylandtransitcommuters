@@ -2,8 +2,11 @@ package com.marylandtransitcommuters.fragments;
 
 import java.util.Map;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -30,21 +33,36 @@ import com.marylandtransitcommuters.service.TransitService;
  */
 public class DirectionsFragment extends TransitFragment {
 	public static final String TAG = "direction";
-		
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView()");
-//		if (savedInstanceState == null) {
-			Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView() savedInstanceState is null");
-			mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
-										container, false);
-			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
-			text.setText(R.string.direction_header);
-			
-			super.onCreateView(inflater, container, savedInstanceState);
-//		}
 		
+		mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
+				container, false);
+		
+		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView() savedInstanceState is null");
+		
+		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
+		text.setText(R.string.direction_header);
+			
+		super.onCreateView(inflater, container, savedInstanceState);
+		
+		if (savedInstanceState != null) {
+			setupFragment();
+			mAlive = savedInstanceState.getBoolean("mAlive");
+			if (mAlive == false) {
+				FragmentManager fm = getFragmentManager();
+		    	Fragment currFrag = fm.findFragmentByTag(TAG);
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.hide(currFrag);
+				ft.commit();
+			}
+		} else {
+			mAlive = true;
+		}
+
 		return mRootView;
 	}
 	
@@ -111,7 +129,8 @@ public class DirectionsFragment extends TransitFragment {
 
 		mData.selectDirection(directionId, headSign);
 		
-		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
+		mCallback.performTransaction(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
+//		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
 	}
 	
 	@Override

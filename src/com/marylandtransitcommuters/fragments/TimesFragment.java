@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -26,13 +25,15 @@ public class TimesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
-//		if (savedInstanceState == null) {
-			mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
-			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_time);
-			text.setText(R.string.times_header);
+		mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
+		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_time);
+		text.setText(R.string.times_header);
+		
+		super.onCreateView(inflater, container, savedInstanceState);
 			
-			super.onCreateView(inflater, container, savedInstanceState);
-//		}
+		if (savedInstanceState != null) {
+			setupFragment();
+		}
 		
 		return mRootView;
 	}

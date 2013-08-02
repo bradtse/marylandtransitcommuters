@@ -4,6 +4,9 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -30,14 +33,26 @@ public class FinalStopsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onCreateView()");
-//		if (savedInstanceState == null) {
-			mRootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
-										container, false);
-			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_final);
-			text.setText(R.string.final_stop_header);
-			
-			super.onCreateView(inflater, container, savedInstanceState);
-//		}
+		mRootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
+									container, false);
+		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_final);
+		text.setText(R.string.final_stop_header);
+		
+		super.onCreateView(inflater, container, savedInstanceState);
+
+		if (savedInstanceState != null) {
+			setupFragment();
+			mAlive = savedInstanceState.getBoolean("mAlive");
+			if (mAlive == false) {
+				FragmentManager fm = getFragmentManager();
+		    	Fragment currFrag = fm.findFragmentByTag(TAG);
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.hide(currFrag);
+				ft.commit();
+			}
+		} else {
+			mAlive = true;
+		}
 		
 		return mRootView;
 	}
@@ -112,7 +127,9 @@ public class FinalStopsFragment extends TransitFragment {
 		
 		mData.setFinalStop(stopId, stopName);
 		
-		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
+		mCallback.performTransaction(TAG, TimesFragment.TAG, new TimesFragment(), true);
+		
+//		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
 	}
 	
 	@Override

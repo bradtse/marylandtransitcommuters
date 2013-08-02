@@ -1,5 +1,7 @@
 package com.marylandtransitcommuters;
 
+import java.util.Stack;
+
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,11 +24,13 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.marylandtransitcommuters.fragments.RoutesFragment;
+import com.marylandtransitcommuters.fragments.TransitFragment;
+import com.marylandtransitcommuters.fragments.TransitFragment.ReplaceFragmentListener;
 
 /**
  * The main activity
  */
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity implements ReplaceFragmentListener {
 	public static final String LOG_TAG = "BRAD";
 
 	private CharSequence mTitle;
@@ -35,6 +39,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	private Stack<String> fragTags;
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,8 @@ public class MainActivity extends SherlockFragmentActivity {
         
         if (savedInstanceState == null) {	
         	Log.d(LOG_TAG, "savedInstanceState is null");
-        	addRoutesFragment();
+        	fragTags = new Stack<String>();
+        	performTransaction(null, RoutesFragment.TAG, new RoutesFragment(), false);
         }
     }
     
@@ -73,16 +79,36 @@ public class MainActivity extends SherlockFragmentActivity {
         mDrawerToggle = getActionBarDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
-      
-    /**
-     *  Initialize the main frame layout with the routes fragment
-     */
-    private void addRoutesFragment() {
-		Fragment routesFragment = new RoutesFragment();
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(R.id.content_frame, routesFragment, RoutesFragment.TAG);
-		ft.commit();
+    
+    @Override
+    public void performTransaction(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack) {
+    	FragmentManager fm = getSupportFragmentManager();
+    	FragmentTransaction ft = fm.beginTransaction();
+//    	ft.replace(R.id.content_frame, mFragmentStack.push(frag));
+    	
+    	if (currentFragTag != null) {
+    		fragTags.push(currentFragTag);
+			Fragment currFrag = fm.findFragmentByTag(currentFragTag);
+	    	((TransitFragment) currFrag).setDead();
+    		ft.hide(currFrag);
+    	}
+    	((TransitFragment) newFrag).setAlive();
+		ft.add(R.id.content_frame, newFrag, newFragTag);
+		
+		if (addToBackStack == true) {
+			ft.addToBackStack(null);
+		}
+    	ft.commit();
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	if (fragTags.size() > 0) {
+    		FragmentManager fm = getSupportFragmentManager();
+    		TransitFragment frag = (TransitFragment) fm.findFragmentByTag(fragTags.pop());
+    		frag.setAlive();
+    	}
+    	super.onBackPressed();
     }
     
     /*
@@ -124,22 +150,18 @@ public class MainActivity extends SherlockFragmentActivity {
     	Log.d(LOG_TAG, "MainActvity onDestory()");
     	super.onDestroy();
     }
-    
-    @Override
-	public void onBackPressed() {
-    	Log.d(LOG_TAG, "Back button pressed");
-    	super.onBackPressed();
-    }
-    
+
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
+    	fragTags = (Stack<String>) inState.getSerializable("frags");
     	super.onRestoreInstanceState(inState);
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
+    	outState.putSerializable("frags", fragTags);
     	super.onSaveInstanceState(outState);
     }
    
@@ -257,4 +279,5 @@ public class MainActivity extends SherlockFragmentActivity {
 	    		return super.onOptionsItemSelected(item);
     	}
     }
+
 }

@@ -4,6 +4,9 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -29,20 +32,32 @@ import com.marylandtransitcommuters.service.TransitService;
  */
 public class RoutesFragment extends TransitFragment {
 	public static final String TAG = "routes";
-	    
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView()");
-//		if (savedInstanceState == null) {
-			Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView() savedInstanceState is null");
-			mRootView = inflater.inflate(R.layout.fragment_layout_routes, 
-										container, false);	
-			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_route);
-			text.setText(R.string.routes_header);
+		mRootView = inflater.inflate(R.layout.fragment_layout_routes, 
+									container, false);	
+		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_route);
+		text.setText(R.string.routes_header);
+		
+		super.onCreateView(inflater, container, savedInstanceState);
 			
-			super.onCreateView(inflater, container, savedInstanceState);
-//		}
+		if (savedInstanceState != null) {
+			setupFragment();
+			mAlive = savedInstanceState.getBoolean("mAlive");
+			if (mAlive == false) {
+				FragmentManager fm = getFragmentManager();
+		    	Fragment currFrag = fm.findFragmentByTag(TAG);
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.hide(currFrag);
+				ft.commit();
+			}
+		} else {
+			mAlive = true;
+		}
+		
 		return mRootView;
 	}
 	
@@ -104,7 +119,8 @@ public class RoutesFragment extends TransitFragment {
 		
 		mData.selectRoute(routeId, shortName, longName);
 			
-		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
+		mCallback.performTransaction(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
+//		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}
 	
 	@Override

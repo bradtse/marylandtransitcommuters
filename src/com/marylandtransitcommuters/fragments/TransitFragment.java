@@ -1,13 +1,12 @@
 package com.marylandtransitcommuters.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +39,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected TransitData mData;
 	protected SearchView mSearchView;
 	protected CustomSimpleAdapter mAdapter;
+	protected boolean mAlive;
+	protected ReplaceFragmentListener mCallback;
 	private TransitReceiver mReceiver;
 	private ProgressDialog mProgDialog;
 	
@@ -48,14 +49,15 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 		
-//		if (savedInstanceState == null) {
+		mContext = getActivity();
+		mData = TransitData.getInstance();
+		createReceiver();
+		createProgressDialog();
+		
+		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
-			mContext = getActivity();
-			mData = TransitData.getInstance();
-			createReceiver();
-			createProgressDialog();
 			startIntentService();
-//		}
+		} 
 	}
 	
 	/**
@@ -86,6 +88,14 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		mContext.startService(intent);
 	}
 	
+	public void setAlive() {
+		mAlive = true;
+	}
+	
+	public void setDead() {
+		mAlive = false;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -106,6 +116,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected abstract void setupBreadcrumbs(); 
 	
 	@Override
+	public void onResume() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onResume()");
+		super.onResume();
+	}
+	
+	@Override
 	public void onStop() {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onStop()");
 		super.onStop();
@@ -121,6 +137,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onDestroy() {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestory()");
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean("mAlive", mAlive);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		// Ensures that the activity implements the interface
+		try {
+			mCallback = (ReplaceFragmentListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnDestoryListener");
+		}
+	}
+	
+	public interface ReplaceFragmentListener {
+		public void performTransaction(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack);
 	}
 	
 	@Override
@@ -163,7 +201,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/**
 	 * Sets up the fragment after the data comes back
 	 */
-	private void setupFragment() {
+	protected void setupFragment() {
 		Log.d(MainActivity.LOG_TAG, "Received data from server... setting up fragment");
 		mList.setOnItemClickListener(new ListItemClickListener());
 		setAdapter();
@@ -204,30 +242,4 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * @param position index of item selected
      */
     public abstract void selectItem(int position);
-    
-    /**
-     * Replaces the current fragment with the new one provided
-     * Uses hide() and add() instead of replace() in order to maintain state of the
-     * fragment that is replaced.
-     * @param newFragment the new fragment that will replace the current one
-     * @param currFragTag the tag of the current fragment
-     * @param newFragTag the tag of the new fragment
-     * FIXME I think this is causing a memory leak
-     */
-    public void replaceFragment(Fragment newFragment, String currFragTag, String newFragTag) {
-    	Log.d(MainActivity.LOG_TAG, "Replacing " + currFragTag + " with " + newFragTag);
-    	FragmentManager fm = getFragmentManager();
-    	Fragment currFrag = fm.findFragmentByTag(currFragTag);
-    	
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
-							   R.animator.slide_in_left, R.animator.slide_out_right);
-				
-		ft.hide(currFrag);
-		ft.add(R.id.content_frame, newFragment, newFragTag);
-	
-		
-		ft.addToBackStack(null);
-		ft.commit();
-    }
 }
