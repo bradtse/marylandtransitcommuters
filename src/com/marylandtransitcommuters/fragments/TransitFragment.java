@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,8 +52,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
 			mContext = getActivity();
 			mData = TransitData.getInstance();
-			setupReceiver();
-			setupProgressDialog();
+			createReceiver();
+			createProgressDialog();
 			startIntentService();
 //		}
 	}
@@ -59,7 +61,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/**
 	 * Sets up the callback receiver
 	 */
-	private void setupReceiver() {
+	private void createReceiver() {
 		mReceiver = new TransitReceiver(new Handler());
 		mReceiver.setReceiver(this);
 	}
@@ -67,7 +69,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/**
 	 * Sets up the progress dialog
 	 */
-	private void setupProgressDialog() {
+	private void createProgressDialog() {
 		mProgDialog = new ProgressDialog(mContext);
 		mProgDialog.setTitle("Retrieving data from server");
 		mProgDialog.setMessage("Please wait");
@@ -82,6 +84,14 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 		setIntentServiceType(intent);
 		mContext.startService(intent);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
+		setupBreadcrumbs();
+		return null;
 	}
 	
 	/**
@@ -112,7 +122,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestory()");
 		super.onDestroy();
 	}
-
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

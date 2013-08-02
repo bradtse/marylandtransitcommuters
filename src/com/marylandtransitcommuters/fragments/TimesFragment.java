@@ -31,8 +31,7 @@ public class TimesFragment extends TransitFragment {
 			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_time);
 			text.setText(R.string.times_header);
 			
-			mList = (ListView) mRootView.findViewById(R.id.fragment_list);
-			setupBreadcrumbs();
+			super.onCreateView(inflater, container, savedInstanceState);
 //		}
 		
 		return mRootView;

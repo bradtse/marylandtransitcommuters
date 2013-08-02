@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -37,8 +36,7 @@ public class StartStopsFragment extends TransitFragment {
 			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_start);
 			text.setText(R.string.start_stop_header);
 			
-			mList = (ListView) mRootView.findViewById(R.id.fragment_list);
-			setupBreadcrumbs();
+			super.onCreateView(inflater, container, savedInstanceState);
 //		}
 			
 		return mRootView;
