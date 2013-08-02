@@ -50,8 +50,18 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
 			mContext = getActivity();
 			mData = TransitData.getInstance();
+			setupReceiver();
 			setupProgressDialog();
+			startIntentService();
 //		}
+	}
+	
+	/**
+	 * Sets up the callback receiver
+	 */
+	private void setupReceiver() {
+		mReceiver = new TransitReceiver(new Handler());
+		mReceiver.setReceiver(this);
 	}
 	
 	/**
@@ -62,6 +72,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		mProgDialog.setTitle("Retrieving data from server");
 		mProgDialog.setMessage("Please wait");
 	}
+	
+	/**
+	 * Starts the new intent service 
+	 */
+	private void startIntentService() {
+		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
+		Intent intent  = new Intent(mContext, TransitService.class);
+		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
+		setIntentServiceType(intent);
+		mContext.startService(intent);
+	}
+	
+	/**
+	 * Add the appropriate service type to the intent 
+	 * @param intent the intent to add the service type to
+	 */
+	protected abstract void setIntentServiceType(Intent intent);
+	
+	/**
+	 * Sets up the TextViews that contain the previous fragment's selections
+	 */
+	protected abstract void setupBreadcrumbs(); 
 	
 	@Override
 	public void onStop() {
@@ -81,49 +113,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		super.onDestroy();
 	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated()");
-		super.onActivityCreated(savedInstanceState);
-	
-//		if (savedInstanceState == null) {
-			Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated() savedInstanceState is null");
-			mList = (ListView) mRootView.findViewById(R.id.fragment_list);
-			setupBreadcrumbs();
-			setupReceiver();
-			startIntentService();
-//		} 
-	}
-	
-	/**
-	 * Sets up the TextViews that contain the previous fragment's selections
-	 */
-	protected abstract void setupBreadcrumbs(); 
-	
-	/**
-	 * Sets up the callback receiver
-	 */
-	private void setupReceiver() {
-		mReceiver = new TransitReceiver(new Handler());
-		mReceiver.setReceiver(this);
-	}
-	
-	/**
-	 * Starts the new intent service 
-	 */
-	private void startIntentService() {
-		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
-		Intent intent  = new Intent(mContext, TransitService.class);
-		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
-		setIntentServiceType(intent);
-		mContext.startService(intent);
-	}
-	
-	/**
-	 * Add the appropriate service type to the intent 
-	 * @param intent the intent to add the service type to
-	 */
-	protected abstract void setIntentServiceType(Intent intent);
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
