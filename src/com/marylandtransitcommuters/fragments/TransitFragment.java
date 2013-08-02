@@ -32,36 +32,35 @@ import com.marylandtransitcommuters.service.TransitService;
  * Parent class for each fragment
  */
 public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver	{
-	protected Context context;
-	protected View rootView;
+	protected Context mContext;
+	protected View mRootView;
 	protected ListView mList;
-	protected TransitData data;
-	protected SearchView search;
-	protected CustomSimpleAdapter adapter;
-	private boolean alive = false;
+	protected TransitData mData;
+	protected SearchView mSearchView;
+	protected CustomSimpleAdapter mAdapter;
 	private TransitReceiver mReceiver;
-	private ProgressDialog progressDialog;
+	private ProgressDialog mProgDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 		
-		if (savedInstanceState == null) {
+//		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
-			context = getActivity();
-			data = TransitData.getInstance();
+			mContext = getActivity();
+			mData = TransitData.getInstance();
 			setupProgressDialog();
-		}
+//		}
 	}
 	
 	/**
 	 * Sets up the progress dialog
 	 */
 	private void setupProgressDialog() {
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setTitle("Retrieving data from server");
-		progressDialog.setMessage("Please wait");
+		mProgDialog = new ProgressDialog(mContext);
+		mProgDialog.setTitle("Retrieving data from server");
+		mProgDialog.setMessage("Please wait");
 	}
 	
 	@Override
@@ -81,19 +80,25 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestory()");
 		super.onDestroy();
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
 	
-		if (savedInstanceState == null) {
+//		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onActivityCreated() savedInstanceState is null");
-			mList = (ListView) rootView.findViewById(R.id.fragment_list);
+			mList = (ListView) mRootView.findViewById(R.id.fragment_list);
+			setupBreadcrumbs();
 			setupReceiver();
 			startIntentService();
-		} 
+//		} 
 	}
+	
+	/**
+	 * Sets up the TextViews that contain the previous fragment's selections
+	 */
+	protected abstract void setupBreadcrumbs(); 
 	
 	/**
 	 * Sets up the callback receiver
@@ -108,26 +113,26 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 */
 	private void startIntentService() {
 		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
-		Intent intent  = new Intent(context, TransitService.class);
+		Intent intent  = new Intent(mContext, TransitService.class);
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 		setIntentServiceType(intent);
-		context.startService(intent);
+		mContext.startService(intent);
 	}
 	
 	/**
 	 * Add the appropriate service type to the intent 
 	 * @param intent the intent to add the service type to
 	 */
-	public abstract void setIntentServiceType(Intent intent);
+	protected abstract void setIntentServiceType(Intent intent);
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Keeps a reference to the SearchView for subclasses to use
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		search = (SearchView) searchItem.getActionView();
+		mSearchView = (SearchView) searchItem.getActionView();
 		
 		// Sets up the SearchViews filter
-		search.setOnQueryTextListener(new OnQueryTextListener() {
+		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
@@ -136,7 +141,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				adapter.getFilter().filter(newText);
+				mAdapter.getFilter().filter(newText);
 				return false;
 			}
 		});
@@ -146,10 +151,10 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
 			case TransitService.START:
-				progressDialog.show();
+				mProgDialog.show();
 				break;
 			case TransitService.FINISH:
-				progressDialog.dismiss();
+				mProgDialog.dismiss();
 				setupFragment();
 				break;
 			default:
@@ -169,8 +174,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		setHasOptionsMenu(true); 
 		
 		// Adds the result count 
-		TextView text = (TextView) rootView.findViewById(R.id.result_count);
-		text.setText(String.valueOf(adapter.getCount()) + " results");
+		TextView text = (TextView) mRootView.findViewById(R.id.result_count);
+		text.setText(String.valueOf(mAdapter.getCount()) + " results");
 	}
 	
 	/**
@@ -193,7 +198,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * text and minimizing the soft keyboard.
      */
     public void resetSearchView() {
-    	search.setQuery("", false);
+    	mSearchView.setQuery("", false);
     }
     
     /**
@@ -214,7 +219,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
     public void replaceFragment(Fragment newFragment, String currFragTag, String newFragTag) {
     	Log.d(MainActivity.LOG_TAG, "Replacing " + currFragTag + " with " + newFragTag);
     	FragmentManager fm = getFragmentManager();
-    	Fragment newFrag = fm.findFragmentByTag(newFragTag);
     	Fragment currFrag = fm.findFragmentByTag(currFragTag);
     	
 		FragmentTransaction ft = fm.beginTransaction();

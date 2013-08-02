@@ -25,40 +25,30 @@ public class TimesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
-		if (savedInstanceState == null) {
-			rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
-			
-			setupBreadcrumbs();
-		}
+//		if (savedInstanceState == null) {
+			mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
+			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_time);
+			text.setText(R.string.times_header);
+//		}
 		
-		return rootView;
+		return mRootView;
 	}
 	
-	private void setupBreadcrumbs() {
-		String route = data.getRouteShortName() + " " + data.getRouteLongName();
-		String direction = data.getDirectionHeadsign();
-		String startStop = data.getStartStopName();
-		String finalStop = data.getFinalStopName();
+	protected void setupBreadcrumbs() {
+		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
+		String direction = mData.getDirectionHeadsign();
+		String startStop = mData.getStartStopName();
+		String finalStop = mData.getFinalStopName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
-		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction_data);
-		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop_data);
-		TextView finalText = (TextView) rootView.findViewById(R.id.info_final_stop_data);
+		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
+		TextView dirText = (TextView) mRootView.findViewById(R.id.info_direction_data);
+		TextView startText = (TextView) mRootView.findViewById(R.id.info_start_stop_data);
+		TextView finalText = (TextView) mRootView.findViewById(R.id.info_final_stop_data);
 
 		routeText.setText(route);
 		dirText.setText(direction);
 		startText.setText(startStop);
 		finalText.setText(finalStop);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "TimesFragment onActivityCreated()");
-		if (savedInstanceState == null) {
-			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_time);
-			text.setText(R.string.times_header);
-		}
-		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override
@@ -68,9 +58,9 @@ public class TimesFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		adapter = new CustomSimpleAdapter(
-					context, 
-					data.getTimesList(),
+		mAdapter = new CustomSimpleAdapter(
+					mContext, 
+					mData.getTimesList(),
 					R.layout.times_list_row,
 					new String[] {Time.ARRIVAL_TIME},
 					new int[] {R.id.time_list_item}
@@ -83,16 +73,16 @@ public class TimesFragment extends TransitFragment {
 			}
 		};
 		
-		mList.setAdapter(adapter);
-		mList.setEmptyView((TextView) rootView.findViewById(R.id.empty));
+		mList.setAdapter(mAdapter);
+		mList.setEmptyView((TextView) mRootView.findViewById(R.id.empty));
 	}
 	
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		search = (SearchView) searchItem.getActionView();
+		mSearchView = (SearchView) searchItem.getActionView();
 		
-		search.setVisibility(View.GONE);
+		mSearchView.setVisibility(View.GONE);
 	}
 
 	@Override

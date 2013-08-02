@@ -34,22 +34,14 @@ public class RoutesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView()");
-		if (savedInstanceState == null) {
+//		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView() savedInstanceState is null");
-			rootView = inflater.inflate(R.layout.fragment_layout_routes, 
+			mRootView = inflater.inflate(R.layout.fragment_layout_routes, 
 										container, false);	
-		}
-		return rootView;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "RoutesFragment onActivityCreated()");
-		if (savedInstanceState == null) {
-			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_route);
+			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_route);
 			text.setText(R.string.routes_header);
-		}
-		super.onActivityCreated(savedInstanceState);
+//		}
+		return mRootView;
 	}
 	
 	@Override
@@ -59,9 +51,9 @@ public class RoutesFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		adapter = new CustomSimpleAdapter(
-				context, 
-				data.getRoutesList(),
+		mAdapter = new CustomSimpleAdapter(
+				mContext, 
+				mData.getRoutesList(),
 				R.layout.routes_list_row,
 				new String[] {Route.SHORT_NAME, Route.LONG_NAME},
 				new int[] {R.id.route_short_name, R.id.route_long_name}
@@ -74,7 +66,7 @@ public class RoutesFragment extends TransitFragment {
 				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
 				
 				@SuppressWarnings("unchecked")
-				Map<String, String> map = (Map<String, String>) adapter.getItem(position);
+				Map<String, String> map = (Map<String, String>) mAdapter.getItem(position);
 				String longName = map.get(Route.LONG_NAME);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -95,7 +87,7 @@ public class RoutesFragment extends TransitFragment {
 			}
 		};
 	
-		mList.setAdapter(adapter);
+		mList.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -103,12 +95,12 @@ public class RoutesFragment extends TransitFragment {
 //		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
+		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
 		String shortName = map.get(Route.SHORT_NAME);
 		String longName = map.get(Route.LONG_NAME);
 		
-		data.selectRoute(routeId, shortName, longName);
+		mData.selectRoute(routeId, shortName, longName);
 			
 		replaceFragment(new DirectionsFragment(), TAG, DirectionsFragment.TAG);
 	}
@@ -116,6 +108,11 @@ public class RoutesFragment extends TransitFragment {
 	@Override
 	public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		search.setQueryHint("Filter by route # or name");
+		mSearchView.setQueryHint("Filter by route # or name");
+	}
+
+	@Override
+	protected void setupBreadcrumbs() {
+		return;
 	}
 }

@@ -35,34 +35,23 @@ public class DirectionsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView()");
-		if (savedInstanceState == null) {
+//		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView() savedInstanceState is null");
-			rootView = inflater.inflate(R.layout.fragment_layout_directions, 
+			mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
 										container, false);
-	
-			setupBreadcrumbs();
-		}
+			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
+			text.setText(R.string.direction_header);
+//		}
 		
-		return rootView;
+		return mRootView;
 	}
 	
-	private void setupBreadcrumbs() {
-		String route = data.getRouteShortName() + " " + data.getRouteLongName();
+	protected void setupBreadcrumbs() {
+		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
+		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
 
 		routeText.setText(route);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onActivityCreated()");
-		if (savedInstanceState == null) {
-			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_direction);
-			text.setText(R.string.direction_header);
-		}
-				
-		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override
@@ -72,9 +61,9 @@ public class DirectionsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		adapter = new CustomSimpleAdapter(
-				context, 
-				data.getDirectionsList(),
+		mAdapter = new CustomSimpleAdapter(
+				mContext, 
+				mData.getDirectionsList(),
 				R.layout.fragment_list_row, 
 				new String[] {Direction.TRIP_HEADSIGN},
 				new int[] {R.id.transit_list_item}
@@ -86,7 +75,7 @@ public class DirectionsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				
-				Map<String, String> map = (Map<String, String>) adapter.getItem(pos);
+				Map<String, String> map = (Map<String, String>) mAdapter.getItem(pos);
 				String headsign = map.get(Direction.TRIP_HEADSIGN);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -108,17 +97,17 @@ public class DirectionsFragment extends TransitFragment {
 			}
 		};
 		
-		mList.setAdapter(adapter);
+		mList.setAdapter(mAdapter);
 	}
 	
 	public void selectItem(int index) {
 //		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
-		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
+		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);
 		String headSign = map.get(Direction.TRIP_HEADSIGN);
 
-		data.selectDirection(directionId, headSign);
+		mData.selectDirection(directionId, headSign);
 		
 		replaceFragment(new StartStopsFragment(), TAG, StartStopsFragment.TAG);
 	}
@@ -126,6 +115,6 @@ public class DirectionsFragment extends TransitFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		search.setQueryHint("Filter by direction name");	
+		mSearchView.setQueryHint("Filter by direction name");	
 	}
 }

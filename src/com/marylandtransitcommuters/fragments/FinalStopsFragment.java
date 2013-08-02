@@ -30,39 +30,28 @@ public class FinalStopsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onCreateView()");
-		if (savedInstanceState == null) {
-			rootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
+//		if (savedInstanceState == null) {
+			mRootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
 										container, false);
-	
-			setupInfoTextViews();
-		}
+			TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_final);
+			text.setText(R.string.final_stop_header);
+//		}
 		
-		return rootView;
+		return mRootView;
 	}
 	
-	private void setupInfoTextViews() {
-		String route = data.getRouteShortName() + " " + data.getRouteLongName();
-		String direction = data.getDirectionHeadsign();
-		String startStop = data.getStartStopName();
+	protected void setupBreadcrumbs() {
+		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
+		String direction = mData.getDirectionHeadsign();
+		String startStop = mData.getStartStopName();
 		
-		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);
-		TextView dirText = (TextView) rootView.findViewById(R.id.info_direction_data);
-		TextView startText = (TextView) rootView.findViewById(R.id.info_start_stop_data);
+		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
+		TextView dirText = (TextView) mRootView.findViewById(R.id.info_direction_data);
+		TextView startText = (TextView) mRootView.findViewById(R.id.info_start_stop_data);
 
 		routeText.setText(route);
 		dirText.setText(direction);
 		startText.setText(startStop);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onActivityCreated()");
-		if (savedInstanceState == null) {
-			TextView text = (TextView) rootView.findViewById(R.id.fragment_header_final);
-			text.setText(R.string.final_stop_header);
-		}
-		
-		super.onActivityCreated(savedInstanceState);
 	}
 	
 	@Override
@@ -72,9 +61,9 @@ public class FinalStopsFragment extends TransitFragment {
 
 	@Override
 	public void setAdapter() {
-		adapter = new CustomSimpleAdapter(
-					context, 
-					data.getFinalStopsList(),
+		mAdapter = new CustomSimpleAdapter(
+					mContext, 
+					mData.getFinalStopsList(),
 					R.layout.fragment_list_row, 
 					new String[] {FinalStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
@@ -86,7 +75,7 @@ public class FinalStopsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 
-				Map<String, String> map = (Map<String, String>) adapter.getItem(pos);
+				Map<String, String> map = (Map<String, String>) mAdapter.getItem(pos);
 				String stopName = map.get(FinalStop.STOP_NAME);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -108,18 +97,18 @@ public class FinalStopsFragment extends TransitFragment {
 			}
 		};
 		
-		mList.setAdapter(adapter);
+		mList.setAdapter(mAdapter);
 	}
 
 	@Override
 	public void selectItem(int index) {
 //		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
 		
-		Map<String, String> map = (Map<String, String>) adapter.getItem(index);
+		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);
 		
-		data.setFinalStop(stopId, stopName);
+		mData.setFinalStop(stopId, stopName);
 		
 		replaceFragment(new TimesFragment(), TAG, TimesFragment.TAG);
 	}
@@ -127,6 +116,6 @@ public class FinalStopsFragment extends TransitFragment {
 	@Override
 	public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		search.setQueryHint("Filter by stop name");
+		mSearchView.setQueryHint("Filter by stop name");
 	}
 }
