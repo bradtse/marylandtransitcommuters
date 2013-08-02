@@ -114,31 +114,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 * Sets up the TextViews that contain the previous fragment's selections
 	 */
 	protected abstract void setupBreadcrumbs(); 
-	
-	@Override
-	public void onResume() {
-		Log.d(MainActivity.LOG_TAG, "TransitFragment onResume()");
-		super.onResume();
-	}
-	
-	@Override
-	public void onStop() {
-		Log.d(MainActivity.LOG_TAG, "TransitFragment onStop()");
-		super.onStop();
-	}
-	
-	@Override
-	public void onDestroyView() {
-		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestoryView()");
-		super.onDestroyView();
-	}
-	
-	@Override
-	public void onDestroy() {
-		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestory()");
-		super.onDestroy();
-	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);

@@ -110,46 +110,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	}
     	super.onBackPressed();
     }
-    
-    /*
-     * Overrides for debugging the activity lifecycle
-     */
-    
-    @Override
-    protected void onRestart() {
-    	Log.d(LOG_TAG, "MainActivity onRestart()");
-    	super.onRestart();
-    }
-    
-    @Override
-    protected void onStart() {
-    	Log.d(LOG_TAG, "MainActivity onStart()");
-    	super.onStart();
-    }
-    
-    @Override
-    protected void onResume() {
-    	Log.d(LOG_TAG, "MainActivity onResume()");
-    	super.onResume();
-    }
-    
-    @Override
-    protected void onPause() {
-    	Log.d(LOG_TAG, "MainActivity onPause()");
-    	super.onPause();
-    }
-    
-    @Override
-    protected void onStop() {
-    	Log.d(LOG_TAG, "MainActivity onStop()");
-    	super.onStop();
-    }
-    
-    @Override
-    protected void onDestroy() {
-    	Log.d(LOG_TAG, "MainActvity onDestory()");
-    	super.onDestroy();
-    }
 
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
