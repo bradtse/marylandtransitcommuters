@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.marylandtransitcommuters.MainActivity;
-import com.marylandtransitcommuters.database.TransitContract.Routes;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,6 +14,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
+
+import com.marylandtransitcommuters.MainActivity;
 
 /**
  * Rather than implementing the SQLiteOpenHelper inside of TransitProvider,

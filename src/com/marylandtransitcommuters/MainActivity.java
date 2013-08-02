@@ -1,6 +1,5 @@
 package com.marylandtransitcommuters;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,23 +35,12 @@ public class MainActivity extends SherlockFragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		Log.d(LOG_TAG, "onNewIntent called");
-		finish();
-		overridePendingTransition(0, 0);
-		
-		Intent i = new Intent(this, MainActivity.class);
-		i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		startActivity(i);
-	}
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(LOG_TAG, "MainActivity onCreate()");
     	super.onCreate(savedInstanceState);
-    	
+    	    	
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
@@ -67,6 +55,39 @@ public class MainActivity extends SherlockFragmentActivity {
         	addRoutesFragment();
         }
     }
+    
+    /**
+     * Takes care of setting up all the elements needed for a properly functioning
+     * navigation drawer
+     */
+    private void setupNavDrawer() {
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
+        												mDrawerItems));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        // Enable Action Bar app icon to toggle nav drawer
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+               
+        mDrawerToggle = getActionBarDrawerToggle();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+      
+    /**
+     *  Initialize the main frame layout with the routes fragment
+     */
+    private void addRoutesFragment() {
+		Fragment routesFragment = new RoutesFragment();
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.add(R.id.content_frame, routesFragment, RoutesFragment.TAG);
+		ft.commit();
+    }
+    
+    /*
+     * Overrides for debugging the activity lifecycle
+     */
     
     @Override
     protected void onRestart() {
@@ -119,28 +140,9 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
-//    	super.onSaveInstanceState(outState);
-    	return;
+    	super.onSaveInstanceState(outState);
     }
-    
-    /**
-     * Takes care of setting up all the elements needed for a properly functioning
-     * navigation drawer
-     */
-    private void setupNavDrawer() {
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
-        												mDrawerItems));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        
-        // Enable Action Bar app icon to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-               
-        mDrawerToggle = getActionBarDrawerToggle();
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
+   
     /**
      * The click listener for the ListView in the nav drawer 
      */
@@ -186,21 +188,12 @@ public class MainActivity extends SherlockFragmentActivity {
     	mTitle = title;
     	getSupportActionBar().setTitle(mTitle);
     }
-  
-    /**
-     *  Initialize the main frame layout with the routes fragment
-     */
-    private void addRoutesFragment() {
-		Fragment routesFragment = new RoutesFragment();
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(R.id.content_frame, routesFragment, RoutesFragment.TAG);
-		ft.commit();
-    }
+
  
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
     	super.onPostCreate(savedInstanceState);
+    	
     	// Sync the toggle state after onRestoreInstanceState has occurred
     	mDrawerToggle.syncState();	
     }
@@ -215,13 +208,14 @@ public class MainActivity extends SherlockFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
         
+        // Get the SearchView menu item
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		SearchView search = (SearchView) searchItem.getActionView();
 		
-		// Forces the SearchView to stay open
+		// Forces the SearchView to stay open no matter what
 		search.setIconifiedByDefault(false);
 		
-		// Sets the text color for the SearchView
+		// I want white text for the SearchView rather than the default grey
 		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);
 		searchText.setHintTextColor(Color.WHITE);
 		searchText.setTextColor(Color.WHITE);
@@ -229,9 +223,13 @@ public class MainActivity extends SherlockFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
     
-    /* Callback function when invalidateOptionsMenu() is called */
+    /* 
+     * Callback function when invalidateOptionsMenu() is called 
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+    	
+    	// Hides the SearchView when the drawer is open
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
     	menu.findItem(R.id.menu_search).setVisible(!drawerOpen);
     	return super.onPrepareOptionsMenu(menu);

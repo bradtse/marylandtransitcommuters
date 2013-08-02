@@ -6,11 +6,6 @@ import java.util.Map;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +18,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.marylandtransitcommuters.R;
-import com.marylandtransitcommuters.dataobjects.Route;
 
 
 /**

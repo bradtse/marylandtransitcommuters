@@ -114,6 +114,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		context.startService(intent);
 	}
 	
+	/**
+	 * Add the appropriate service type to the intent 
+	 * @param intent the intent to add the service type to
+	 */
+	public abstract void setIntentServiceType(Intent intent);
+	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Keeps a reference to the SearchView for subclasses to use
@@ -135,13 +141,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			}
 		});
 	}
-	
-	/**
-	 * Add the appropriate service type to the intent 
-	 * @param intent the intent to add the service type to
-	 */
-	public abstract void setIntentServiceType(Intent intent);
-	
+
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {

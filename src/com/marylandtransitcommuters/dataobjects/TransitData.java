@@ -13,7 +13,7 @@ import com.marylandtransitcommuters.service.TransitService;
 /**
  * Singleton containing info on the current search being done. Also contains
  * a bunch of methods that allow you to add/get data. Acts as the interface
- * to the each of the objects.
+ * to the each of the objects containing data from the server.
  */
 public final class TransitData {
 	private static TransitData instance;

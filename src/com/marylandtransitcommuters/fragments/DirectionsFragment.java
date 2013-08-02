@@ -40,13 +40,13 @@ public class DirectionsFragment extends TransitFragment {
 			rootView = inflater.inflate(R.layout.fragment_layout_directions, 
 										container, false);
 	
-			setupInfoTextViews();
+			setupBreadcrumbs();
 		}
 		
 		return rootView;
 	}
 	
-	private void setupInfoTextViews() {
+	private void setupBreadcrumbs() {
 		String route = data.getRouteShortName() + " " + data.getRouteLongName();
 		
 		TextView routeText = (TextView) rootView.findViewById(R.id.info_route_data);

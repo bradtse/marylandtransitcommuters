@@ -28,13 +28,13 @@ public class TimesFragment extends TransitFragment {
 		if (savedInstanceState == null) {
 			rootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
 			
-			setupInfoTextViews();
+			setupBreadcrumbs();
 		}
 		
 		return rootView;
 	}
 	
-	private void setupInfoTextViews() {
+	private void setupBreadcrumbs() {
 		String route = data.getRouteShortName() + " " + data.getRouteLongName();
 		String direction = data.getDirectionHeadsign();
 		String startStop = data.getStartStopName();
