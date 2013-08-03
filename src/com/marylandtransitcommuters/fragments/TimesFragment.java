@@ -26,9 +26,7 @@ public class TimesFragment extends TransitFragment {
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
 		mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
-		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_time);
-		text.setText(R.string.times_header);
-		
+
 		super.onCreateView(inflater, container, savedInstanceState);
 			
 		if (savedInstanceState != null) {

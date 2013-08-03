@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,8 +54,9 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        setupNavDrawer();   
+        setupNavigationDrawer();   
         
+        // Only instantiate route fragment if it hasn't already been done
         if (savedInstanceState == null) {	
         	Log.d(LOG_TAG, "savedInstanceState is null");
         	mFragTags = new ArrayDeque<String>();
@@ -66,7 +68,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Takes care of setting up all the elements needed for a properly functioning
      * navigation drawer
      */
-    private void setupNavDrawer() {
+    private void setupNavigationDrawer() {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
         												mDrawerItems));
@@ -78,6 +80,9 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
                
         mDrawerToggle = getActionBarDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        
+        // Start with the drawer open
+//        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
     
     @Override
@@ -101,6 +106,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		if (addToBackStack == true) {
 			ft.addToBackStack(null);
 		}
+		
     	ft.commit();
     }
     
@@ -183,8 +189,11 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Handles when nav drawer item is selected
      */
     private void selectItem(int position) {
+    	// Indicates the item has been selected
     	mDrawerList.setItemChecked(position, true);
+    	// Then set the action bar title to the item that was selected
     	setTitle(mDrawerItems[position]);
+    	// Then close the drawer
     	mDrawerLayout.closeDrawer(mDrawerList);
     }
     
@@ -235,9 +244,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         // Get the SearchView menu item
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		SearchView search = (SearchView) searchItem.getActionView();
-		
-		// Forces the SearchView to stay open no matter what
-		search.setIconifiedByDefault(false);
 		
 		// I want white text for the SearchView rather than the default grey
 		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);

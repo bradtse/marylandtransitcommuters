@@ -4,9 +4,6 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -35,20 +32,14 @@ public class StartStopsFragment extends TransitFragment {
 		Log.d(MainActivity.LOG_TAG, "StartStopsFragment onCreateView()");
 		mRootView = inflater.inflate(R.layout.fragment_layout_startstops, 
 									container, false);
-		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_start);
-		text.setText(R.string.start_stop_header);
-		
+
 		super.onCreateView(inflater, container, savedInstanceState);
 			
 		if (savedInstanceState != null) {
 			setupFragment();
 			mVisible = savedInstanceState.getBoolean("mAlive");
 			if (mVisible == false) {
-				FragmentManager fm = getFragmentManager();
-		    	Fragment currFrag = fm.findFragmentByTag(TAG);
-				FragmentTransaction ft = fm.beginTransaction();
-				ft.hide(currFrag);
-				ft.commit();
+				hideFragment(TAG);
 			}
 		}
 		

@@ -106,8 +106,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		FragmentManager fm = getFragmentManager();
     	Fragment currFrag = fm.findFragmentByTag(fragTag);
 		FragmentTransaction ft = fm.beginTransaction();
-		ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
-				   R.animator.slide_in_left, R.animator.slide_out_right);
 		ft.hide(currFrag);
 		ft.commit();
 	}
@@ -215,6 +213,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			Log.d(MainActivity.LOG_TAG, "Item " + position + " was selected...");
 			// Clears the SearchView text
 	    	mSearchView.setQuery("", false);
+	    	mSearchView.clearFocus();
 			selectItem(position);
 		}
     }

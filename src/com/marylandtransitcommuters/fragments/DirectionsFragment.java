@@ -40,11 +40,7 @@ public class DirectionsFragment extends TransitFragment {
 				container, false);
 		
 		super.onCreateView(inflater, container, savedInstanceState);
-		
-		// Set the fragment header
-		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_direction);
-		text.setText(R.string.direction_header);
-			
+	
 		// Only setup fragment here if it was previously destroyed and saved
 		if (savedInstanceState != null) {
 			setupFragment();

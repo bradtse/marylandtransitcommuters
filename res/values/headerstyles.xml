@@ -56,26 +56,31 @@
       
     <!-- Route Header style -->
     <style name="RouteHeader" parent="@style/HeaderStyle" >
+        <item name="android:text">@string/routes_header</item>
         <item name="android:textColor">@color/route</item>
     </style>
     
     <!-- Direction Header style -->
     <style name="DirectionHeader" parent="@style/HeaderStyle" >
+        <item name="android:text">@string/direction_header</item>
         <item name="android:textColor">@color/direction</item>
     </style>
     
     <!-- Start Stop Header style -->
     <style name="StartStopHeader" parent="@style/HeaderStyle" >
+        <item name="android:text">@string/start_stop_header</item>
         <item name="android:textColor">@color/startstop</item>
     </style>
     
     <!-- Final Stop Header style -->
     <style name="FinalStopHeader" parent="@style/HeaderStyle" >
+        <item name="android:text">@string/final_stop_header</item>
         <item name="android:textColor">@color/finalstop</item>
     </style>
     
     <!-- Time Header Style -->
     <style name="TimeHeader" parent="@style/HeaderStyle" >
+        <item name="android:text">@string/times_header</item>
         <item name="android:textColor">@color/time</item>
     </style>
     

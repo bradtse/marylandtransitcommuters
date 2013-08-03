@@ -41,9 +41,6 @@ public class RoutesFragment extends TransitFragment {
 									container, false);	
 		
 		super.onCreateView(inflater, container, savedInstanceState);	
-
-		TextView text = (TextView) mRootView.findViewById(R.id.fragment_header_route);
-		text.setText(R.string.routes_header);
 				
 		if (savedInstanceState != null) {
 			setupFragment();
