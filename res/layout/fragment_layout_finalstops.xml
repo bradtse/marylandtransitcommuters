@@ -30,7 +30,9 @@
     <View
         android:id="@+id/header_border_2"
         style="@style/HeaderBorder" />
-    
+
+    <include layout="@layout/progress_layout" />
+
     <include layout="@layout/fragment_listview" />
  
 </LinearLayout>

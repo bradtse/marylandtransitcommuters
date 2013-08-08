@@ -42,8 +42,6 @@ public class TransitService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		final ResultReceiver mReceiver = intent.getParcelableExtra(TransitReceiver.RECEIVER);
 		
-		mReceiver.send(START, Bundle.EMPTY);
-		
 		serviceHelper((DataType) intent.getSerializableExtra(DataType.KEY));
 		
 		mReceiver.send(FINISH, Bundle.EMPTY);

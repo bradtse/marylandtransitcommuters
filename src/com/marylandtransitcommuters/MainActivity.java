@@ -149,6 +149,14 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	Log.d(LOG_TAG, "MainActvity onDestory()");
     	super.onDestroy();
     }
+    
+    @Override
+    public void onBackPressed() {
+    	if (mFragTags.size() > 0) {
+    		mFragTags.pop();
+    	}
+    	super.onBackPressed();
+    }
 
     @Override
     protected void onRestoreInstanceState(Bundle inState) {
@@ -157,8 +165,14 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	// Restores my stack of fragment tags
     	mFragTags = (ArrayDeque<String>) inState.getSerializable("frags");
 
-    	// Hides each fragment on the back stack since for some reason they
-    	// automatically unhide themselves
+    	hideFragmentsOnBackStack();
+    }
+    
+	/* 
+	 * Hides each fragment on the back stack since for some reason they
+	 * automatically unhide themselves
+	 */
+    private void hideFragmentsOnBackStack() {
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
         Iterator<String> it = mFragTags.iterator();

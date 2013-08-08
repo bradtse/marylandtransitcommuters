@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -42,6 +43,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected ReplaceFragmentListener mCallback;
 	private TransitReceiver mReceiver;
 	private ProgressDialog mProgDialog;
+	private RelativeLayout mProgressLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,10 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
+		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
+		if (savedInstanceState != null) {
+			mProgressLayout.setVisibility(View.GONE);
+		}
 		setupBreadcrumbs();
 		return null;
 	}
@@ -161,11 +167,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
-			case TransitService.START:
-				mProgDialog.show();
-				break;
 			case TransitService.FINISH:
-				mProgDialog.dismiss();
+				mProgressLayout.setVisibility(View.GONE);
 				setupFragment();
 				break;
 			default:

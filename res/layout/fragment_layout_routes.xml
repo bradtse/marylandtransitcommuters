@@ -17,6 +17,8 @@
         android:id="@+id/header_border_1"
         style="@style/HeaderBorder" />
     
+    <include layout="@layout/progress_layout" />
+
     <include layout="@layout/fragment_listview" />
  
 </LinearLayout>
