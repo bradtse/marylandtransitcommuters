@@ -22,6 +22,7 @@
     <string name="direction">Direction:\u0020</string>
     <string name="finalstop">Final Stop:\u0020</string>
     <string name="startstop">Start stop:\u0020</string>
+    <string name="favorite_desc">Add this route to your favorites</string>
         
     <!-- Items added to nav drawer -->
     <string-array name="items">

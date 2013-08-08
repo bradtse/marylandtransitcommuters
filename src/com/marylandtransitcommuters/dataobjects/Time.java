@@ -55,9 +55,9 @@ public class Time {
 				String secs = json.getString(ARRIVAL_TIME_SECONDS);
 				int arrival = Integer.parseInt(secs);
 				
-//				if (arrival < currTimeSecs) {
-//					continue;
-//				}
+				if (arrival < current) {
+					continue;
+				}
 				
 				String result = getBusTime(arrival, current);
 				map.put(ARRIVAL_TIME, result);

@@ -92,7 +92,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 */
 	private void startIntentService() {
 		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
-		Intent intent  = new Intent(mContext, TransitService.class);
+		Intent intent = new Intent(mContext, TransitService.class);
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 		setIntentServiceType(intent);
 		mContext.startService(intent);

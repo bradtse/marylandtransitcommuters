@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -240,7 +239,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
-        
+       
         // Get the SearchView menu item
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		SearchView search = (SearchView) searchItem.getActionView();
