@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -75,10 +76,24 @@ public class TimesFragment extends TransitFragment {
 	
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.time, menu);
+		
+		// Hide the SearchView
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		mSearchView = (SearchView) searchItem.getActionView();
+		mSearchView = (SearchView) searchItem.getActionView();    
 		mSearchView.setVisibility(View.GONE);
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    		case R.id.favorite:
+	    		Toast.makeText(mContext, "Favorites!", Toast.LENGTH_SHORT).show();
+	    		return true;
+	    	default:
+	    		return super.onOptionsItemSelected(item);
+    	}
+    }
 
 	@Override
 	public void selectItem(int position) {
