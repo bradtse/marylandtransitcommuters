@@ -41,11 +41,8 @@ public class RoutesFragment extends TransitFragment {
 				
 		if (savedInstanceState != null) {
 			setupFragment();
-			mVisible = savedInstanceState.getBoolean("mAlive");
-			if (mVisible == false) {
-				hideFragment(TAG);
-			}
 		} 
+
 		return mRootView;
 	}
 	
@@ -97,8 +94,6 @@ public class RoutesFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
-//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
-		
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String routeId = map.get(Route.ROUTE_ID);
@@ -107,7 +102,7 @@ public class RoutesFragment extends TransitFragment {
 		
 		mData.selectRoute(routeId, shortName, longName);
 			
-		mCallback.performTransaction(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
+		mCallback.showFragment(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
 	}
 	
 	@Override

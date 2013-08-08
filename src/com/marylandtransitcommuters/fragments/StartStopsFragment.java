@@ -37,10 +37,6 @@ public class StartStopsFragment extends TransitFragment {
 			
 		if (savedInstanceState != null) {
 			setupFragment();
-			mVisible = savedInstanceState.getBoolean("mAlive");
-			if (mVisible == false) {
-				hideFragment(TAG);
-			}
 		}
 		
 		return mRootView;
@@ -113,7 +109,7 @@ public class StartStopsFragment extends TransitFragment {
 		
 		mData.selectStartStop(stopId, stopName, stopSeq);
 		
-		mCallback.performTransaction(TAG, FinalStopsFragment.TAG, new FinalStopsFragment(), true);
+		mCallback.showFragment(TAG, FinalStopsFragment.TAG, new FinalStopsFragment(), true);
 	}
 	
 	@Override

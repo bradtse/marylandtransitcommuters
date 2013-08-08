@@ -44,12 +44,8 @@ public class DirectionsFragment extends TransitFragment {
 		// Only setup fragment here if it was previously destroyed and saved
 		if (savedInstanceState != null) {
 			setupFragment();
-			mVisible = savedInstanceState.getBoolean("mAlive");
-			// Hide fragment if it is supposed to be invisible
-			if (mVisible == false) {
-				hideFragment(TAG);
-			}
 		}
+
 		return mRootView;
 	}
 	
@@ -112,7 +108,7 @@ public class DirectionsFragment extends TransitFragment {
 
 		mData.selectDirection(directionId, headSign);
 		
-		mCallback.performTransaction(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
+		mCallback.showFragment(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
 	}
 	
 	@Override

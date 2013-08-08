@@ -1,6 +1,7 @@
 package com.marylandtransitcommuters;
 
 import java.util.ArrayDeque;
+import java.util.Iterator;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -48,6 +49,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	    	
         setContentView(R.layout.activity_main);
 
+        // Stores a bunch of resources that we'll need later
         mTitle = mDrawerTitle = getTitle();
         mDrawerItems = getResources().getStringArray(R.array.items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -55,12 +57,12 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 
         setupNavigationDrawer();   
         
-        // Only instantiate route fragment if it hasn't already been done
+        // Only instantiate route fragment if it doesn't already exist
         if (savedInstanceState == null) {	
         	Log.d(LOG_TAG, "savedInstanceState is null");
         	mFragTags = new ArrayDeque<String>();
-        	performTransaction(null, RoutesFragment.TAG, new RoutesFragment(), false);
-        }
+        	showFragment(null, RoutesFragment.TAG, new RoutesFragment(), false);
+        } 
     }
     
     /**
@@ -85,7 +87,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     }
     
     @Override
-    public void performTransaction(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack) {
+    public void showFragment(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack) {
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
     	ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
@@ -94,12 +96,11 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	// If there is a current fragment in the frame layout then hide it
     	if (currentFragTag != null) {
     		mFragTags.push(currentFragTag);
-			Fragment currFrag = fm.findFragmentByTag(currentFragTag);
-	    	((TransitFragment) currFrag).setInvisible();
-    		ft.hide(currFrag);
+			TransitFragment currentFragment = (TransitFragment) fm.findFragmentByTag(currentFragTag);
+    		ft.hide(currentFragment);
     	}
     	
-    	((TransitFragment) newFrag).setVisible();
+    	// Add the new fragment to the fragment frame layout 
 		ft.add(R.id.content_frame, newFrag, newFragTag);
 		
 		if (addToBackStack == true) {
@@ -107,16 +108,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		}
 		
     	ft.commit();
-    }
-    
-    @Override
-    public void onBackPressed() {
-    	if (mFragTags.size() > 0) {
-    		FragmentManager fm = getSupportFragmentManager();
-    		TransitFragment frag = (TransitFragment) fm.findFragmentByTag(mFragTags.pop());
-    		frag.setVisible();
-    	}
-    	super.onBackPressed();
     }
     
     /*
@@ -163,13 +154,26 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     protected void onRestoreInstanceState(Bundle inState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
     	super.onRestoreInstanceState(inState);
+    	// Restores my stack of fragment tags
     	mFragTags = (ArrayDeque<String>) inState.getSerializable("frags");
+
+    	// Hides each fragment on the back stack since for some reason they
+    	// automatically unhide themselves
+    	FragmentManager fm = getSupportFragmentManager();
+    	FragmentTransaction ft = fm.beginTransaction();
+        Iterator<String> it = mFragTags.iterator();
+        while (it.hasNext()) {
+        	TransitFragment fragment = (TransitFragment) fm.findFragmentByTag(it.next());
+        	ft.hide(fragment);
+        }
+        ft.commit();
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
     	super.onSaveInstanceState(outState);
+    	// Keep track of the stack of fragment tags
     	outState.putSerializable("frags", mFragTags);
     }
    
@@ -197,7 +201,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     }
     
     /**
-     * Returns a new ActionBarDrawerToggle that ties together the the proper 
+     * Returns a new ActionBarDrawerToggle that ties together the proper 
      * interactions between the sliding drawer and the action bar app icon
      * @return A new ActionBarDrawerToggle object
      */
@@ -285,5 +289,4 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	    		return super.onOptionsItemSelected(item);
     	}
     }
-
 }

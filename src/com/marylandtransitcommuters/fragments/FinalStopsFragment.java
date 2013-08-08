@@ -37,10 +37,6 @@ public class FinalStopsFragment extends TransitFragment {
 
 		if (savedInstanceState != null) {
 			setupFragment();
-			mVisible = savedInstanceState.getBoolean("mAlive");
-			if (mVisible == false) {
-				hideFragment(TAG);
-			}
 		}
 		
 		return mRootView;
@@ -108,15 +104,13 @@ public class FinalStopsFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
-//		Log.d(MainActivity.LOG_TAG, "Item selected: " + String.valueOf(index));
-		
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);
 		
 		mData.setFinalStop(stopId, stopName);
 		
-		mCallback.performTransaction(TAG, TimesFragment.TAG, new TimesFragment(), true);
+		mCallback.showFragment(TAG, TimesFragment.TAG, new TimesFragment(), true);
 	}
 	
 	@Override

@@ -83,7 +83,6 @@ public class TimesFragment extends TransitFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mSearchView = (SearchView) searchItem.getActionView();
-		
 		mSearchView.setVisibility(View.GONE);
 	}
 
