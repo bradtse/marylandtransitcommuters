@@ -35,17 +35,8 @@ public class DirectionsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "DirectionsFragment onCreateView()");
-		
-		mRootView = inflater.inflate(R.layout.fragment_layout_directions, 
-				container, false);
-		
+		mRootView = inflater.inflate(R.layout.fragment_layout_directions, container, false);
 		super.onCreateView(inflater, container, savedInstanceState);
-	
-		// Only setup fragment here if it was previously destroyed and saved
-		if (savedInstanceState != null) {
-			setupFragment();
-		}
-
 		return mRootView;
 	}
 	

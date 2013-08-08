@@ -30,15 +30,8 @@ public class FinalStopsFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "FinalStopsFragment onCreateView()");
-		mRootView = inflater.inflate(R.layout.fragment_layout_finalstops, 
-									container, false);
-
+		mRootView = inflater.inflate(R.layout.fragment_layout_finalstops, container, false);
 		super.onCreateView(inflater, container, savedInstanceState);
-
-		if (savedInstanceState != null) {
-			setupFragment();
-		}
-		
 		return mRootView;
 	}
 	

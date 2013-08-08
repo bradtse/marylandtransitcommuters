@@ -34,15 +34,8 @@ public class RoutesFragment extends TransitFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "RoutesFragment onCreateView()");
-		mRootView = inflater.inflate(R.layout.fragment_layout_routes, 
-									container, false);	
-		
+		mRootView = inflater.inflate(R.layout.fragment_layout_routes, container, false);	
 		super.onCreateView(inflater, container, savedInstanceState);	
-				
-		if (savedInstanceState != null) {
-			setupFragment();
-		} 
-
 		return mRootView;
 	}
 	

@@ -32,13 +32,7 @@ public class StartStopsFragment extends TransitFragment {
 		Log.d(MainActivity.LOG_TAG, "StartStopsFragment onCreateView()");
 		mRootView = inflater.inflate(R.layout.fragment_layout_startstops, 
 									container, false);
-
 		super.onCreateView(inflater, container, savedInstanceState);
-			
-		if (savedInstanceState != null) {
-			setupFragment();
-		}
-		
 		return mRootView;
 	}
 	

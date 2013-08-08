@@ -66,10 +66,13 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 							 Bundle savedInstanceState) {
 		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
 		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
+		setupBreadcrumbs();
+
 		if (savedInstanceState != null) {
 			mProgressLayout.setVisibility(View.GONE);
+			setupFragment();
 		}
-		setupBreadcrumbs();
+
 		return null;
 	}
 	

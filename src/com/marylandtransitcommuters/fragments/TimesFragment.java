@@ -26,13 +26,7 @@ public class TimesFragment extends TransitFragment {
 							 Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TimesFragment onCreateView()");
 		mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
-
 		super.onCreateView(inflater, container, savedInstanceState);
-			
-		if (savedInstanceState != null) {
-			setupFragment();
-		}
-		
 		return mRootView;
 	}
 	
