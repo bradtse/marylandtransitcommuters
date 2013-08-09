@@ -45,10 +45,10 @@ public class RoutesFragment extends TransitFragment {
 	}
 
 	@Override
-	public void setAdapter() {
+	public void setListViewAdapter() {
 		mAdapter = new CustomSimpleAdapter(
 				mContext, 
-				mData.getRoutesList(),
+				mTransitData.getRoutesList(),
 				R.layout.routes_list_row,
 				new String[] {Route.SHORT_NAME, Route.LONG_NAME},
 				new int[] {R.id.route_short_name, R.id.route_long_name}
@@ -61,7 +61,7 @@ public class RoutesFragment extends TransitFragment {
 				TextView tv = (TextView) view.findViewById(R.id.route_long_name);
 				
 				@SuppressWarnings("unchecked")
-				Map<String, String> map = (Map<String, String>) mAdapter.getItem(position);
+				Map<String, String> map = (Map<String, String>) mData.get(position);
 				String longName = map.get(Route.LONG_NAME);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -81,7 +81,7 @@ public class RoutesFragment extends TransitFragment {
 				return view;
 			}
 		};
-	
+		Log.d(MainActivity.LOG_TAG, "Attaching adapter to ListView");
 		mList.setAdapter(mAdapter);
 	}
 
@@ -93,7 +93,7 @@ public class RoutesFragment extends TransitFragment {
 		String shortName = map.get(Route.SHORT_NAME);
 		String longName = map.get(Route.LONG_NAME);
 		
-		mData.selectRoute(routeId, shortName, longName);
+		mTransitData.selectRoute(routeId, shortName, longName);
 			
 		mCallback.showFragment(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
 	}
@@ -105,7 +105,5 @@ public class RoutesFragment extends TransitFragment {
 	}
 
 	@Override
-	protected void setupBreadcrumbs() {
-		return;
-	}
+	protected void setupBreadcrumbs() {}
 }

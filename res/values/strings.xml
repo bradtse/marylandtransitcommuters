@@ -15,6 +15,7 @@
     <string name="times_header">Predictions</string>
     <string name="menu_search">Search</string>
     <string name="menu_favorite">Favorite</string>
+    <string name="email_developer">Email developer</string>
     <string name="empty_time_fragment">
         There are currently no arrival predictions for this stop. This is most
         likely because this route\'s last trip has already passed by your start stop.

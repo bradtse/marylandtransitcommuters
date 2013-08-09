@@ -32,6 +32,7 @@ public final class TransitData {
 	 */
 	public static TransitData getInstance() {
 		if (instance == null) {
+			Log.d(MainActivity.LOG_TAG, "TransitData instance is null");
 			instance = new TransitData();
 		}
 		return instance;

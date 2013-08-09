@@ -36,9 +36,9 @@ public class FinalStopsFragment extends TransitFragment {
 	}
 	
 	protected void setupBreadcrumbs() {
-		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
-		String direction = mData.getDirectionHeadsign();
-		String startStop = mData.getStartStopName();
+		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
+		String direction = mTransitData.getDirectionHeadsign();
+		String startStop = mTransitData.getStartStopName();
 		
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
 		TextView dirText = (TextView) mRootView.findViewById(R.id.info_direction_data);
@@ -55,10 +55,10 @@ public class FinalStopsFragment extends TransitFragment {
 	}
 
 	@Override
-	public void setAdapter() {
+	public void setListViewAdapter() {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
-					mData.getFinalStopsList(),
+					mTransitData.getFinalStopsList(),
 					R.layout.fragment_list_row, 
 					new String[] {FinalStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
@@ -70,7 +70,7 @@ public class FinalStopsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 
-				Map<String, String> map = (Map<String, String>) mAdapter.getItem(pos);
+				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String stopName = map.get(FinalStop.STOP_NAME);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -101,7 +101,7 @@ public class FinalStopsFragment extends TransitFragment {
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);
 		
-		mData.setFinalStop(stopId, stopName);
+		mTransitData.setFinalStop(stopId, stopName);
 		
 		mCallback.showFragment(TAG, TimesFragment.TAG, new TimesFragment(), true);
 	}

@@ -37,8 +37,8 @@ public class StartStopsFragment extends TransitFragment {
 	}
 	
 	protected void setupBreadcrumbs() {
-		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
-		String direction = mData.getDirectionHeadsign();
+		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
+		String direction = mTransitData.getDirectionHeadsign();
 		
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
 		TextView dirText = (TextView) mRootView.findViewById(R.id.info_direction_data);
@@ -53,10 +53,10 @@ public class StartStopsFragment extends TransitFragment {
 	}
 
 	@Override
-	public void setAdapter() {
+	public void setListViewAdapter() {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
-					mData.getStartStopsList(),
+					mTransitData.getStartStopsList(),
 					R.layout.fragment_list_row,
 					new String[] {StartStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
@@ -68,7 +68,7 @@ public class StartStopsFragment extends TransitFragment {
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				
 				@SuppressWarnings("unchecked")
-				Map<String, String> map = (Map<String, String>) mAdapter.getItem(pos);
+				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String stopName = map.get(StartStop.STOP_NAME);
 				
 				if (stopName.contains("&")) {
@@ -101,7 +101,7 @@ public class StartStopsFragment extends TransitFragment {
 		String stopName = map.get(StartStop.STOP_NAME);
 		String stopSeq = map.get(StartStop.STOP_SEQ);
 		
-		mData.selectStartStop(stopId, stopName, stopSeq);
+		mTransitData.selectStartStop(stopId, stopName, stopSeq);
 		
 		mCallback.showFragment(TAG, FinalStopsFragment.TAG, new FinalStopsFragment(), true);
 	}

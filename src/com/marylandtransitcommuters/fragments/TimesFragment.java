@@ -32,10 +32,10 @@ public class TimesFragment extends TransitFragment {
 	}
 	
 	protected void setupBreadcrumbs() {
-		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
-		String direction = mData.getDirectionHeadsign();
-		String startStop = mData.getStartStopName();
-		String finalStop = mData.getFinalStopName();
+		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
+		String direction = mTransitData.getDirectionHeadsign();
+		String startStop = mTransitData.getStartStopName();
+		String finalStop = mTransitData.getFinalStopName();
 		
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
 		TextView dirText = (TextView) mRootView.findViewById(R.id.info_direction_data);
@@ -54,10 +54,10 @@ public class TimesFragment extends TransitFragment {
 	}
 
 	@Override
-	public void setAdapter() {
+	public void setListViewAdapter() {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
-					mData.getTimesList(),
+					mTransitData.getTimesList(),
 					R.layout.times_list_row,
 					new String[] {Time.ARRIVAL_TIME},
 					new int[] {R.id.time_list_item}
@@ -96,7 +96,5 @@ public class TimesFragment extends TransitFragment {
     }
 
 	@Override
-	public void selectItem(int position) {
-		return;
-	}
+	public void selectItem(int position) {}
 }

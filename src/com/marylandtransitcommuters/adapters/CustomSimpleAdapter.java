@@ -48,7 +48,7 @@ public class CustomSimpleAdapter extends BaseAdapter implements Filterable {
     private String[] mFrom;
     private ViewBinder mViewBinder;
 
-    private List<? extends Map<String, ?>> mData;
+    protected List<? extends Map<String, ?>> mData;
 
     private int mResource;
     private int mDropDownResource;

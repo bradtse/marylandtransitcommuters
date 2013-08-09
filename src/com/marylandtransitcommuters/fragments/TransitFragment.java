@@ -37,23 +37,32 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected Context mContext;
 	protected View mRootView;
 	protected ListView mList;
-	protected TransitData mData;
+	protected TransitData mTransitData;
 	protected SearchView mSearchView;
 	protected CustomSimpleAdapter mAdapter;
 	protected ReplaceFragmentListener mCallback;
+	protected TextView mResults;
 	private TransitReceiver mReceiver;
-	private ProgressDialog mProgDialog;
 	private RelativeLayout mProgressLayout;
+	
+	@Override
+	public void onDestroy() {
+		Log.d(MainActivity.LOG_TAG, "Destroying fragment");
+		super.onDestroy();
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 		
+		// Do some initial setting up of components
 		mContext = getActivity();
-		mData = TransitData.getInstance();
+		mTransitData = TransitData.getInstance();
 		setupTransitReceiver();
-		setupProgressDialog();
+
+		// Forces onCreateOptionsMenu to be called in each fragment
+		setHasOptionsMenu(true); 
 
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
@@ -66,9 +75,11 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 							 Bundle savedInstanceState) {
 		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
 		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
+		mResults = (TextView) mRootView.findViewById(R.id.result_count);
 		setupBreadcrumbs();
 
 		if (savedInstanceState != null) {
+			Log.d(MainActivity.LOG_TAG, "onCreateView savedInstanceState not null");
 			mProgressLayout.setVisibility(View.GONE);
 			setupFragment();
 		}
@@ -82,15 +93,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	private void setupTransitReceiver() {
 		mReceiver = new TransitReceiver(new Handler());
 		mReceiver.setReceiver(this);
-	}
-	
-	/**
-	 * Sets up a progress dialog
-	 */
-	private void setupProgressDialog() {
-		mProgDialog = new ProgressDialog(mContext);
-		mProgDialog.setTitle("Retrieving data from server");
-		mProgDialog.setMessage("Please wait");
 	}
 	
 	/**
@@ -145,11 +147,20 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Keeps a reference to the SearchView for subclasses to use
+		Log.d(MainActivity.LOG_TAG, "Fragment onCreateOptionsMenu()");
+		// Keeps a reference to the SearchView for future use 
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mSearchView = (SearchView) searchItem.getActionView();
 
-		// Attaches the adapter's filter to to the SearchView
+		if (mAdapter != null) {
+			setSearchViewTextListener();
+		}
+	}
+	
+	/*
+	 * Attaches the adapter's filter to the Search View
+	 */
+	private void setSearchViewTextListener() {
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
@@ -163,7 +174,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				return false;
 			}
 		});
-
 	}
 
 	// This is the callback that the Transit Service communicates with
@@ -183,25 +193,25 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 * Sets up the fragment after the data comes back
 	 */
 	public void setupFragment() {
+		Log.d(MainActivity.LOG_TAG, "Starting to set up fragment");
 		// The TransitService has retrieved the data and stored it in our
 		// TransitData singleton, so we can use that data to create the adapter
-		setAdapter();
+		setListViewAdapter();
 		
-		// Forces onCreateOptionsMenu to be called in each fragment
-		setHasOptionsMenu(true); 
-
+		setSearchViewTextListener();
+		
 		// Adds the result count 
-		TextView text = (TextView) mRootView.findViewById(R.id.result_count);
-		text.setText(String.valueOf(mAdapter.getCount()) + " results");
+		mResults.setText(String.valueOf(mAdapter.getCount()) + " results");
 
 		// Attach the ListView click listener
 		mList.setOnItemClickListener(new ListItemClickListener());
+		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
 	}
 	
 	/**
 	 * Set up the adapter for the ListView from the data in our TransitData singleton
 	 */
-	public abstract void setAdapter();
+	public abstract void setListViewAdapter();
 
 	/**
 	 * Click listener for the ListView
@@ -210,9 +220,10 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			// Clears the SearchView text
-	    	mSearchView.setQuery("", false);
-	    	mSearchView.clearFocus();
+			// Clears the SearchView text and closes the keyboard
+			mSearchView.setQuery("", false);
+			mSearchView.clearFocus();
+
 			selectItem(position);
 		}
     }

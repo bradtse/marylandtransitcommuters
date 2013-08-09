@@ -3,8 +3,10 @@ package com.marylandtransitcommuters;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -299,8 +301,23 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	    	case R.id.action_settings:
 	    		Toast.makeText(this, "Yay settings!", Toast.LENGTH_SHORT).show();
 	    		return true;
+	    	case R.id.email_developer:
+	    		sendEmail();
+	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);
     	}
+    }
+    
+    /*
+     * Helper class to send an email to the developer
+     */
+    private void sendEmail() {
+		Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+//		emailIntent.setType("message/rfc822");
+		emailIntent.setData(Uri.parse("mailto:" + "bradleytse@gmail.com"));
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"bradleytse@gmail.com"});
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MTA Commute");
+		startActivity(Intent.createChooser(emailIntent, "Send email via:"));
     }
 }

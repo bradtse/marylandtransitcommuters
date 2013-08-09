@@ -41,7 +41,7 @@ public class DirectionsFragment extends TransitFragment {
 	}
 	
 	protected void setupBreadcrumbs() {
-		String route = mData.getRouteShortName() + " " + mData.getRouteLongName();
+		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
 		routeText.setText(route);
 	}
@@ -52,10 +52,10 @@ public class DirectionsFragment extends TransitFragment {
 	}
 
 	@Override
-	public void setAdapter() {
+	public void setListViewAdapter() {
 		mAdapter = new CustomSimpleAdapter(
 				mContext, 
-				mData.getDirectionsList(),
+				mTransitData.getDirectionsList(),
 				R.layout.fragment_list_row, 
 				new String[] {Direction.TRIP_HEADSIGN},
 				new int[] {R.id.transit_list_item}
@@ -67,7 +67,7 @@ public class DirectionsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				
-				Map<String, String> map = (Map<String, String>) mAdapter.getItem(pos);
+				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String headsign = map.get(Direction.TRIP_HEADSIGN);
 				int color = getResources().getColor(R.color.glue_color);
 				
@@ -97,7 +97,7 @@ public class DirectionsFragment extends TransitFragment {
 		String directionId = map.get(Direction.DIR_ID);
 		String headSign = map.get(Direction.TRIP_HEADSIGN);
 
-		mData.selectDirection(directionId, headSign);
+		mTransitData.selectDirection(directionId, headSign);
 		
 		mCallback.showFragment(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
 	}
