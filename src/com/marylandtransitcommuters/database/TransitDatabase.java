@@ -155,32 +155,6 @@ public class TransitDatabase {
 			}
 		}
 		
-		/** 
-		 * Parse data files and load them into the database 
-		 */
-		private void loadData() throws IOException {
-			final Resources resources = mHelperContext.getResources();
-			for(int id : TransitContract.RAW_IDS) {
-				Log.d(MainActivity.LOG_TAG, "Loading: " + id);
-				InputStream input = resources.openRawResource(id);
-				CSVReader reader = new CSVReader(new InputStreamReader(input));
-				
-				try {
-					String [] line = reader.readNext(); // Skip the first line of the file	
-					while ((line = reader.readNext()) != null ) {
-						long rowid = insertRowHelper(id, line);
-						Log.d(MainActivity.LOG_TAG, "Inserted to row: " + rowid);
-						if (rowid < 0) {
-							Log.e(MainActivity.LOG_TAG, "Unable to add row of data for route id: " + line[0]);
-						}
-					}
-				} finally {
-					reader.close();
-				}
-			}
-
-		}
-		
 		/**
 		 * Helper function
 		 * @param id the raw id of the data file I am parsing

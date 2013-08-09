@@ -44,23 +44,16 @@ public final class TransitContract {
 		Trips.CREATE_TABLE
 	};
 	
-	/**
-	 * Array of resource ids for each GTFS data file that will be loaded into 
-	 * database
-	 */
-	public static final int[] RAW_IDS = {
-//		R.raw.agency,
-//		R.raw.calendar_dates,
-//		R.raw.calendar,
-//		R.raw.routes,
-//		R.raw.shapes,
-//		R.raw.stops,
-//		R.raw.stop_times,
-//		R.raw.trips,
-	};
-	
 	/* Do not allow this class to be instantiated */
 	private TransitContract() {}
+	
+	/**
+	 * Table containing all favorites
+	 */
+	public static final class Favorites implements BaseColumns {
+		private Favorites() {}
+		
+	}
 	
 	/** 
 	 * Agency table contract
