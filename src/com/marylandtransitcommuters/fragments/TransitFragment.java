@@ -1,7 +1,6 @@
 package com.marylandtransitcommuters.fragments;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -136,13 +135,13 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		/**
 		 * Callback used by the Fragments to let the MainActivity know it needs
 		 * to replace the current fragment
-		 * @param currentFragTag
-		 * @param newFragTag
-		 * @param newFrag
-		 * @param addToBackStack
+		 * @param newFragTag The new fragment's tag
+		 * @param newFrag The new fragment instance
+		 * @param addToBackStack Whether or not to add this transaction to the backstack
+		 * @param clearFrags Whether or not to clear all of the current fragments
 		 */
-		public void showFragment(String currentFragTag, String newFragTag, 
-								       Fragment newFrag, boolean addToBackStack);
+		public void replaceFragment(String newFragTag, Fragment newFrag, 
+								 boolean addToBackStack, boolean clearFrags);
 	}
 	
 	@Override
@@ -152,28 +151,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mSearchView = (SearchView) searchItem.getActionView();
 
-		if (mAdapter != null) {
-			setSearchViewTextListener();
-		}
+		setSearchViewTextListener();
 	}
 	
 	/*
 	 * Attaches the adapter's filter to the Search View
 	 */
 	private void setSearchViewTextListener() {
-		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
-
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				return false;
-			}
-
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				mAdapter.getFilter().filter(newText);
-				return false;
-			}
-		});
+		if (mSearchView != null && mAdapter != null) {
+			mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
+	
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					return false;
+				}
+	
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					mAdapter.getFilter().filter(newText);
+					return false;
+				}
+			});
+		}
 	}
 
 	// This is the callback that the Transit Service communicates with

@@ -15,17 +15,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
+import com.commonsware.cwac.merge.MergeAdapter;
 import com.marylandtransitcommuters.fragments.RoutesFragment;
 import com.marylandtransitcommuters.fragments.TransitFragment;
 import com.marylandtransitcommuters.fragments.TransitFragment.ReplaceFragmentListener;
@@ -43,6 +46,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private ArrayDeque<String> mFragTags;
+	private String mCurrFragTag;
 		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +62,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         setupNavigationDrawer();   
-        
-        // Only instantiate route fragment if it doesn't already exist
-        if (savedInstanceState == null) {	
-        	Log.d(LOG_TAG, "savedInstanceState is null");
-        	mFragTags = new ArrayDeque<String>();
-        	showFragment(null, RoutesFragment.TAG, new RoutesFragment(), false);
-        } 
     }
     
     /**
@@ -72,33 +69,71 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * navigation drawer
      */
     private void setupNavigationDrawer() {
+    	// Add drawer shadow
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
-        												mDrawerItems));
+        // Attach the adapter to the drawer ListView
+        mDrawerList.setAdapter(setupMergeAdapter());
+        // Attach a list item click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
         // Enable Action Bar app icon to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
                
+        // Add a listener for when the drawer is toggled
         mDrawerToggle = getActionBarDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
+//        mDrawerList.performItemClick(mDrawerList, 2, mDrawerList.getItemIdAtPosition(2));
         // Start with the drawer open
-//        mDrawerLayout.openDrawer(Gravity.LEFT);
+        mDrawerLayout.openDrawer(Gravity.LEFT);
+    }
+    
+    private MergeAdapter setupMergeAdapter() {
+    	MergeAdapter m = new MergeAdapter();
+    	
+    	m.addView(createHeader("CATEGORY"));
+    	m.addView(createDivider());
+
+    	ArrayAdapter<String> a = new ArrayAdapter<String>(this, R.layout.drawer_list_text, 
+        												mDrawerItems);
+    	m.addAdapter(a);
+    	
+    	m.addView(createHeader("FAVORITES"));
+    	m.addView(createDivider());
+
+    	return m;
+    }
+    
+    private TextView createDivider() {
+    	TextView tv = (TextView) getLayoutInflater().inflate(R.layout.divider, null);
+    	return tv;
+    }
+    
+    private TextView createHeader(String s) {
+		TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_header, null);
+    	tv.setText(s);
+    	return tv;
     }
     
     @Override
-    public void showFragment(String currentFragTag, String newFragTag, Fragment newFrag, boolean addToBackStack) {
+    public void replaceFragment(String newFragTag, Fragment newFrag, 
+    						 boolean addToBackStack, boolean clearFrags) {
+
+    	// Removes all of the existing fragments
+		if (clearFrags == true && mCurrFragTag != null) {
+			removeAllFragments();
+    	}
+
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
     	ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
 				   R.animator.slide_in_left, R.animator.slide_out_right);
-    	
+
     	// If there is a current fragment in the frame layout then hide it
-    	if (currentFragTag != null) {
-    		mFragTags.push(currentFragTag);
-			TransitFragment currentFragment = (TransitFragment) fm.findFragmentByTag(currentFragTag);
+    	if (mCurrFragTag != null) {
+    		mFragTags.push(mCurrFragTag);
+			TransitFragment currentFragment = (TransitFragment) fm.findFragmentByTag(mCurrFragTag);
     		ft.hide(currentFragment);
     	}
     	
@@ -108,54 +143,39 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		if (addToBackStack == true) {
 			ft.addToBackStack(null);
 		}
-		
+
     	ft.commit();
+    	mCurrFragTag = newFragTag;
     }
     
     /*
-     * Overrides for debugging the activity lifecycle
+     * Removes all of the current fragments in the frame layout
      */
-    
-    @Override
-    protected void onRestart() {
-    	Log.d(LOG_TAG, "MainActivity onRestart()");
-    	super.onRestart();
+    private void removeAllFragments() {
+    	FragmentManager fm = getSupportFragmentManager();
+    	fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    	FragmentTransaction ft = fm.beginTransaction();
+    	
+    	// Remove the fragment that is currently showing
+    	TransitFragment fragment = (TransitFragment) fm.findFragmentByTag(mCurrFragTag);
+    	ft.remove(fragment);
+    	
+    	// Remove all fragments on the back stack
+        Iterator<String> it = mFragTags.iterator();
+        while (it.hasNext()) {
+        	fragment = (TransitFragment) fm.findFragmentByTag(it.next());
+        	ft.remove(fragment);
+        }
+
+        ft.commit();
+        mCurrFragTag = null;
     }
-    
-    @Override
-    protected void onStart() {
-    	Log.d(LOG_TAG, "MainActivity onStart()");
-    	super.onStart();
-    }
-    
-    @Override
-    protected void onResume() {
-    	Log.d(LOG_TAG, "MainActivity onResume()");
-    	super.onResume();
-    }
-    
-    @Override
-    protected void onPause() {
-    	Log.d(LOG_TAG, "MainActivity onPause()");
-    	super.onPause();
-    }
-    
-    @Override
-    protected void onStop() {
-    	Log.d(LOG_TAG, "MainActivity onStop()");
-    	super.onStop();
-    }
-    
-    @Override
-    protected void onDestroy() {
-    	Log.d(LOG_TAG, "MainActvity onDestory()");
-    	super.onDestroy();
-    }
+
     
     @Override
     public void onBackPressed() {
     	if (mFragTags.size() > 0) {
-    		mFragTags.pop();
+    		mCurrFragTag = mFragTags.pop();
     	}
     	super.onBackPressed();
     }
@@ -208,10 +228,21 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Handles when nav drawer item is selected
      */
     private void selectItem(int position) {
+    	// Since it is a mergeadapter, must account for other views
+    	position = position - 2;
+
     	// Indicates the item has been selected
-    	mDrawerList.setItemChecked(position, true);
+//    	mDrawerList.setItemChecked(position, true);
     	// Then set the action bar title to the item that was selected
     	setTitle(mDrawerItems[position]);
+    	
+    	if (position == 0) {
+        	replaceFragment(RoutesFragment.TAG, new RoutesFragment(), false, true);
+        	mFragTags = new ArrayDeque<String>();
+    	} else if (position == 1) {
+    		
+    	}
+    	
     	// Then close the drawer
     	mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -264,7 +295,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		SearchView search = (SearchView) searchItem.getActionView();
 		
-		// I want white text for the SearchView rather than the default grey
+		// Make the text for the SearchView white instead of the default grey
 		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);
 		searchText.setHintTextColor(Color.WHITE);
 		searchText.setTextColor(Color.WHITE);
@@ -319,5 +350,45 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"bradleytse@gmail.com"});
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MTA Commute");
 		startActivity(Intent.createChooser(emailIntent, "Send email via:"));
+    }
+    
+    /*
+     * Overrides for debugging the activity lifecycle
+     */
+    
+    @Override
+    protected void onRestart() {
+    	Log.d(LOG_TAG, "MainActivity onRestart()");
+    	super.onRestart();
+    }
+    
+    @Override
+    protected void onStart() {
+    	Log.d(LOG_TAG, "MainActivity onStart()");
+    	super.onStart();
+    }
+    
+    @Override
+    protected void onResume() {
+    	Log.d(LOG_TAG, "MainActivity onResume()");
+    	super.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+    	Log.d(LOG_TAG, "MainActivity onPause()");
+    	super.onPause();
+    }
+    
+    @Override
+    protected void onStop() {
+    	Log.d(LOG_TAG, "MainActivity onStop()");
+    	super.onStop();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	Log.d(LOG_TAG, "MainActvity onDestory()");
+    	super.onDestroy();
     }
 }

@@ -88,7 +88,7 @@ public class TimesFragment extends TransitFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
     		case R.id.favorite:
-	    		Toast.makeText(mContext, "Favorites!", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(mContext, "Added to favorites!", Toast.LENGTH_SHORT).show();
 	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);

@@ -103,7 +103,7 @@ public class FinalStopsFragment extends TransitFragment {
 		
 		mTransitData.setFinalStop(stopId, stopName);
 		
-		mCallback.showFragment(TAG, TimesFragment.TAG, new TimesFragment(), true);
+		mCallback.replaceFragment(TimesFragment.TAG, new TimesFragment(), true, false);
 	}
 	
 	@Override

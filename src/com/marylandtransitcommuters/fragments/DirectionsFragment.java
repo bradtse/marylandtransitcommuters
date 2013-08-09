@@ -99,7 +99,7 @@ public class DirectionsFragment extends TransitFragment {
 
 		mTransitData.selectDirection(directionId, headSign);
 		
-		mCallback.showFragment(TAG, StartStopsFragment.TAG, new StartStopsFragment(), true);
+		mCallback.replaceFragment(StartStopsFragment.TAG, new StartStopsFragment(), true, false);
 	}
 	
 	@Override

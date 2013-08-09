@@ -95,7 +95,7 @@ public class RoutesFragment extends TransitFragment {
 		
 		mTransitData.selectRoute(routeId, shortName, longName);
 			
-		mCallback.showFragment(TAG, DirectionsFragment.TAG, new DirectionsFragment(), true);
+		mCallback.replaceFragment(DirectionsFragment.TAG, new DirectionsFragment(), true, false);
 	}
 	
 	@Override

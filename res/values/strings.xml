@@ -25,12 +25,14 @@
     <string name="finalstop">Final Stop:\u0020</string>
     <string name="startstop">Start stop:\u0020</string>
     <string name="favorite_desc">Add this route to your favorites</string>
-    <string name="progress_desc">Getting the data</string>
+    <string name="progress_desc">Fetching data&#8230;</string>
         
     <!-- Items added to nav drawer -->
     <string-array name="items">
         <item>Bus</item>
         <item>Train</item>
     </string-array>
+    
+    <string name="category_header">Category</string>
 
 </resources>
