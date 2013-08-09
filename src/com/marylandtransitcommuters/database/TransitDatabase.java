@@ -132,27 +132,6 @@ public class TransitDatabase {
 			for(String s : TransitContract.SQL_CREATE_TABLE_ARRAY) {
 				mDatabase.execSQL(s);
 			}
-			
-//			new Thread(new Runnable() {
-//				public void run() {
-//					try {
-//						loadData();
-//					} catch (IOException e) {
-//						throw new RuntimeException(e);
-//					}
-//				}
-//			}).start();
-						
-			try {
-				Log.d(MainActivity.LOG_TAG, "Loading GTFS data");
-				final long startTime = System.currentTimeMillis();
-				loadData();
-				final long endTime = System.currentTimeMillis();
-				Log.d(MainActivity.LOG_TAG, "Done loading GTFS data: " + 
-						String.valueOf(endTime - startTime) + " ms");
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
 		}
 		
 		/**
