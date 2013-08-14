@@ -52,7 +52,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     protected void onCreate(Bundle savedInstanceState) {
     	Log.d(LOG_TAG, "MainActivity onCreate()");
     	super.onCreate(savedInstanceState);
-    	    	
         setContentView(R.layout.activity_main);
 
         // Stores a bunch of resources that we'll need later
@@ -62,10 +61,14 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         setupNavigationDrawer();   
+        
+        if (savedInstanceState == null) {
+        	mFragTags = new ArrayDeque<String>();
+        }
     }
     
     /**
-     * Takes care of setting up all the elements needed for a properly functioning
+     * Takes care of setting up all of the elements needed for a properly functioning
      * navigation drawer
      */
     private void setupNavigationDrawer() {
@@ -89,6 +92,10 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerLayout.openDrawer(Gravity.LEFT);
     }
     
+    /*
+     * Sets up the merge adapter that is used to populate the navigation drawer's
+     * ListView
+     */
     private MergeAdapter setupMergeAdapter() {
     	MergeAdapter m = new MergeAdapter();
     	
@@ -106,7 +113,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     }
     
     private TextView createDivider() {
-    	TextView tv = (TextView) getLayoutInflater().inflate(R.layout.divider, null);
+    	TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_divider, null);
     	return tv;
     }
     
@@ -127,8 +134,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
-    	ft.setCustomAnimations(R.animator.slide_in_right, R.animator.slide_out_left, 
-				   R.animator.slide_in_left, R.animator.slide_out_right);
+    	ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, 
+				   R.anim.slide_in_left, R.anim.slide_out_right);
 
     	// If there is a current fragment in the frame layout then hide it
     	if (mCurrFragTag != null) {
@@ -161,9 +168,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	ft.remove(fragment);
     	
     	// Remove all fragments on the back stack
-        Iterator<String> it = mFragTags.iterator();
-        while (it.hasNext()) {
-        	fragment = (TransitFragment) fm.findFragmentByTag(it.next());
+        while (mFragTags.size() != 0) {
+        	fragment = (TransitFragment) fm.findFragmentByTag(mFragTags.pop());
         	ft.remove(fragment);
         }
 
@@ -238,7 +244,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	
     	if (position == 0) {
         	replaceFragment(RoutesFragment.TAG, new RoutesFragment(), false, true);
-        	mFragTags = new ArrayDeque<String>();
     	} else if (position == 1) {
     		
     	}

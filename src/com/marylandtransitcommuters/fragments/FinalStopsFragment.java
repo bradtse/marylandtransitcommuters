@@ -59,7 +59,7 @@ public class FinalStopsFragment extends TransitFragment {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
 					mTransitData.getFinalStopsList(),
-					R.layout.fragment_list_row, 
+					R.layout.fragment_listview_row, 
 					new String[] {FinalStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
 					) 
@@ -70,6 +70,7 @@ public class FinalStopsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 
+				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String stopName = map.get(FinalStop.STOP_NAME);
 				int color = getResources().getColor(R.color.glue_color);
@@ -97,6 +98,7 @@ public class FinalStopsFragment extends TransitFragment {
 
 	@Override
 	public void selectItem(int index) {
+		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);

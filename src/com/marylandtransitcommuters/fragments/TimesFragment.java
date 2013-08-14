@@ -58,12 +58,13 @@ public class TimesFragment extends TransitFragment {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
 					mTransitData.getTimesList(),
-					R.layout.times_list_row,
+					R.layout.fragment_times_listview_row,
 					new String[] {Time.ARRIVAL_TIME},
 					new int[] {R.id.time_list_item}
 					)
 		{
 
+			// Disable clicking for this ListView
 			@Override
 			public boolean isEnabled(int position) {
 				return false;
@@ -90,11 +91,15 @@ public class TimesFragment extends TransitFragment {
     		case R.id.favorite:
 	    		Toast.makeText(mContext, "Added to favorites!", Toast.LENGTH_SHORT).show();
 	    		return true;
+    		case R.id.refresh:
+	    		Toast.makeText(mContext, "Refresh!", Toast.LENGTH_SHORT).show();
+	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);
     	}
     }
 
+	// Clicking is disabled for this fragment's ListView
 	@Override
 	public void selectItem(int position) {}
 }

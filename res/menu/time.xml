@@ -5,6 +5,12 @@
         android:icon="@drawable/ic_action_star"
         android:title="@string/menu_favorite"
         android:showAsAction="always" />
+    
+    <item 
+        android:id="@+id/refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/menu_refresh"
+        android:showAsAction="always" />
 
 </menu>
 

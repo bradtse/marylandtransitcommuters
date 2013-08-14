@@ -49,7 +49,7 @@ public class RoutesFragment extends TransitFragment {
 		mAdapter = new CustomSimpleAdapter(
 				mContext, 
 				mTransitData.getRoutesList(),
-				R.layout.routes_list_row,
+				R.layout.fragment_routes_listview_row,
 				new String[] {Route.SHORT_NAME, Route.LONG_NAME},
 				new int[] {R.id.route_short_name, R.id.route_long_name}
 				) 
@@ -81,7 +81,7 @@ public class RoutesFragment extends TransitFragment {
 				return view;
 			}
 		};
-		Log.d(MainActivity.LOG_TAG, "Attaching adapter to ListView");
+
 		mList.setAdapter(mAdapter);
 	}
 

@@ -40,7 +40,7 @@ public class TransitService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		final ResultReceiver mReceiver = intent.getParcelableExtra(TransitReceiver.RECEIVER);
+		ResultReceiver mReceiver = intent.getParcelableExtra(TransitReceiver.RECEIVER);
 		
 		serviceHelper((DataType) intent.getSerializableExtra(DataType.KEY));
 		

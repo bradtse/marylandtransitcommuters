@@ -27,7 +27,7 @@ public final class RestHelper {
 	/**
 	 * Sends data to query the server and returns the response in JSONArray form
 	 * @param data the data needed to query the database
-	 * @return a JSONArray containing the response from the server
+	 * @return a JSONArray containing the response from the server, or null on failure
 	 * FIXME Handle what happens when null returns
 	 */
 	public static JSONArray post(JSONObject data) {
@@ -36,7 +36,7 @@ public final class RestHelper {
 		int failCount = 0; 
 		
 		do {
-			// Prevent infinite posts
+			// Only retry a max of 10 times
 			if (failCount > 10) {
 				return null;
 			}
@@ -55,9 +55,7 @@ public final class RestHelper {
 				continue;
 			}
 			
-			int responseCode = getResponseCode(conn);
-//			Log.d(MainActivity.LOG_TAG, "Response code: " + String.valueOf(responseCode));
-			if (responseCode == -1) {
+			if (getResponseCode(conn) == -1) {
 				success = false;
 				failCount++;
 				continue;
@@ -85,9 +83,8 @@ public final class RestHelper {
 	 */
 	private static HttpURLConnection setupConnection(String stringURL) {
 		HttpURLConnection conn = null;
-		URL url = null;
 		try {
-			url = new URL(stringURL);
+			URL url = new URL(stringURL);
 			conn = (HttpURLConnection) url.openConnection();
 			
 			// Sets up POST settings
@@ -97,7 +94,6 @@ public final class RestHelper {
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestMethod("POST");
-			
 			conn.connect();
 		} catch (IOException e) {
 			Log.d(MainActivity.LOG_TAG, "setupConnection failed: " + e.getMessage());
@@ -150,7 +146,6 @@ public final class RestHelper {
 		try {
 			Scanner s = new Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
 			String str = s.hasNext() ? s.next() : "";
-//			Log.d(MainActivity.LOG_TAG, str.toString());
 			json = new JSONArray(str);
 		} catch (JSONException e) {
 			Log.d(MainActivity.LOG_TAG, "responseToJSON failed (JSONException): " + e.getMessage());

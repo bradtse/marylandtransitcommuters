@@ -56,7 +56,7 @@ public class DirectionsFragment extends TransitFragment {
 		mAdapter = new CustomSimpleAdapter(
 				mContext, 
 				mTransitData.getDirectionsList(),
-				R.layout.fragment_list_row, 
+				R.layout.fragment_listview_row, 
 				new String[] {Direction.TRIP_HEADSIGN},
 				new int[] {R.id.transit_list_item}
 				)
@@ -67,6 +67,7 @@ public class DirectionsFragment extends TransitFragment {
 				View view = super.getView(pos, convertView, parent);
 				TextView tv = (TextView) view.findViewById(R.id.transit_list_item);
 				
+				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String headsign = map.get(Direction.TRIP_HEADSIGN);
 				int color = getResources().getColor(R.color.glue_color);
@@ -93,6 +94,7 @@ public class DirectionsFragment extends TransitFragment {
 	}
 	
 	public void selectItem(int index) {		
+		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);
 		String directionId = map.get(Direction.DIR_ID);
 		String headSign = map.get(Direction.TRIP_HEADSIGN);

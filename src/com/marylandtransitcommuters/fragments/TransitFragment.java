@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
@@ -45,22 +44,16 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	private RelativeLayout mProgressLayout;
 	
 	@Override
-	public void onDestroy() {
-		Log.d(MainActivity.LOG_TAG, "Destroying fragment");
-		super.onDestroy();
-	}
-	
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 		
-		// Do some initial setting up of components
+		// Initialize some components
 		mContext = getActivity();
 		mTransitData = TransitData.getInstance();
 		setupTransitReceiver();
 
-		// Forces onCreateOptionsMenu to be called in each fragment
+		// Forces onCreateOptionsMenu to be called
 		setHasOptionsMenu(true); 
 
 		if (savedInstanceState == null) {
@@ -106,13 +99,14 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Add the appropriate service type to the intent 
-	 * @param intent the intent to add the service type to
+	 * Adds the appropriate service type to the intent 
+	 * @param intent The intent to declare the type for
 	 */
 	protected abstract void setIntentServiceType(Intent intent);
 	
 	/**
-	 * Sets up the TextViews that contain the previous fragment's selections
+	 * Sets up the TextViews that shows which items were selected in the previous
+	 * fragments
 	 */
 	protected abstract void setupBreadcrumbs(); 
 
@@ -120,7 +114,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
-		// Ensures that the parent activity implements the interface
+		// Ensures that the parent activity implements ReplaceFragmentListener
 		try {
 			mCallback = (ReplaceFragmentListener) activity;
 		} catch (ClassCastException e) {
@@ -129,12 +123,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 *  Interface to allow fragments to communicate with its Activity
+	 *  Interface that allows fragments to communicate with the MainActivity
 	 */
 	public interface ReplaceFragmentListener {
 		/**
 		 * Callback used by the Fragments to let the MainActivity know it needs
-		 * to replace the current fragment
+		 * to replace the current fragment in the frame layout
 		 * @param newFragTag The new fragment's tag
 		 * @param newFrag The new fragment instance
 		 * @param addToBackStack Whether or not to add this transaction to the backstack
@@ -148,9 +142,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		Log.d(MainActivity.LOG_TAG, "Fragment onCreateOptionsMenu()");
 		// Keeps a reference to the SearchView for future use 
-		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		mSearchView = (SearchView) searchItem.getActionView();
-
+		mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
 		setSearchViewTextListener();
 	}
 	
@@ -175,7 +167,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 	}
 
-	// This is the callback that the Transit Service communicates with
+	// This is the callback that is called when the TransitService completes its work
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
@@ -189,31 +181,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Sets up the fragment after the data comes back
+	 * Sets up the different parts of the fragment after the data has been received
+	 * back from the server.
 	 */
 	public void setupFragment() {
 		Log.d(MainActivity.LOG_TAG, "Starting to set up fragment");
-		// The TransitService has retrieved the data and stored it in our
-		// TransitData singleton, so we can use that data to create the adapter
-		setListViewAdapter();
-		
-		setSearchViewTextListener();
-		
-		// Adds the result count 
-		mResults.setText(String.valueOf(mAdapter.getCount()) + " results");
 
-		// Attach the ListView click listener
+		setListViewAdapter();
+		setSearchViewTextListener();
+		mResults.setText(String.valueOf(mAdapter.getCount()) + " results");
 		mList.setOnItemClickListener(new ListItemClickListener());
+
 		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
 	}
 	
 	/**
-	 * Set up the adapter for the ListView from the data in our TransitData singleton
+	 * Creates and attaches the adapter to the fragment's ListView. The adapter
+	 * is created using the data received back from the server.
 	 */
 	public abstract void setListViewAdapter();
 
 	/**
-	 * Click listener for the ListView
+	 * ListView item click listener
 	 */
     class ListItemClickListener implements ListView.OnItemClickListener {
 		@Override
@@ -228,8 +217,17 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
     }
     
     /**
-     * Takes appropriate action when item in ListView is selected
-     * @param position index of item selected
+     * Handles what should happen when an item in the ListView is clicked by 
+     * the user. In our case, this really means storing info about the item
+     * that was selected, and then alerting the MainActivity to start the 
+     * next appropriate fragment.
+     * @param position Index of the item selected
      */
     public abstract void selectItem(int position);
+
+	@Override
+	public void onDestroy() {
+		Log.d(MainActivity.LOG_TAG, "Destroying fragment");
+		super.onDestroy();
+	}
 }

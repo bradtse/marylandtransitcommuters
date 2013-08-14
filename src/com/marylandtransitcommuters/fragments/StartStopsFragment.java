@@ -57,7 +57,7 @@ public class StartStopsFragment extends TransitFragment {
 		mAdapter = new CustomSimpleAdapter(
 					mContext, 
 					mTransitData.getStartStopsList(),
-					R.layout.fragment_list_row,
+					R.layout.fragment_listview_row,
 					new String[] {StartStop.STOP_NAME},
 					new int[] {R.id.transit_list_item}
 					) 
