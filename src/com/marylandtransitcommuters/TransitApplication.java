@@ -7,4 +7,14 @@ import android.app.Application;
  */
 public class TransitApplication extends Application {
 	
+	private boolean isAlive = false;
+	
+	public void setAlive () {
+		this.isAlive = true;
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
+	}
+	
 }

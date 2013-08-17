@@ -69,7 +69,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 
         // Stores a bunch of resources that we'll need later
         mTitle = mDrawerTitle = getTitle();
-        mDrawerItems = getResources().getStringArray(R.array.items);
+        mDrawerItems = getResources().getStringArray(R.array.drawer_categories);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mFrameImage = (ImageView) findViewById(R.id.frame_layout_image);

@@ -31,9 +31,11 @@
     <string name="frame_layout_image">Image of grey bus</string>
         
     <!-- Items added to nav drawer -->
-    <string-array name="items">
+    <string-array name="drawer_categories">
         <item>Bus</item>
         <item>Train</item>
+        <item>Map</item>
+        <item>Nearest Stops</item>
     </string-array>
     
     <string name="category_header">Category</string>

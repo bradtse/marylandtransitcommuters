@@ -41,6 +41,7 @@ public class TimesFragment extends TransitFragment {
 	@Override
 	public void onCreate(Bundle savedBundleInstanceState) {
 		super.onCreate(savedBundleInstanceState);
+
 		String[] selectionArgs = {mTransitData.getRouteId(),
 							      mTransitData.getDirectionId(),
 								  mTransitData.getStartStopId(),
