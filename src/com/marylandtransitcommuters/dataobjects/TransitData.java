@@ -24,7 +24,13 @@ public final class TransitData {
 	private FinalStop finalStop;
 	private Time time;
 
-	private TransitData() {}
+	private TransitData() {
+		this.route = new Route();
+		this.direction = new Direction();
+		this.startStop = new StartStop();
+		this.finalStop = new FinalStop();
+		this.time = new Time();
+	}
 	
 	/**
 	 * Singleton getter
@@ -137,7 +143,7 @@ public final class TransitData {
 	 * Final Stop methods
 	 */
 
-	public void setFinalStop(String stopId, String stopName) {
+	public void selectFinalStop(String stopId, String stopName) {
 		finalStop.setStopInfo(stopId, stopName);
 	}
 	

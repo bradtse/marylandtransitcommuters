@@ -26,6 +26,8 @@ public class StartStop {
 	private String stopSequence;
 	private ArrayList<HashMap<String, String>> startStopsList;
 	
+	public StartStop() {}
+
 	public StartStop(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;

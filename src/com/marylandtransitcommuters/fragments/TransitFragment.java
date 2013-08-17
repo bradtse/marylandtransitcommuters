@@ -3,6 +3,7 @@ package com.marylandtransitcommuters.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -69,6 +71,16 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
 		mResults = (TextView) mRootView.findViewById(R.id.result_count);
 		setupBreadcrumbs();
+
+		// Start the bus animation. Had to use this workaround for it to work
+		// on Android 2.2
+		ImageView img = (ImageView) mRootView.findViewById(R.id.progress_bus);
+        final AnimationDrawable animation = (AnimationDrawable) img.getBackground();
+        img.post(new Runnable() {
+        	public void run() {
+        		animation.start();
+        	}
+        });
 
 		if (savedInstanceState != null) {
 			Log.d(MainActivity.LOG_TAG, "onCreateView savedInstanceState not null");
@@ -135,7 +147,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		 * @param clearFrags Whether or not to clear all of the current fragments
 		 */
 		public void replaceFragment(String newFragTag, Fragment newFrag, 
-								 boolean addToBackStack, boolean clearFrags);
+								 	boolean addToBackStack, boolean clearFrags, 
+								 	boolean animate, boolean commit);
 	}
 	
 	@Override
@@ -146,27 +159,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		setSearchViewTextListener();
 	}
 	
-	/*
-	 * Attaches the adapter's filter to the Search View
-	 */
-	private void setSearchViewTextListener() {
-		if (mSearchView != null && mAdapter != null) {
-			mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
-	
-				@Override
-				public boolean onQueryTextSubmit(String query) {
-					return false;
-				}
-	
-				@Override
-				public boolean onQueryTextChange(String newText) {
-					mAdapter.getFilter().filter(newText);
-					return false;
-				}
-			});
-		}
-	}
-
 	// This is the callback that is called when the TransitService completes its work
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
@@ -194,7 +186,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 
 		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
 	}
+
+	/*
+	 * Attaches the adapter's filter to the Search View
+	 */
+	private void setSearchViewTextListener() {
+		if (mSearchView != null && mAdapter != null) {
+			mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 	
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					return false;
+				}
+	
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					mAdapter.getFilter().filter(newText);
+					return false;
+				}
+			});
+		}
+	}
+
 	/**
 	 * Creates and attaches the adapter to the fragment's ListView. The adapter
 	 * is created using the data received back from the server.
@@ -229,5 +242,11 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onDestroy() {
 		Log.d(MainActivity.LOG_TAG, "Destroying fragment");
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onSaveInstanceState()");
+		super.onSaveInstanceState(outState);
 	}
 }

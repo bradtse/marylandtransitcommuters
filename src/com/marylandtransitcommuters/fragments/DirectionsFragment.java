@@ -101,7 +101,7 @@ public class DirectionsFragment extends TransitFragment {
 
 		mTransitData.selectDirection(directionId, headSign);
 		
-		mCallback.replaceFragment(StartStopsFragment.TAG, new StartStopsFragment(), true, false);
+		mCallback.replaceFragment(StartStopsFragment.TAG, new StartStopsFragment(), true, false, true, true);
 	}
 	
 	@Override

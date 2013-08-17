@@ -103,9 +103,9 @@ public class FinalStopsFragment extends TransitFragment {
 		String stopId = map.get(FinalStop.STOP_ID);
 		String stopName = map.get(FinalStop.STOP_NAME);
 		
-		mTransitData.setFinalStop(stopId, stopName);
+		mTransitData.selectFinalStop(stopId, stopName);
 		
-		mCallback.replaceFragment(TimesFragment.TAG, new TimesFragment(), true, false);
+		mCallback.replaceFragment(TimesFragment.TAG, new TimesFragment(), true, false, true, true);
 	}
 	
 	@Override

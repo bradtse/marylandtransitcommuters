@@ -103,7 +103,7 @@ public class StartStopsFragment extends TransitFragment {
 		
 		mTransitData.selectStartStop(stopId, stopName, stopSeq);
 		
-		mCallback.replaceFragment(FinalStopsFragment.TAG, new FinalStopsFragment(), true, false);
+		mCallback.replaceFragment(FinalStopsFragment.TAG, new FinalStopsFragment(), true, false, true, true);
 	}
 	
 	@Override

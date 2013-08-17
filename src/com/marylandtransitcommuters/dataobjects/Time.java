@@ -26,16 +26,16 @@ public class Time {
 	
 	private JSONArray rawData;
 	private JSONArray prettyData;
-	private ArrayList<HashMap<String, String>> timesList;
+	
+	public Time() {}
 	
 	public Time(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;
-		this.timesList = createTimesList();
 	}
 	
 	public ArrayList<HashMap<String, String>> getTimesList() {
-		return timesList;
+		return createTimesList();
 	}
 	
 	/**
@@ -109,10 +109,10 @@ public class Time {
 		PeriodFormatter dhm = new PeriodFormatterBuilder()
 				.appendDays()
 				.appendSuffix(" day", " days")
-				.appendSeparator(" and ")
+				.appendSeparator(" ")
 				.appendHours()
 				.appendSuffix(" hr", " hrs")
-				.appendSeparator(" and " )
+				.appendSeparator(" " )
 				.appendMinutes()
 				.appendSuffix(" min", " mins")
 				.toFormatter();

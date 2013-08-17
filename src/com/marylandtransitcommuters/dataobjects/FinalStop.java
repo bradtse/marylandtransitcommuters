@@ -23,6 +23,8 @@ public class FinalStop {
 	private String stopName;
 	private ArrayList<HashMap<String, String>> finalStopsList;
 	
+	public FinalStop() {}
+	
 	public FinalStop(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;

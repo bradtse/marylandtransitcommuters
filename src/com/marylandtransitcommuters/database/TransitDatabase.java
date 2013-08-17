@@ -3,6 +3,7 @@ package com.marylandtransitcommuters.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -14,11 +15,11 @@ import com.marylandtransitcommuters.MainActivity;
 /**
  * Rather than implementing the SQLiteOpenHelper inside of TransitProvider,
  * I decided to implement it within this class. The purpose of the class is
- * to correctly handle the different types of database queries. As of now
- * this class is kind of pointless.
+ * to correctly handle the different types of database queries. 
  */
 public class TransitDatabase {	
 	private TransitSqlHelper mTransitHelper;
+	private Context mContext;
 	
 	/**
 	 * TransitDatabase constructor
@@ -27,16 +28,9 @@ public class TransitDatabase {
 	public TransitDatabase(Context context) {
 		Log.d(MainActivity.LOG_TAG, "TransitDatabase constructor");
 		mTransitHelper = new TransitSqlHelper(context);
+		mContext = context;
 	}
 
-	/**
-	 * Helper function to retrieve a list from a table
-	 */
-	public Cursor getList(String table, String[] projection, String selection,
-						  String[] selectionArgs, String sortOrder) {
-		return query(table, projection, selection, selectionArgs, sortOrder);
-	}
-	
 	/**
 	 * Helper function to retrieve a single row from a table
 	 * @param table The table to query
@@ -48,7 +42,7 @@ public class TransitDatabase {
 		String id = uri.getLastPathSegment();
 		String selection = "((" + TransitContract.Routes._ID + " = ?))";
 		String[] selectionArgs = {id};
-		return query(table, projection, selection, selectionArgs, null);
+		return query(uri, table, projection, selection, selectionArgs, null);
 	}
 	
     /**
@@ -58,7 +52,7 @@ public class TransitDatabase {
      * @param selectionArgs Selection arguments for "?" components in the selection
      * @return A Cursor over all rows matching the query
      */
-    public Cursor query(String table, String[] projection, String selection, 
+    public Cursor query(Uri uri, String table, String[] projection, String selection, 
     					 String[] selectionArgs, String sortOrder) {
     	Log.d(MainActivity.LOG_TAG, "Transitdatabase query (Database creation)");
 
@@ -73,129 +67,72 @@ public class TransitDatabase {
         if (cursor == null) {
         	Log.d(MainActivity.LOG_TAG, "Returned cursor was null");
             return null;
-        } else if (!cursor.moveToFirst()) {
+        } 
+
+        if (!cursor.moveToFirst()) {
         	Log.d(MainActivity.LOG_TAG, "Cursor was empty");
-            cursor.close();
-            return null;
         }
-        Log.d(MainActivity.LOG_TAG, "Leaving Transitdatabase query");
+       
+        cursor.setNotificationUri(mContext.getContentResolver(), uri);
+        
         return cursor;
+    }
+    
+    /**
+     * Inserts the ContentValues into the table
+     * @return The uri of the newly inserted row
+     */
+    public Uri insert(Uri uri, String table, ContentValues cv) {
+    	SQLiteDatabase db = mTransitHelper.getWritableDatabase();
+    	try {
+	    	long rowId = db.insertOrThrow(table, null, cv);
+	    	if (rowId > 0 ) {
+	    		mContext.getContentResolver().notifyChange(uri, null);
+	    		Uri newUri = Uri.withAppendedPath(uri, String.valueOf(rowId));
+	    		return newUri;
+	    	} else { 
+	    		throw new SQLException();
+	    	}
+    	} catch (SQLException e) {
+    		Log.d(MainActivity.LOG_TAG, "Insert failed: " + e.getMessage());
+    	} finally {
+    		db.close();
+    	}
+    	return null;
+    }
+    
+    /**
+     * Deletes from the table based upon the arguments provided.
+     * @return The number of rows deleted
+     */
+    public int delete(Uri uri, String table, String selection, String[] selectionArgs) {
+    	SQLiteDatabase db = mTransitHelper.getWritableDatabase();
+    	int rowsDeleted = db.delete(table, selection, selectionArgs);
+    	mContext.getContentResolver().notifyChange(uri, null);
+    	return rowsDeleted;
     }
 	
 	/**
 	 * Helper class that opens/creates the database
 	 */
 	private static class TransitSqlHelper extends SQLiteOpenHelper {
-		private static final int DATABASE_VERSION = 1;
 		
-		private final Context mHelperContext;
-		private SQLiteDatabase mDatabase;
-
-		/**
-		 * TransitSqlHelper constructor
-		 * @param context The context of the app
-		 */
 		public TransitSqlHelper(Context context) {
-			super(context, TransitContract.DATABASE_NAME, null, DATABASE_VERSION);
+			super(context, TransitContract.DATABASE_NAME, null, TransitContract.DATABASE_VERSION);
 			Log.d(MainActivity.LOG_TAG, "TransitSqlHelper constructor");
-			mHelperContext = context;
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			Log.d(MainActivity.LOG_TAG, "TransitSqlHelper onCreate()");
-			mDatabase = db;
-			createDatabase();
-			Log.d(MainActivity.LOG_TAG, "Leaving TransitSqlHelper onCreate()");
+			for (String s : TransitContract.SQL_CREATE_TABLE_ARRAY) {
+				db.execSQL(s);
+			}
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
 		}
-		
-		/*
-		 * HELPER FUNCTIONS 
-		 */
-		
-		/** 
-		 * Create the database with the GTFS data
-		 */
-		private void createDatabase() {
-			/* Create all of the tables for the database */
-			for(String s : TransitContract.SQL_CREATE_TABLE_ARRAY) {
-				mDatabase.execSQL(s);
-			}
-		}
-		
-		/**
-		 * Helper function
-		 * @param id the raw id of the data file I am parsing
-		 * @param line the line to insert
-		 * @return the row the line was inserted into
-		 */
-		private long insertRowHelper(int id, String[] line) {
-			String[] keys;
-			String table;
-			switch(id) {
-//				case R.raw.agency:
-//					keys = TransitContract.Agency.KEY_ARRAY;
-//					table = TransitContract.Agency.TABLE_NAME;
-//					break;
-//				case R.raw.calendar_dates:
-//					keys = TransitContract.CalendarDates.KEY_ARRAY;
-//					table = TransitContract.CalendarDates.TABLE_NAME;
-//					break;
-//				case R.raw.calendar:
-//					keys = TransitContract.Calendar.KEY_ARRAY;
-//					table = TransitContract.Calendar.TABLE_NAME;
-//					break;
-//				case R.raw.routes:
-//					keys = TransitContract.Routes.KEY_ARRAY;
-//					table = TransitContract.Routes.TABLE_NAME;
-//					break;
-//				case R.raw.shapes:
-//					keys = TransitContract.Shapes.KEY_ARRAY;
-//					table = TransitContract.Shapes.TABLE_NAME;
-//					break;
-//				case R.raw.stops:
-//					keys = TransitContract.Stops.KEY_ARRAY;
-//					table = TransitContract.Stops.TABLE_NAME;
-//					break;
-//				case R.raw.stop_times:
-//					keys = TransitContract.StopTimes.KEY_ARRAY;
-//					table = TransitContract.StopTimes.TABLE_NAME;
-//					break;
-//				case R.raw.trips:
-//					keys = TransitContract.Trips.KEY_ARRAY;
-//					table = TransitContract.Trips.TABLE_NAME;
-//					break;
-				default:
-					return -1;
-			}
-//			return insertRow(line, keys, table);
-		}
-
-		/**
-		 * Insert line of data into table
-		 * @param line the data
-		 * @param keys the keys to insert the data in
-		 * @param table the table to insert the data into
-		 * @return the row the line was inserted into
-		 */
-		private long insertRow(String[] line, String[] keys, String table) {
-			// Check to make sure the line returned by OpenCSV is the correct size
-			if (line.length != keys.length) {
-				return -1;
-			}
-			ContentValues values = new ContentValues();
-			int i = 0;
-			for(String s : keys) {
-				values.put(s, line[i]);
-				i++;
-			}
-			return mDatabase.insert(table, null, values);
-		}
 	}
-	
 }

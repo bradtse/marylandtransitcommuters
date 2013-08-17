@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.marylandtransitcommuters.MainActivity;
+import com.marylandtransitcommuters.database.TransitContract.Favorites;
 
 /**
  * Content Provider for the transit data
@@ -20,22 +21,7 @@ public class TransitProvider extends ContentProvider {
 	/*
 	 * UriMatcher constants
 	 */
-	private static final int GET_AGENCY_LIST = 0;
-	private static final int GET_AGENCY = 1;
-	private static final int GET_CALENDAR_DATES_LIST = 2;
-	private static final int GET_CALENDAR_DATE = 3;
-	private static final int GET_CALENDAR_LIST = 4;
-	private static final int GET_CALENDAR = 5;
-	private static final int GET_ROUTES_LIST = 6;
-	private static final int GET_ROUTE = 7;
-	private static final int GET_SHAPES_LIST = 8;
-	private static final int GET_SHAPE = 9;
-	private static final int GET_STOPS_LIST = 10;
-	private static final int GET_STOP = 11;
-	private static final int GET_STOP_TIMES_LIST = 12;
-	private static final int GET_STOP_TIME = 13;
-	private static final int GET_TRIPS_LIST = 14;
-	private static final int GET_TRIP = 15;
+	private static final int FAVORITE = 0;
 
 	@Override
 	public boolean onCreate() {
@@ -47,38 +33,8 @@ public class TransitProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch(sUriMatcher.match(uri)) {
-			case GET_AGENCY_LIST:
-				return TransitContract.Agency.CONTENT_TYPE;
-			case GET_AGENCY:
-				return TransitContract.Agency.CONTENT_ITEM_TYPE;
-			case GET_CALENDAR_DATES_LIST:
-				return TransitContract.CalendarDates.CONTENT_TYPE;
-			case GET_CALENDAR_DATE:
-				return TransitContract.CalendarDates.CONTENT_ITEM_TYPE;
-			case GET_CALENDAR_LIST:
-				return TransitContract.Calendar.CONTENT_TYPE;
-			case GET_CALENDAR:
-				return TransitContract.Calendar.CONTENT_ITEM_TYPE;
-			case GET_ROUTES_LIST:
-				return TransitContract.Routes.CONTENT_TYPE;
-			case GET_ROUTE:
-				return TransitContract.Routes.CONTENT_ITEM_TYPE;
-			case GET_SHAPES_LIST:
-				return TransitContract.Shapes.CONTENT_TYPE;
-			case GET_SHAPE:
-				return TransitContract.Shapes.CONTENT_ITEM_TYPE;
-			case GET_STOPS_LIST:
-				return TransitContract.Stops.CONTENT_TYPE;
-			case GET_STOP:
-				return TransitContract.Stops.CONTENT_ITEM_TYPE;
-			case GET_STOP_TIMES_LIST:
-				return TransitContract.StopTimes.CONTENT_TYPE;
-			case GET_STOP_TIME:
-				return TransitContract.StopTimes.CONTENT_ITEM_TYPE;
-			case GET_TRIPS_LIST:
-				return TransitContract.Trips.CONTENT_TYPE;
-			case GET_TRIP:
-				return TransitContract.Trips.CONTENT_ITEM_TYPE;
+			case FAVORITE:
+				return TransitContract.Favorites.CONTENT_ITEM_TYPE;
 			default:
 				throw new IllegalArgumentException("Unsupported URI " + uri);
 		}
@@ -89,38 +45,33 @@ public class TransitProvider extends ContentProvider {
 						String[] selectionArgs, String sortOrder) {
 		Log.d(MainActivity.LOG_TAG, "TransitProvider query()");
 		switch(sUriMatcher.match(uri)) {
-			case GET_ROUTES_LIST:
-				return mTransitDatabase.getList(TransitContract.Routes.TABLE_NAME, 
-											  	projection, selection, 
-											  	selectionArgs, sortOrder);
-			case GET_ROUTE:
-				return mTransitDatabase.getRow(TransitContract.Routes.TABLE_NAME, 
-											   projection, uri);
-			case GET_STOPS_LIST:
-				return mTransitDatabase.getList(TransitContract.Stops.TABLE_NAME,
-												projection, selection,
-												selectionArgs, sortOrder);
-			case GET_STOP:
-				return mTransitDatabase.getRow(TransitContract.Stops.TABLE_NAME,
-											   projection, uri);
+			case FAVORITE:
+				return mTransitDatabase.query(uri, TransitContract.Favorites.TABLE_NAME, 
+								projection, selection, selectionArgs, sortOrder);
 			default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
 	}
 
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		throw new UnsupportedOperationException("Delete not supported for database");
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		switch(sUriMatcher.match(uri)) {
+			case FAVORITE:
+				return mTransitDatabase.delete(uri, Favorites.TABLE_NAME, selection, selectionArgs);
+			default:
+				throw new IllegalArgumentException("Unsupported URI: " + uri);
+		}
 	}
 
-	/*
-	 * Not sure if I will implement this because for this app no data should ever
-	 * be inserted into the database unless the GTFS data is updated, which as of
-	 * now will be handled manually by me
-	 */
 	@Override
-	public Uri insert(Uri arg0, ContentValues arg1) {
-		throw new UnsupportedOperationException("Insert not supported for database");
+	public Uri insert(Uri uri, ContentValues cv) {
+		switch(sUriMatcher.match(uri)) {
+			case FAVORITE:
+				Log.d(MainActivity.LOG_TAG, "Inserting into favorites table");
+				return mTransitDatabase.insert(uri, TransitContract.Favorites.TABLE_NAME, cv);
+			default:
+				throw new IllegalArgumentException("Unsupported URI: " + uri);
+		}
 	}
 
 	@Override
@@ -140,22 +91,7 @@ public class TransitProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Agency.TABLE_NAME, GET_AGENCY_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Agency.TABLE_NAME + "/#", GET_AGENCY);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.CalendarDates.TABLE_NAME, GET_CALENDAR_DATES_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.CalendarDates.TABLE_NAME + "/#", GET_CALENDAR_DATE);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Calendar.TABLE_NAME, GET_CALENDAR_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Calendar.TABLE_NAME + "/#", GET_CALENDAR);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME, GET_ROUTES_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Routes.TABLE_NAME + "/#", GET_ROUTE);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Shapes.TABLE_NAME, GET_SHAPES_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Shapes.TABLE_NAME + "/#", GET_SHAPE);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME, GET_STOPS_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Stops.TABLE_NAME + "/#", GET_STOP);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.StopTimes.TABLE_NAME, GET_STOP_TIMES_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.StopTimes.TABLE_NAME + "/#", GET_STOP_TIME);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Trips.TABLE_NAME, GET_TRIPS_LIST);
-		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Trips.TABLE_NAME + "/#", GET_TRIP);
+		matcher.addURI(TransitContract.AUTHORITY, TransitContract.Favorites.TABLE_NAME, FAVORITE);
 		
 		return matcher;
 	}

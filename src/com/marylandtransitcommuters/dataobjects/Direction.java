@@ -27,6 +27,8 @@ public class Direction {
 	private String headsign;
 	private ArrayList<HashMap<String, String>> dirsList;
 	
+	public Direction() {}
+	
 	/**
 	 * Constructor
 	 * @param data The direction data returned by the server

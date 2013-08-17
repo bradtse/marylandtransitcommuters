@@ -9,8 +9,19 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-  
+        android:layout_height="match_parent"
+        android:background="@color/window_color" >
+        
+        <ImageView
+            android:id="@+id/frame_layout_image"
+            android:src="@drawable/bus_grey"
+            android:contentDescription="@string/frame_layout_image"
+            android:layout_width="70dp"
+            android:layout_height="80dp" 
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+        
     <!-- The navigation drawer view -->
     <ListView
         android:id="@+id/left_drawer"

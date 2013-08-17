@@ -30,6 +30,12 @@ public class Route {
 	 * Constructor
 	 * @param data The route data returned by the server
 	 */
+	public Route() {}
+
+	/**
+	 * Constructor
+	 * @param data The route data returned by the server
+	 */
 	public Route(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = prettify(data);

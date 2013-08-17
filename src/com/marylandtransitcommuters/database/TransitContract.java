@@ -18,30 +18,33 @@ public final class TransitContract {
 	public static final String AUTHORITY = "com.marylandtransitcommuters.TransitProvider";
 	public static final String SCHEME = "content://";
 	public static final String SLASH = "/";
-	public static final String DATABASE_NAME = "transit.db"; 
+	public static final String DATABASE_NAME = "gtfs.db"; 
+	public static final int DATABASE_VERSION = 1;
 	
 	/* An array list of all the table names */
 	public static final String[] TABLE_ARRAY = {
+		Favorites.TABLE_NAME
 //		Agency.TABLE_NAME,
 //		CalendarDates.TABLE_NAME,
 //		Calendar.TABLE_NAME,
-		Routes.TABLE_NAME,
+//		Routes.TABLE_NAME,
 //		Shapes.TABLE_NAME,
-		Stops.TABLE_NAME,
+//		Stops.TABLE_NAME,
 //		StopTimes.TABLE_NAME,
-		Trips.TABLE_NAME
+//		Trips.TABLE_NAME
 	};
 	
 	/* An array list of all the SQL create table statements */
 	public static final String[] SQL_CREATE_TABLE_ARRAY = {
-		Agency.CREATE_TABLE,
-		CalendarDates.CREATE_TABLE,
-		Calendar.CREATE_TABLE,
-		Routes.CREATE_TABLE,
-		Shapes.CREATE_TABLE,
-		Stops.CREATE_TABLE,
-		StopTimes.CREATE_TABLE,
-		Trips.CREATE_TABLE
+		Favorites.CREATE_TABLE
+//		Agency.CREATE_TABLE,
+//		CalendarDates.CREATE_TABLE,
+//		Calendar.CREATE_TABLE,
+//		Routes.CREATE_TABLE,
+//		Shapes.CREATE_TABLE,
+//		Stops.CREATE_TABLE,
+//		StopTimes.CREATE_TABLE,
+//		Trips.CREATE_TABLE
 	};
 	
 	/* Do not allow this class to be instantiated */
@@ -52,7 +55,154 @@ public final class TransitContract {
 	 */
 	public static final class Favorites implements BaseColumns {
 		private Favorites() {}
+
+		/**
+		 * Table name
+		 */
+		public static final String TABLE_NAME = "favorites";
 		
+		/*
+		 * Table columns
+		 */
+		
+		/**
+	     * Column name for the route_id 
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_ROUTE_ID = "route_id";
+		
+		/**
+	     * Column name for the route_id 
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_ROUTE_SHORT_NAME = "route_short_name";
+
+		/**
+	     * Column name for the start stop_id
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_ROUTE_LONG_NAME = "route_long_name";
+
+		/**
+	     * Column name for the direction_id 
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_DIRECTION_ID = "direction_id";
+		
+		/**
+	     * Column name for the direction's headsign
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_DIRECTION_HEADSIGN = "direction_headsign";
+		
+		/**
+	     * Column name for the start stop_id
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_START_STOP_ID = "start_stop_id";
+		
+		/**
+	     * Column name for the start stop name
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_START_STOP_NAME = "start_stop_name";
+
+		/**
+	     * Column name for the start stop sequence
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_START_STOP_SEQ = "start_stop_seq";
+
+		/**
+	     * Column name for the final stop_id
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_FINAL_STOP_ID = "final_stop_id";
+
+		/**
+	     * Column name for the start stop name
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_FINAL_STOP_NAME = "final_stop_name";
+		
+		/**
+	     * Column name for the start stop sequence
+	     * <P>Type: TEXT</P>
+	     */
+		public static final String KEY_FINAL_STOP_SEQ = "final_stop_seq";
+
+		/*
+         * URI definitions
+         */
+
+		/**
+		 * The content style URI
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME);
+		
+		/**
+		 * The content URI base for a single row. An ID must be appended.
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + SLASH + TABLE_NAME + SLASH);
+		
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_ORDER = "_ID ASC";
+        
+		/*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing rows
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.favorites";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} single row
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + 
+        										"/vnd.com.marylandtransitcommuters.favorites";
+		
+		/**
+         * SQL Statement to create the routes table
+         */
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
+        										  + _ID + " INTEGER PRIMARY KEY,"
+        										  + KEY_ROUTE_ID + " TEXT,"
+        										  + KEY_ROUTE_SHORT_NAME + " TEXT,"
+        										  + KEY_ROUTE_LONG_NAME + " TEXT,"
+        										  + KEY_DIRECTION_ID + " TEXT,"
+        										  + KEY_DIRECTION_HEADSIGN + " TEXT,"
+        										  + KEY_START_STOP_ID + " TEXT,"
+        										  + KEY_START_STOP_NAME + " TEXT,"
+        										  + KEY_START_STOP_SEQ + " TEXT,"
+        										  + KEY_FINAL_STOP_ID + " TEXT," 
+        										  + KEY_FINAL_STOP_NAME + " TEXT" 
+        										  + ");";
+        
+        /**
+         * SQL statement to delete the table
+         */
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        
+        /**
+         * Array of all the columns. Makes for cleaner code
+         */
+        public static final String[] KEY_ARRAY = {
+			KEY_ROUTE_ID,
+			KEY_ROUTE_SHORT_NAME,
+			KEY_ROUTE_LONG_NAME,
+			KEY_DIRECTION_ID,
+			KEY_DIRECTION_HEADSIGN,
+			KEY_START_STOP_ID,
+			KEY_START_STOP_NAME,
+			KEY_START_STOP_SEQ,
+			KEY_FINAL_STOP_ID,
+			KEY_FINAL_STOP_NAME
+        };
 	}
 	
 	/** 

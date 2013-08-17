@@ -6,11 +6,13 @@
     
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".TransitApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -30,8 +32,8 @@
         </activity>
         
         <!-- Provides search suggestions for words and their definitions. -->
-<!--         <provider android:name="com.marylandtransitcommuters.database.TransitProvider" -->
-<!--                   android:authorities="com.marylandtransitcommuters.TransitProvider" /> -->
+        <provider android:name="com.marylandtransitcommuters.database.TransitProvider"
+                  android:authorities="com.marylandtransitcommuters.TransitProvider" />
         
         <service android:name="com.marylandtransitcommuters.service.TransitService" />
         
