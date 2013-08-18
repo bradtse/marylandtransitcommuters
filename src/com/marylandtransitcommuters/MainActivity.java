@@ -1,7 +1,6 @@
 package com.marylandtransitcommuters;
 
 import java.util.ArrayDeque;
-import java.util.Iterator;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -47,6 +46,9 @@ import com.marylandtransitcommuters.fragments.TransitFragment.ReplaceFragmentLis
  */
 public class MainActivity extends SherlockFragmentActivity implements ReplaceFragmentListener, LoaderCallbacks<Cursor> {
 	public static final String LOG_TAG = "BRAD";
+	private static final String FRAG_STACK= "fragstack";
+	private static final String FRAG_TAG = "fragtag";
+	private static final int HDR_SIZE = 2; // # of views the drawer headers take up
 
 	private CharSequence mTitle;
 	private CharSequence mDrawerTitle;
@@ -58,7 +60,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	private String mCurrFragTag;
 	private SimpleCursorAdapter mCursorAdapter;
 	private boolean mCommitDelayed;
-	private FragmentTransaction ft;
+	private FragmentTransaction mFt;
 	private ImageView mFrameImage;
 		
     @Override
@@ -113,7 +115,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      */
     private MergeAdapter setupMergeAdapter() {
     	MergeAdapter m = new MergeAdapter();
-    	
+
     	m.addView(createHeader("CATEGORY"));
     	m.addView(createDivider());
 
@@ -166,10 +168,10 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	}
 
     	FragmentManager fm = getSupportFragmentManager();
-    	ft = fm.beginTransaction();
+    	mFt = fm.beginTransaction();
     	
     	if (animate == true) {
-	    	ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, 
+	    	mFt.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, 
 	    						   R.anim.slide_in_left, R.anim.slide_out_right);
 //	    	ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, 
 //	    						   R.anim.fade_in, R.anim.fade_out);
@@ -179,18 +181,18 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	if (mCurrFragTag != null) {
     		mFragTags.push(mCurrFragTag);
 			TransitFragment currentFragment = (TransitFragment) fm.findFragmentByTag(mCurrFragTag);
-    		ft.hide(currentFragment);
+    		mFt.hide(currentFragment);
     	}
     	
     	// Add the new fragment to the fragment frame layout 
-		ft.add(R.id.content_frame, newFrag, newFragTag);
+		mFt.add(R.id.content_frame, newFrag, newFragTag);
 		
 		if (addToBackStack == true) {
-			ft.addToBackStack(null);
+			mFt.addToBackStack(null);
 		}
 
 		if (commit == true) {
-			ft.commit();
+			mFt.commit();
 		} else {
 			mCommitDelayed = true;
 		}
@@ -238,19 +240,24 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
+    	super.onSaveInstanceState(outState);
+    	outState.putSerializable(FRAG_STACK, mFragTags);
+    	outState.putSerializable(FRAG_TAG, mCurrFragTag);
+    }
+    
+    @Override
     protected void onRestoreInstanceState(Bundle inState) {
     	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
     	super.onRestoreInstanceState(inState);
-    	// Restores my stack of fragment tags
-    	mFragTags = (ArrayDeque<String>) inState.getSerializable("frags");
-    	mCurrFragTag = (String) inState.getSerializable("currfrag");
-    	
+    	mFragTags = (ArrayDeque<String>) inState.getSerializable(FRAG_STACK);
+    	mCurrFragTag = (String) inState.getSerializable(FRAG_TAG);
     	if (mCurrFragTag != null) {
     		mFrameImage.setVisibility(View.GONE);
     	}
-
     	hideFragmentsOnBackStack();
-    }
+    } 
     
 	/* 
 	 * Hides each fragment on the back stack since for some reason they
@@ -259,23 +266,12 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     private void hideFragmentsOnBackStack() {
     	FragmentManager fm = getSupportFragmentManager();
     	FragmentTransaction ft = fm.beginTransaction();
-        Iterator<String> it = mFragTags.iterator();
-        while (it.hasNext()) {
-        	TransitFragment fragment = (TransitFragment) fm.findFragmentByTag(it.next());
-        	ft.hide(fragment);
-        }
+        for (String s : mFragTags) {
+        	ft.hide((TransitFragment) fm.findFragmentByTag(s));
+    	}
         ft.commit();
     }
     
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	Log.d(MainActivity.LOG_TAG, "MainActivity onSaveInstanceState()");
-    	super.onSaveInstanceState(outState);
-    	// Keep track of the stack of fragment tags
-    	outState.putSerializable("frags", mFragTags);
-    	outState.putSerializable("currfrag", mCurrFragTag);
-    }
-   
     /**
      * The click listener for the ListView in the nav drawer 
      */
@@ -291,20 +287,24 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Handles when nav drawer item is selected
      */
     private void selectItem(int position) {
-    	
-    	if (isBetween(position, 2, 1 + mDrawerItems.length)){
+    	if (isBetween(position, HDR_SIZE, HDR_SIZE + mDrawerItems.length - 1)){
+
 	    	position = position - 2;
 	    	// Then set the action bar title to the item that was selected
 	    	setTitle(mDrawerItems[position]);
+
 	     	if (position == 0) {
 	        	replaceFragment(RoutesFragment.TAG, new RoutesFragment(), false, true, true, false);
 	    	} else if (position == 1) {
 	    		
 	    	}    	
-    	} else if (isBetween(position, 4 + mDrawerItems.length, 3 + mDrawerItems.length + mCursorAdapter.getCount())) {
-	    	position = position - 4 - mDrawerItems.length;
+
+    	} else if (isBetween(position, (HDR_SIZE * 2) + mDrawerItems.length, 
+    			  (HDR_SIZE * 2) + mDrawerItems.length + mCursorAdapter.getCount() - 1)) {
+
+	    	position = position - (HDR_SIZE * 2) - mDrawerItems.length;
+	    	
 	    	Cursor c = mCursorAdapter.getCursor();
-	    	Log.d(LOG_TAG, "Cursor size: " + c.getCount());
 	    	c.moveToPosition(position);
 
 	    	String routeId = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_ID));
@@ -333,8 +333,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	mDrawerLayout.closeDrawer(mDrawerList);
     }
     
-    private boolean isBetween(int x, int lower, int upper) {
-    	return lower <= x && x <= upper;
+    private boolean isBetween(int value, int lower, int upper) {
+    	return lower <= value && value <= upper;
     }
     
     /**
@@ -350,7 +350,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         		supportInvalidateOptionsMenu(); // Redraw options menu
         		if (mCommitDelayed == true) {
         			mFrameImage.setVisibility(View.GONE);
-        			ft.commit();
+        			mFt.commit();
         			getSupportFragmentManager().executePendingTransactions();
         			mCommitDelayed = false;
         		}
@@ -387,9 +387,10 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
        
-        // Get the SearchView menu item
+        // Get the SearchView menu item and hide it
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		SearchView search = (SearchView) searchItem.getActionView();
+		search.setVisibility(View.GONE);
 		
 		// Make the text for the SearchView white instead of the default grey
 		AutoCompleteTextView searchText = (AutoCompleteTextView) search.findViewById(R.id.abs__search_src_text);
@@ -404,7 +405,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-    	// Hides the SearchView when the drawer is open
     	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
     	menu.findItem(R.id.menu_search).setVisible(!drawerOpen);
     	return super.onPrepareOptionsMenu(menu);
@@ -429,7 +429,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 	    		Toast.makeText(this, "Yay settings!", Toast.LENGTH_SHORT).show();
 	    		return true;
 	    	case R.id.email_developer:
-	    		sendEmail();
+	    		sendEmailToDeveloper();
 	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);
@@ -439,7 +439,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     /*
      * Helper class to send an email to the developer
      */
-    private void sendEmail() {
+    private void sendEmailToDeveloper() {
 		Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 //		emailIntent.setType("message/rfc822");
 		emailIntent.setData(Uri.parse("mailto:" + "bradleytse@gmail.com"));
@@ -455,7 +455,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
  	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
  		Log.d(LOG_TAG, "Loader intialized");
- 		Uri uri= Favorites.CONTENT_URI;
  		String[] projection = {Favorites._ID, 
  							   Favorites.KEY_ROUTE_ID,
  							   Favorites.KEY_ROUTE_SHORT_NAME,
@@ -467,7 +466,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
  							   Favorites.KEY_START_STOP_SEQ,
  							   Favorites.KEY_FINAL_STOP_ID,
  							   Favorites.KEY_FINAL_STOP_NAME};
- 		return new CursorLoader(this, uri, projection, null, null, Favorites.DEFAULT_SORT_ORDER);
+ 		return new CursorLoader(this, Favorites.CONTENT_URI, projection, null, 
+ 								null, Favorites.DEFAULT_SORT_ORDER);
 	}
 
 	@Override

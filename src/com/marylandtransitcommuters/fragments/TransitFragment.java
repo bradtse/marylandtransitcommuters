@@ -115,15 +115,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/*
 	 * Current workaround that removes animations when the fragments are removed
 	 * from the backstack. This doesn't work completely because it still shows the 
-	 * fragments for a split seconds.
+	 * fragments for a split second.
 	 */
 	@Override
 	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-		Log.d(MainActivity.LOG_TAG, "Fragment animation");
 		TransitApplication app = (TransitApplication) getActivity().getApplication();
-		Log.d(MainActivity.LOG_TAG, String.valueOf(app.isFragmentAnimationsEnabled()));
 		if (app.isFragmentAnimationsEnabled() == false) {
-			Log.d(MainActivity.LOG_TAG, "Animation disabled");
 			Animation a = new Animation() {};
 			a.setDuration(0);
 			return a;
@@ -132,7 +129,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 	
 	/**
-	 * Adds the appropriate service type to the intent 
+	 * Adds the appropriate service type to the intent as an extra. Abstract method. 
 	 * @param intent The intent to declare the type for
 	 */
 	protected abstract void setIntentServiceType(Intent intent);
@@ -175,11 +172,32 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		Log.d(MainActivity.LOG_TAG, "Fragment onCreateOptionsMenu()");
-		// Keeps a reference to the SearchView for future use 
 		mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		mSearchView.setVisibility(View.VISIBLE);
 		setSearchViewTextListener();
 	}
+
+	/*
+	 * Attaches the adapter's filter to the Search View to allow filtering of the ListView
+	 */
+	private void setSearchViewTextListener() {
+		if (mSearchView != null && mAdapter != null) {
+			mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 	
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					return false;
+				}
+	
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					mAdapter.getFilter().filter(newText);
+					return false;
+				}
+			});
+		}
+	}
+
 	// This is the callback that is called when the TransitService completes its work
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
@@ -208,30 +226,11 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
 	}
 
-	/*
-	 * Attaches the adapter's filter to the Search View
-	 */
-	private void setSearchViewTextListener() {
-		if (mSearchView != null && mAdapter != null) {
-			mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
-	
-				@Override
-				public boolean onQueryTextSubmit(String query) {
-					return false;
-				}
-	
-				@Override
-				public boolean onQueryTextChange(String newText) {
-					mAdapter.getFilter().filter(newText);
-					return false;
-				}
-			});
-		}
-	}
-
 	/**
 	 * Creates and attaches the adapter to the fragment's ListView. The adapter
 	 * is created using the data received back from the server.
+	 * 
+	 * This is an abstract method that must be implemented by subclasses. 
 	 */
 	public abstract void setListViewAdapter();
 
@@ -254,8 +253,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * Handles what should happen when an item in the ListView is clicked by 
      * the user. In our case, this really means storing info about the item
      * that was selected, and then alerting the MainActivity to start the 
-     * next appropriate fragment.
-     * @param position Index of the item selected
+     * next appropriate fragment. This is an abstract method that must be implemented
+     * by any subclasses.
+     * @param position Index of the item selected in the ListView
      */
     public abstract void selectItem(int position);
 

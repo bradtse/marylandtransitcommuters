@@ -127,16 +127,16 @@ public class TimesFragment extends TransitFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		Log.d(MainActivity.LOG_TAG, "onCreateOptionsMenu()");
 		inflater.inflate(R.menu.time, menu);
-		
+		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mFavoritesIcon = menu.findItem(R.id.favorite);
+
+		// Hide the SearchView
+		mSearchView = (SearchView) searchItem.getActionView();    
+		mSearchView.setVisibility(View.GONE);
+
 		if (mIsFavorite == true) {
 			setFavoritesState(ON);
 		}
-		
-		// Hide the SearchView
-		MenuItem searchItem = menu.findItem(R.id.menu_search);
-		mSearchView = (SearchView) searchItem.getActionView();    
-		mSearchView.setVisibility(View.GONE);
 	}
 	
 	@Override
