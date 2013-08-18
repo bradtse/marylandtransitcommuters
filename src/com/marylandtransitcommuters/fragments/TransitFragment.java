@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -62,13 +64,16 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
-			startIntentService();
+			if (hasInternet()) {
+				startIntentService();
+			}
 		} 
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreateView()");
 		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
 		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
 		mResults = (TextView) mRootView.findViewById(R.id.result_count);
@@ -258,10 +263,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
      * @param position Index of the item selected in the ListView
      */
     public abstract void selectItem(int position);
+    
+    private boolean hasInternet() {
+    	ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+    	NetworkInfo info = cm.getActiveNetworkInfo();
+    	return (info != null && info.isConnected()) ? true : false;
+    }
+
+	@Override
+	public void onPause() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onPause()");
+		super.onDestroy();
+	}
+
+	@Override
+	public void onStop() {
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onStop()");
+		super.onDestroy();
+	}
 
 	@Override
 	public void onDestroy() {
-		Log.d(MainActivity.LOG_TAG, "Destroying fragment");
+		Log.d(MainActivity.LOG_TAG, "TransitFragment onDestroy()");
 		super.onDestroy();
 	}
 	

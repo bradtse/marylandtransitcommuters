@@ -76,11 +76,19 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mFrameImage = (ImageView) findViewById(R.id.frame_layout_image);
         
-        setupNavigationDrawer();   
+        setupNavigationDrawer(savedInstanceState);   
         getSupportLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
         	mFragTags = new ArrayDeque<String>();
+        	mDrawerLayout.openDrawer(Gravity.LEFT);
+        } else {
+        	mFragTags = (ArrayDeque<String>) savedInstanceState.getSerializable(FRAG_STACK);
+        	mCurrFragTag = (String) savedInstanceState.getSerializable(FRAG_TAG);
+        	if (mCurrFragTag != null) {
+        		mFrameImage.setVisibility(View.GONE);
+        	}
+        	hideFragmentsOnBackStack();	
         }
     }
     
@@ -88,7 +96,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Takes care of setting up all of the elements needed for a properly functioning
      * navigation drawer
      */
-    private void setupNavigationDrawer() {
+    private void setupNavigationDrawer(Bundle savedInstanceState) {
     	// Add drawer shadow
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // Attach the adapter to the drawer ListView
@@ -103,10 +111,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         // Add a listener for when the drawer is toggled
         mDrawerToggle = getActionBarDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        
-//        mDrawerList.performItemClick(mDrawerList, 2, mDrawerList.getItemIdAtPosition(2));
-        // Start with the drawer open
-        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
     
     /*
@@ -196,6 +200,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		} else {
 			mCommitDelayed = true;
 		}
+
     	mCurrFragTag = newFragTag;
     }
     
@@ -246,18 +251,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	outState.putSerializable(FRAG_STACK, mFragTags);
     	outState.putSerializable(FRAG_TAG, mCurrFragTag);
     }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle inState) {
-    	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
-    	super.onRestoreInstanceState(inState);
-    	mFragTags = (ArrayDeque<String>) inState.getSerializable(FRAG_STACK);
-    	mCurrFragTag = (String) inState.getSerializable(FRAG_TAG);
-    	if (mCurrFragTag != null) {
-    		mFrameImage.setVisibility(View.GONE);
-    	}
-    	hideFragmentsOnBackStack();
-    } 
     
 	/* 
 	 * Hides each fragment on the back stack since for some reason they
@@ -369,7 +362,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	getSupportActionBar().setTitle(mTitle);
     }
 
- 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
     	super.onPostCreate(savedInstanceState);
@@ -497,7 +489,13 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	Log.d(LOG_TAG, "MainActivity onStart()");
     	super.onStart();
     }
-    
+
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+    	Log.d(MainActivity.LOG_TAG, "MainActivity onRestoreInstanceState()");
+    	super.onRestoreInstanceState(inState);
+    }  
+
     @Override
     protected void onResume() {
     	Log.d(LOG_TAG, "MainActivity onResume()");
