@@ -6,15 +6,18 @@ import android.app.Application;
  * Keeps track of a few application wide variables
  */
 public class TransitApplication extends Application {
+	private static boolean sFragmentAnimations = true;
 	
-	private boolean isAlive = false;
-	
-	public void setAlive () {
-		this.isAlive = true;
+	public void enableFragmentAnimations() {
+		sFragmentAnimations = true;
 	}
 	
-	public boolean isAlive() {
-		return isAlive;
+	public void disableFragmentAnimations() {
+		sFragmentAnimations = false;
+	}
+	
+	public boolean isFragmentAnimationsEnabled() {
+		return sFragmentAnimations;
 	}
 	
 }

@@ -201,6 +201,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * Removes all of the current fragments in the frame layout
      */
     private void removeAllFragments() {
+    	((TransitApplication) getApplication()).disableFragmentAnimations();
+
     	FragmentManager fm = getSupportFragmentManager();
     	fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     	FragmentTransaction ft = fm.beginTransaction();
@@ -216,6 +218,10 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         }
 
         ft.commit();
+        fm.executePendingTransactions();
+
+        ((TransitApplication) getApplication()).enableFragmentAnimations();
+
         mCurrFragTag = null;
         
         if (mCommitDelayed == false) {

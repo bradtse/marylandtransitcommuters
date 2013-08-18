@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,6 +25,7 @@ import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.marylandtransitcommuters.MainActivity;
 import com.marylandtransitcommuters.R;
+import com.marylandtransitcommuters.TransitApplication;
 import com.marylandtransitcommuters.adapters.CustomSimpleAdapter;
 import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.receiver.TransitReceiver;
@@ -108,6 +110,25 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
 		setIntentServiceType(intent);
 		mContext.startService(intent);
+	}
+	
+	/*
+	 * Current workaround that removes animations when the fragments are removed
+	 * from the backstack. This doesn't work completely because it still shows the 
+	 * fragments for a split seconds.
+	 */
+	@Override
+	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+		Log.d(MainActivity.LOG_TAG, "Fragment animation");
+		TransitApplication app = (TransitApplication) getActivity().getApplication();
+		Log.d(MainActivity.LOG_TAG, String.valueOf(app.isFragmentAnimationsEnabled()));
+		if (app.isFragmentAnimationsEnabled() == false) {
+			Log.d(MainActivity.LOG_TAG, "Animation disabled");
+			Animation a = new Animation() {};
+			a.setDuration(0);
+			return a;
+		}
+		return super.onCreateAnimation(transit, enter, nextAnim);
 	}
 	
 	/**
