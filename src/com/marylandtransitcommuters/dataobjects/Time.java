@@ -34,6 +34,11 @@ public class Time {
 		this.prettyData = data;
 	}
 	
+	public void setData(JSONArray data) {
+		this.rawData = data;
+		this.prettyData = data;
+	}
+	
 	public ArrayList<HashMap<String, String>> getTimesList() {
 		return createTimesList();
 	}

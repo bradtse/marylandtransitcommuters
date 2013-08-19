@@ -25,11 +25,11 @@ public final class TransitData {
 	private Time time;
 
 	private TransitData() {
-		this.route = new Route();
-		this.direction = new Direction();
-		this.startStop = new StartStop();
-		this.finalStop = new FinalStop();
-		this.time = new Time();
+		route = new Route();
+		direction = new Direction();
+		startStop = new StartStop();
+		finalStop = new FinalStop();
+		time = new Time();
 	}
 	
 	/**
@@ -45,6 +45,13 @@ public final class TransitData {
 	}
 	
 	/**
+	 * Singleton setter
+	 */
+	public static void setInstance(TransitData data) {
+		instance = data;
+	}
+	
+	/**
 	 * Stores data in the singleton in the form of a JSONArray
 	 * @param type the type of the data that is passed in
 	 * @param data the JSONArray containing the data
@@ -52,19 +59,19 @@ public final class TransitData {
 	public void setData(TransitService.DataType type, JSONArray data) {
 		switch (type) {
 			case ROUTES:
-				this.route = new Route(data);
+				instance.route.setData(data);
 				break;
 			case DIRECTIONS:
-				this.direction = new Direction(data);
+				instance.direction.setData(data);
 				break;
 			case STARTSTOPS:
-				this.startStop = new StartStop(data);
+				instance.startStop.setData(data);
 				break;
 			case FINALSTOPS:
-				this.finalStop = new FinalStop(data);
+				instance.finalStop.setData(data);
 				break;
 			case TIMES:
-				this.time = new Time(data);
+				instance.time.setData(data);
 				break;
 			default:
 				Log.d(MainActivity.LOG_TAG, "setData() should never use default case");
@@ -76,23 +83,23 @@ public final class TransitData {
 	 */
 	
 	public void selectRoute(String routeId, String shortName, String longName) {
-		route.setRouteInfo(routeId, shortName, longName);
+		instance.route.setRouteInfo(routeId, shortName, longName);
 	}
 	
 	public String getRouteId() {
-		return (route == null) ? null : route.getRouteId();
+		return instance.route.getRouteId();
 	}
 	
 	public String getRouteShortName() {
-		return (route == null) ? null : route.getShortName();
+		return instance.route.getShortName();
 	}
 	
 	public String getRouteLongName() {
-		return (route == null) ? null : route.getLongName();
+		return instance.route.getLongName();
 	}
 	
 	public ArrayList<HashMap<String, String>> getRoutesList() {
-		return (route == null) ? null : route.getRoutesList();
+		return instance.route.getRoutesList();
 	}
 
 	/*
@@ -100,19 +107,19 @@ public final class TransitData {
 	 */
 	
 	public void selectDirection(String dirId, String headSign) {
-		direction.setDirectionInfo(dirId, headSign);
+		instance.direction.setDirectionInfo(dirId, headSign);
 	}
 	
 	public String getDirectionId() {
-		return (direction == null) ? null : direction.getDirectionId();
+		return instance.direction.getDirectionId();
 	}
 	
 	public String getDirectionHeadsign() {
-		return (direction == null) ? null : direction.getHeadsign();
+		return instance.direction.getHeadsign();
 	}
 	
 	public ArrayList<HashMap<String, String>> getDirectionsList() {
-		return (direction == null) ? null : direction.getDirectionsList();
+		return instance.direction.getDirectionsList();
 	}
 		
 	/*
@@ -120,23 +127,23 @@ public final class TransitData {
 	 */
 	
 	public void selectStartStop(String stopId, String shortName, String stopSeq) {
-		startStop.setStopInfo(stopId, shortName, stopSeq);
+		instance.startStop.setStopInfo(stopId, shortName, stopSeq);
 	}
 	
 	public String getStartStopId() {
-		return (startStop == null) ? null : startStop.getStopId();
+		return instance.startStop.getStopId();
 	}
 	
 	public String getStartStopName() {
-		return (startStop == null) ? null : startStop.getStopName();
+		return instance.startStop.getStopName();
 	}
 	
 	public String getStartStopSeq() {
-		return (startStop == null) ? null : startStop.getStopSequence();
+		return instance.startStop.getStopSequence();
 	}
 	
 	public ArrayList<HashMap<String, String>> getStartStopsList() {
-		return (startStop == null) ? null : startStop.getStopsList();
+		return instance.startStop.getStopsList();
 	}
 	
 	/*
@@ -144,27 +151,26 @@ public final class TransitData {
 	 */
 
 	public void selectFinalStop(String stopId, String stopName) {
-		finalStop.setStopInfo(stopId, stopName);
+		instance.finalStop.setStopInfo(stopId, stopName);
 	}
 	
 	public String getFinalStopId() {
-		return (finalStop == null) ? null : finalStop.getStopId();
+		return instance.finalStop.getStopId();
 	}
 	
 	public String getFinalStopName() {
-		return (finalStop == null) ? null : finalStop.getStopName();
+		return instance.finalStop.getStopName();
 	}
 
 	public ArrayList<HashMap<String, String>> getFinalStopsList() {
-		return (finalStop == null) ? null : finalStop.getStopsList();
+		return instance.finalStop.getStopsList();
 	}
 
-	
 	/*
 	 * Time methods
 	 */
 
 	public ArrayList<HashMap<String, String>> getTimesList() {
-		return (time == null) ? null : time.getTimesList();
+		return instance.time.getTimesList();
 	}
 }

@@ -39,6 +39,12 @@ public class Direction {
 		this.dirsList = createDirectionsList();
 	}
 	
+	public void setData(JSONArray data) {
+		this.rawData = data;
+		this.prettyData = prettify(data);
+		this.dirsList = createDirectionsList();
+	}
+	
 	public void setDirectionInfo(String dirId, String headSign) {
 		this.directionId = dirId;
 		this.headsign = headSign;

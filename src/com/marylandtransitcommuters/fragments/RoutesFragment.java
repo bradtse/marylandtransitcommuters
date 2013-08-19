@@ -92,10 +92,11 @@ public class RoutesFragment extends TransitFragment {
 		String routeId = map.get(Route.ROUTE_ID);
 		String shortName = map.get(Route.SHORT_NAME);
 		String longName = map.get(Route.LONG_NAME);
-		
+
 		mTransitData.selectRoute(routeId, shortName, longName);
 			
-		mCallback.replaceFragment(DirectionsFragment.TAG, new DirectionsFragment(), true, false, true, true);
+		mCallback.replaceFragment(DirectionsFragment.TAG, new DirectionsFragment(), 
+								  true, false, true, true);
 	}
 	
 	@Override

@@ -57,6 +57,13 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		// Initialize some components
 		mContext = getActivity();
 		mTransitData = TransitData.getInstance();
+		if (mTransitData.getRouteId() != null) {
+			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteId()); 
+			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteShortName()); 
+			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteLongName()); 
+		} else {
+			Log.d(MainActivity.LOG_TAG, "mTransitData null"); 
+		}
 		setupTransitReceiver();
 
 		// Forces onCreateOptionsMenu to be called
@@ -94,29 +101,42 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			mProgressLayout.setVisibility(View.GONE);
 			setupFragment();
 		}
-
 		return null;
 	}
-	
-	/**
-	 * Sets up a callback receiver
-	 */
-	private void setupTransitReceiver() {
-		mReceiver = new TransitReceiver(new Handler());
-		mReceiver.setReceiver(this);
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		Log.d(MainActivity.LOG_TAG, "Fragment onCreateOptionsMenu()");
+		mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		mSearchView.setVisibility(View.VISIBLE);
+		setSearchViewTextListener();
+	}
+
+	// This is the callback that is called when the TransitService completes its work
+	@Override
+	public void onReceiveResult(int resultCode, Bundle resultData) {
+		switch (resultCode) {
+			case TransitService.FINISH:
+				mProgressLayout.setVisibility(View.GONE);
+				setupFragment();
+				break;
+			default:
+				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");
+		}
 	}
 	
-	/**
-	 * Starts the new intent service 
-	 */
-	private void startIntentService() {
-		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
-		Intent intent = new Intent(mContext, TransitService.class);
-		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
-		setIntentServiceType(intent);
-		mContext.startService(intent);
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		// Ensures that the parent activity implements ReplaceFragmentListener
+		try {
+			mCallback = (ReplaceFragmentListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnDestoryListener");
+		}
 	}
-	
+
 	/*
 	 * Current workaround that removes animations when the fragments are removed
 	 * from the backstack. This doesn't work completely because it still shows the 
@@ -132,7 +152,27 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 		return super.onCreateAnimation(transit, enter, nextAnim);
 	}
-	
+
+	/**
+	 * ListView item click listener
+	 */
+    class ListItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			// Clears the SearchView text and closes the keyboard
+			mSearchView.setQuery("", false);
+			mSearchView.clearFocus();
+
+			selectItem(position);
+		}
+    }
+    
+    
+    /*
+     * Abstract methods/interfaces
+     */
+    
 	/**
 	 * Adds the appropriate service type to the intent as an extra. Abstract method. 
 	 * @param intent The intent to declare the type for
@@ -145,17 +185,23 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	 */
 	protected abstract void setupBreadcrumbs(); 
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-		// Ensures that the parent activity implements ReplaceFragmentListener
-		try {
-			mCallback = (ReplaceFragmentListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnDestoryListener");
-		}
-	}
+	/**
+	 * Creates and attaches the adapter to the fragment's ListView. The adapter
+	 * is created using the data received back from the server.
+	 * 
+	 * This is an abstract method that must be implemented by subclasses. 
+	 */
+	public abstract void setListViewAdapter();
+
+    /**
+     * Handles what should happen when an item in the ListView is clicked by 
+     * the user. In our case, this really means storing info about the item
+     * that was selected, and then alerting the MainActivity to start the 
+     * next appropriate fragment. This is an abstract method that must be implemented
+     * by any subclasses.
+     * @param position Index of the item selected in the ListView
+     */
+    public abstract void selectItem(int position);
 	
 	/**
 	 *  Interface that allows fragments to communicate with the MainActivity
@@ -174,12 +220,28 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 								 	boolean animate, boolean commit);
 	}
 	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		Log.d(MainActivity.LOG_TAG, "Fragment onCreateOptionsMenu()");
-		mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-		mSearchView.setVisibility(View.VISIBLE);
-		setSearchViewTextListener();
+
+    /*
+     * Helper methods
+     */
+
+	/**
+	 * Sets up a callback receiver to be used by the TransitService
+	 */
+	private void setupTransitReceiver() {
+		mReceiver = new TransitReceiver(new Handler());
+		mReceiver.setReceiver(this);
+	}
+	
+	/**
+	 * Starts the new intent service 
+	 */
+	private void startIntentService() {
+		Log.d(MainActivity.LOG_TAG, "Starting new IntentService");
+		Intent intent = new Intent(mContext, TransitService.class);
+		intent.putExtra(TransitReceiver.RECEIVER, mReceiver);
+		setIntentServiceType(intent);
+		mContext.startService(intent);
 	}
 
 	/*
@@ -203,19 +265,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 	}
 
-	// This is the callback that is called when the TransitService completes its work
-	@Override
-	public void onReceiveResult(int resultCode, Bundle resultData) {
-		switch (resultCode) {
-			case TransitService.FINISH:
-				mProgressLayout.setVisibility(View.GONE);
-				setupFragment();
-				break;
-			default:
-				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");
-		}
-	}
-	
 	/**
 	 * Sets up the different parts of the fragment after the data has been received
 	 * back from the server.
@@ -232,44 +281,19 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 
 	/**
-	 * Creates and attaches the adapter to the fragment's ListView. The adapter
-	 * is created using the data received back from the server.
-	 * 
-	 * This is an abstract method that must be implemented by subclasses. 
+	 * Checks for Internet connectivity
 	 */
-	public abstract void setListViewAdapter();
-
-	/**
-	 * ListView item click listener
-	 */
-    class ListItemClickListener implements ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			// Clears the SearchView text and closes the keyboard
-			mSearchView.setQuery("", false);
-			mSearchView.clearFocus();
-
-			selectItem(position);
-		}
-    }
-    
-    /**
-     * Handles what should happen when an item in the ListView is clicked by 
-     * the user. In our case, this really means storing info about the item
-     * that was selected, and then alerting the MainActivity to start the 
-     * next appropriate fragment. This is an abstract method that must be implemented
-     * by any subclasses.
-     * @param position Index of the item selected in the ListView
-     */
-    public abstract void selectItem(int position);
-    
     private boolean hasInternet() {
     	ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
     	NetworkInfo info = cm.getActiveNetworkInfo();
     	return (info != null && info.isConnected()) ? true : false;
     }
 
+
+    /*
+     * Fragment Lifecycle debugging
+     */
+    
 	@Override
 	public void onPause() {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onPause()");

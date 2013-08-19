@@ -192,6 +192,7 @@ public final class TransitContract {
          * Array of all the columns. Makes for cleaner code
          */
         public static final String[] KEY_ARRAY = {
+        	_ID,
 			KEY_ROUTE_ID,
 			KEY_ROUTE_SHORT_NAME,
 			KEY_ROUTE_LONG_NAME,

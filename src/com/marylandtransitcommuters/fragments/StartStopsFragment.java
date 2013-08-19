@@ -36,6 +36,7 @@ public class StartStopsFragment extends TransitFragment {
 		return mRootView;
 	}
 	
+	@Override
 	protected void setupBreadcrumbs() {
 		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
 		String direction = mTransitData.getDirectionHeadsign();

@@ -60,6 +60,7 @@ public class TimesFragment extends TransitFragment {
 		return mRootView;
 	}
 	
+	@Override
 	protected void setupBreadcrumbs() {
 		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
 		String direction = mTransitData.getDirectionHeadsign();
@@ -123,6 +124,10 @@ public class TimesFragment extends TransitFragment {
 		}
 	}
 
+	// Clicking is disabled for this fragment's ListView
+	@Override
+	public void selectItem(int position) {}
+
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		Log.d(MainActivity.LOG_TAG, "onCreateOptionsMenu()");
@@ -164,9 +169,6 @@ public class TimesFragment extends TransitFragment {
 		}
 	}
 	
-	// Clicking is disabled for this fragment's ListView
-	@Override
-	public void selectItem(int position) {}
 	
 	/*
 	 * Asynctask that queries the favorites table
@@ -194,10 +196,10 @@ public class TimesFragment extends TransitFragment {
 			}
 		}
 	}
+
 	/*
 	 * Asynctask that inserts into the favorites table
 	 */
-
 	private class InsertFavoritesTableRow extends AsyncTask<Void , Integer, Void> {
 
 		@Override

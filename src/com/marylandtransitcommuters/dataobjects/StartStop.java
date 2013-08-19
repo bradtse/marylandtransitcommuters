@@ -34,6 +34,12 @@ public class StartStop {
 		this.startStopsList = createStopsList();
 	}
 	
+	public void setData(JSONArray data) {
+		this.rawData = data;
+		this.prettyData = data;
+		this.startStopsList = createStopsList();
+	}
+	
 	public void setStopInfo(String stopId, String stopName, String stopSequence) {
 		this.stopId = stopId;
 		this.stopName = stopName;

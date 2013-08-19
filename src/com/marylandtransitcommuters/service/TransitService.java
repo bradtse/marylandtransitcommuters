@@ -55,23 +55,23 @@ public class TransitService extends IntentService {
 	 */
 	private void serviceHelper(DataType type) {
 		try {
-			TransitData profile = TransitData.getInstance();
+			TransitData transitObject = TransitData.getInstance();
 			JSONObject data = new JSONObject();
 			
 			// Adds all of the data that will be sent to the server. Some of the 
 			// fields might be empty sometimes but TransitData handles null 
 			// cases already and the server ignores any empty fields
-			data.put(Route.KEY, profile.getRouteId());
-			data.put(Direction.KEY, profile.getDirectionId());
-			data.put(StartStop.STOP_KEY,  profile.getStartStopId());
-			data.put(StartStop.SEQ_KEY, profile.getStartStopSeq());
-			data.put(FinalStop.STOP_KEY, profile.getFinalStopId());
+			data.put(Route.KEY, transitObject.getRouteId());
+			data.put(Direction.KEY, transitObject.getDirectionId());
+			data.put(StartStop.STOP_KEY,  transitObject.getStartStopId());
+			data.put(StartStop.SEQ_KEY, transitObject.getStartStopSeq());
+			data.put(FinalStop.STOP_KEY, transitObject.getFinalStopId());
 			data.put(DataType.KEY, type.name().toLowerCase(Locale.US));
 			
 //			Log.d(MainActivity.LOG_TAG, data.toString());
 			
 			JSONArray results = RestHelper.post(data);
-			profile.setData(type, results);
+			transitObject.setData(type, results);
 		} catch (JSONException e) {
 			Log.d(MainActivity.LOG_TAG, "serviceHelper() failed: " + e.getMessage());
 		}

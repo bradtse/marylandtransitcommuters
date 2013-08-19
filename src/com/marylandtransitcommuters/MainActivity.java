@@ -3,6 +3,8 @@ package com.marylandtransitcommuters;
 import java.util.ArrayDeque;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -34,6 +36,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.commonsware.cwac.merge.MergeAdapter;
+import com.google.gson.Gson;
 import com.marylandtransitcommuters.database.TransitContract.Favorites;
 import com.marylandtransitcommuters.dataobjects.TransitData;
 import com.marylandtransitcommuters.fragments.RoutesFragment;
@@ -46,8 +49,13 @@ import com.marylandtransitcommuters.fragments.TransitFragment.ReplaceFragmentLis
  */
 public class MainActivity extends SherlockFragmentActivity implements ReplaceFragmentListener, LoaderCallbacks<Cursor> {
 	public static final String LOG_TAG = "BRAD";
+	private static final String SHARED_PREFS = "gtfs_shared_prefs";
+	private static final String TRANSIT_DATA = "transitdata";
 	private static final String FRAG_STACK= "fragstack";
 	private static final String FRAG_TAG = "fragtag";
+	private static final String EMAIL = "bradleytse@gmail.com";
+	private static final String EMAIL_SUBJECT = "MTA Commute App";
+	private static final String CHOOSE_MSG = "Send email via:";
 	private static final int HDR_SIZE = 2; // # of views the drawer headers take up
 
 	private CharSequence mTitle;
@@ -83,6 +91,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         	mFragTags = new ArrayDeque<String>();
         	mDrawerLayout.openDrawer(Gravity.LEFT);
         } else {
+        	Log.d(LOG_TAG, "MainActivity onCreate() savedInstanceState != null");
+        	restoreTransitData();
         	mFragTags = (ArrayDeque<String>) savedInstanceState.getSerializable(FRAG_STACK);
         	mCurrFragTag = (String) savedInstanceState.getSerializable(FRAG_TAG);
         	if (mCurrFragTag != null) {
@@ -90,76 +100,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         	}
         	hideFragmentsOnBackStack();	
         }
-    }
-    
-    /**
-     * Takes care of setting up all of the elements needed for a properly functioning
-     * navigation drawer
-     */
-    private void setupNavigationDrawer(Bundle savedInstanceState) {
-    	// Add drawer shadow
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // Attach the adapter to the drawer ListView
-        mDrawerList.setAdapter(setupMergeAdapter());
-        // Attach a list item click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        
-        // Enable Action Bar app icon to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-               
-        // Add a listener for when the drawer is toggled
-        mDrawerToggle = getActionBarDrawerToggle();
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-    
-    /*
-     * Sets up the merge adapter that is used to populate the navigation drawer's
-     * ListView
-     */
-    private MergeAdapter setupMergeAdapter() {
-    	MergeAdapter m = new MergeAdapter();
-
-    	m.addView(createHeader("CATEGORY"));
-    	m.addView(createDivider());
-
-    	ArrayAdapter<String> a = new ArrayAdapter<String>(this, 
-    													  R.layout.drawer_categories_row,
-    												      R.id.item_text,
-    												      mDrawerItems);
-    	
-    	m.addAdapter(a);
-    	
-    	m.addView(createHeader("FAVORITES"));
-    	m.addView(createDivider());
-    	
-    	mCursorAdapter = new SimpleCursorAdapter(this, 
-												R.layout.drawer_favorites_row,
-												null,
-												new String[] {Favorites.KEY_ROUTE_SHORT_NAME,
-    														  Favorites.KEY_DIRECTION_HEADSIGN,
-    														  Favorites.KEY_START_STOP_NAME,
-    														  Favorites.KEY_FINAL_STOP_NAME},
-												new int[] {R.id.route_name,
-    													   R.id.direction_name,
-    													   R.id.start_stop_name,
-    													   R.id.final_stop_name},
-												0);
-
-    	m.addAdapter(mCursorAdapter);
-
-    	return m;
-    }
-    
-    private TextView createDivider() {
-    	TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_divider, null);
-    	return tv;
-    }
-    
-    private TextView createHeader(String s) {
-		TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_header, null);
-    	tv.setText(s);
-    	return tv;
     }
     
     @Override
@@ -203,38 +143,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 
     	mCurrFragTag = newFragTag;
     }
-    
-    /*
-     * Removes all of the current fragments in the frame layout
-     */
-    private void removeAllFragments() {
-    	((TransitApplication) getApplication()).disableFragmentAnimations();
-
-    	FragmentManager fm = getSupportFragmentManager();
-    	fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    	FragmentTransaction ft = fm.beginTransaction();
-    	
-    	// Remove the fragment that is currently showing
-    	TransitFragment fragment = (TransitFragment) fm.findFragmentByTag(mCurrFragTag);
-    	ft.remove(fragment);
-    	
-    	// Remove all fragments on the back stack
-        while (mFragTags.size() != 0) {
-        	fragment = (TransitFragment) fm.findFragmentByTag(mFragTags.pop());
-        	ft.remove(fragment);
-        }
-
-        ft.commit();
-        fm.executePendingTransactions();
-
-        ((TransitApplication) getApplication()).enableFragmentAnimations();
-
-        mCurrFragTag = null;
-        
-        if (mCommitDelayed == false) {
-	        mFrameImage.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -250,21 +158,9 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	super.onSaveInstanceState(outState);
     	outState.putSerializable(FRAG_STACK, mFragTags);
     	outState.putSerializable(FRAG_TAG, mCurrFragTag);
+    	saveTransitData();
     }
-    
-	/* 
-	 * Hides each fragment on the back stack since for some reason they
-	 * automatically unhide themselves
-	 */
-    private void hideFragmentsOnBackStack() {
-    	FragmentManager fm = getSupportFragmentManager();
-    	FragmentTransaction ft = fm.beginTransaction();
-        for (String s : mFragTags) {
-        	ft.hide((TransitFragment) fm.findFragmentByTag(s));
-    	}
-        ft.commit();
-    }
-    
+
     /**
      * The click listener for the ListView in the nav drawer 
      */
@@ -275,87 +171,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 			selectItem(position);
 		}		
     }
-    
-    /**
-     * Handles when nav drawer item is selected
-     */
-    private void selectItem(int position) {
-    	if (isBetween(position, HDR_SIZE, HDR_SIZE + mDrawerItems.length - 1)){
 
-	    	position = position - 2;
-	    	// Then set the action bar title to the item that was selected
-	    	setTitle(mDrawerItems[position]);
-
-	     	if (position == 0) {
-	        	replaceFragment(RoutesFragment.TAG, new RoutesFragment(), false, true, true, false);
-	    	} else if (position == 1) {
-	    		
-	    	}    	
-
-    	} else if (isBetween(position, (HDR_SIZE * 2) + mDrawerItems.length, 
-    			  (HDR_SIZE * 2) + mDrawerItems.length + mCursorAdapter.getCount() - 1)) {
-
-	    	position = position - (HDR_SIZE * 2) - mDrawerItems.length;
-	    	
-	    	Cursor c = mCursorAdapter.getCursor();
-	    	c.moveToPosition(position);
-
-	    	String routeId = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_ID));
-	    	String routeShortName = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_SHORT_NAME));
-	    	String routeLongName = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_LONG_NAME));
-	    	String directionId = c.getString(c.getColumnIndex(Favorites.KEY_DIRECTION_ID));
-	    	String directionHeadsign = c.getString(c.getColumnIndex(Favorites.KEY_DIRECTION_HEADSIGN));
-	    	String startStopId = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_ID));
-	    	String startStopName = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_NAME));
-	    	String startStopSeq = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_SEQ));
-	    	String finalStopId = c.getString(c.getColumnIndex(Favorites.KEY_FINAL_STOP_ID));
-	    	String finalStopName = c.getString(c.getColumnIndex(Favorites.KEY_FINAL_STOP_NAME));
-
-	    	TransitData data = TransitData.getInstance();
-	    	data.selectRoute(routeId, routeShortName, routeLongName);
-	    	data.selectDirection(directionId, directionHeadsign);
-	    	data.selectStartStop(startStopId, startStopName, startStopSeq);
-	    	data.selectFinalStop(finalStopId, finalStopName);
-	    	
-	    	replaceFragment(TimesFragment.TAG, new TimesFragment(), false, true, true, false);
-    	}
-    	
-    	// Indicates the item has been selected
-//    	mDrawerList.setItemChecked(position, true);
-
-    	mDrawerLayout.closeDrawer(mDrawerList);
-    }
-    
-    private boolean isBetween(int value, int lower, int upper) {
-    	return lower <= value && value <= upper;
-    }
-    
-    /**
-     * Returns a new ActionBarDrawerToggle that ties together the proper 
-     * interactions between the sliding drawer and the action bar app icon
-     * @return A new ActionBarDrawerToggle object
-     */
-    private ActionBarDrawerToggle getActionBarDrawerToggle() {
-    	return new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer_white,	
-    									R.string.drawer_open, R.string.drawer_close) {
-        	public void onDrawerClosed(View view) {
-        		getSupportActionBar().setTitle(mTitle);
-        		supportInvalidateOptionsMenu(); // Redraw options menu
-        		if (mCommitDelayed == true) {
-        			mFrameImage.setVisibility(View.GONE);
-        			mFt.commit();
-        			getSupportFragmentManager().executePendingTransactions();
-        			mCommitDelayed = false;
-        		}
-        	}
-        	
-        	public void onDrawerOpened(View drawerView) {
-        		getSupportActionBar().setTitle(mDrawerTitle);
-        		supportInvalidateOptionsMenu(); 
-        	}
-        };
-    }
-    
     @Override
     public void setTitle(CharSequence title) {
     	mTitle = title;
@@ -428,17 +244,237 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	}
     }
     
+
+    /*
+     * Helper methods
+     */
+
+    /**
+     * Takes care of setting up all of the elements needed for a properly functioning
+     * navigation drawer
+     */
+    private void setupNavigationDrawer(Bundle savedInstanceState) {
+    	// Add drawer shadow
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // Attach the adapter to the drawer ListView
+        mDrawerList.setAdapter(setupMergeAdapter());
+        // Attach a list item click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        // Enable Action Bar app icon to toggle nav drawer
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+               
+        // Add a listener for when the drawer is toggled
+        mDrawerToggle = getActionBarDrawerToggle();
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+    
+    /*
+     * Sets up the merge adapter that is used to populate the navigation drawer's
+     * ListView
+     */
+    private MergeAdapter setupMergeAdapter() {
+    	MergeAdapter m = new MergeAdapter();
+
+    	m.addView(createHeader("CATEGORY"));
+    	m.addView(createDivider());
+
+    	ArrayAdapter<String> a = new ArrayAdapter<String>(this, 
+    													  R.layout.drawer_categories_row,
+    												      R.id.item_text,
+    												      mDrawerItems);
+    	
+    	m.addAdapter(a);
+    	
+    	m.addView(createHeader("FAVORITES"));
+    	m.addView(createDivider());
+    	
+    	mCursorAdapter = new SimpleCursorAdapter(this, 
+												R.layout.drawer_favorites_row,
+												null,
+												new String[] {Favorites.KEY_ROUTE_SHORT_NAME,
+    														  Favorites.KEY_DIRECTION_HEADSIGN,
+    														  Favorites.KEY_START_STOP_NAME,
+    														  Favorites.KEY_FINAL_STOP_NAME},
+												new int[] {R.id.route_name,
+    													   R.id.direction_name,
+    													   R.id.start_stop_name,
+    													   R.id.final_stop_name},
+												0);
+    	m.addAdapter(mCursorAdapter);
+    	return m;
+    }
+    
+    private TextView createDivider() {
+    	TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_divider, null);
+    	return tv;
+    }
+    
+    private TextView createHeader(String s) {
+		TextView tv = (TextView) getLayoutInflater().inflate(R.layout.drawer_header, null);
+    	tv.setText(s);
+    	return tv;
+    }
+    
+    /*
+     * Removes all of the current fragments in the frame layout
+     */
+    private void removeAllFragments() {
+    	((TransitApplication) getApplication()).disableFragmentAnimations();
+
+    	FragmentManager fm = getSupportFragmentManager();
+    	fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    	FragmentTransaction ft = fm.beginTransaction();
+    	
+    	// Remove the fragment that is currently showing
+    	TransitFragment fragment = (TransitFragment) fm.findFragmentByTag(mCurrFragTag);
+    	ft.remove(fragment);
+    	
+    	// Remove all fragments on the back stack
+        while (mFragTags.size() != 0) {
+        	fragment = (TransitFragment) fm.findFragmentByTag(mFragTags.pop());
+        	ft.remove(fragment);
+        }
+
+        ft.commit();
+        fm.executePendingTransactions();
+
+        ((TransitApplication) getApplication()).enableFragmentAnimations();
+
+        mCurrFragTag = null;
+        
+        if (mCommitDelayed == false) {
+	        mFrameImage.setVisibility(View.VISIBLE);
+        }
+    }
+
+	/* 
+	 * Hides each fragment on the back stack since for some reason they
+	 * automatically unhide themselves when the stack is restored
+	 */
+    private void hideFragmentsOnBackStack() {
+    	FragmentManager fm = getSupportFragmentManager();
+    	FragmentTransaction ft = fm.beginTransaction();
+        for (String s : mFragTags) {
+        	ft.hide((TransitFragment) fm.findFragmentByTag(s));
+    	}
+        ft.commit();
+    }
+    
+    /**
+     * Handles when nav drawer item is selected
+     */
+    private void selectItem(int position) {
+    	if (isBetween(position, HDR_SIZE, HDR_SIZE + mDrawerItems.length - 1)){
+
+	    	position = position - 2;
+	    	// Then set the action bar title to the item that was selected
+	    	setTitle(mDrawerItems[position]);
+
+	     	if (position == 0) {
+	        	replaceFragment(RoutesFragment.TAG, new RoutesFragment(), false, true, true, false);
+	    	} else if (position == 1) {
+	    		
+	    	}    	
+
+    	} else if (isBetween(position, (HDR_SIZE * 2) + mDrawerItems.length, 
+    			  (HDR_SIZE * 2) + mDrawerItems.length + mCursorAdapter.getCount() - 1)) {
+
+	    	position = position - (HDR_SIZE * 2) - mDrawerItems.length;
+	    	
+	    	Cursor c = mCursorAdapter.getCursor();
+	    	c.moveToPosition(position);
+
+	    	String routeId = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_ID));
+	    	String routeShortName = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_SHORT_NAME));
+	    	String routeLongName = c.getString(c.getColumnIndex(Favorites.KEY_ROUTE_LONG_NAME));
+	    	String directionId = c.getString(c.getColumnIndex(Favorites.KEY_DIRECTION_ID));
+	    	String directionHeadsign = c.getString(c.getColumnIndex(Favorites.KEY_DIRECTION_HEADSIGN));
+	    	String startStopId = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_ID));
+	    	String startStopName = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_NAME));
+	    	String startStopSeq = c.getString(c.getColumnIndex(Favorites.KEY_START_STOP_SEQ));
+	    	String finalStopId = c.getString(c.getColumnIndex(Favorites.KEY_FINAL_STOP_ID));
+	    	String finalStopName = c.getString(c.getColumnIndex(Favorites.KEY_FINAL_STOP_NAME));
+
+	    	TransitData data = TransitData.getInstance();
+	    	data.selectRoute(routeId, routeShortName, routeLongName);
+	    	data.selectDirection(directionId, directionHeadsign);
+	    	data.selectStartStop(startStopId, startStopName, startStopSeq);
+	    	data.selectFinalStop(finalStopId, finalStopName);
+	    	
+	    	replaceFragment(TimesFragment.TAG, new TimesFragment(), false, true, true, false);
+    	}
+    	
+    	// Indicates the item has been selected
+//    	mDrawerList.setItemChecked(position, true);
+    	mDrawerLayout.closeDrawer(mDrawerList);
+    }
+    
+    private boolean isBetween(int value, int lower, int upper) {
+    	return lower <= value && value <= upper;
+    }
+    
+    /**
+     * Returns a new ActionBarDrawerToggle that ties together the proper 
+     * interactions between the sliding drawer and the action bar app icon
+     * @return A new ActionBarDrawerToggle object
+     */
+    private ActionBarDrawerToggle getActionBarDrawerToggle() {
+    	return new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer_white,	
+    									R.string.drawer_open, R.string.drawer_close) {
+        	public void onDrawerClosed(View view) {
+        		getSupportActionBar().setTitle(mTitle);
+        		supportInvalidateOptionsMenu(); // Redraw options menu
+        		if (mCommitDelayed == true) {
+        			mFrameImage.setVisibility(View.GONE);
+        			mFt.commit();
+        			getSupportFragmentManager().executePendingTransactions();
+        			mCommitDelayed = false;
+        		}
+        	}
+        	
+        	public void onDrawerOpened(View drawerView) {
+        		getSupportActionBar().setTitle(mDrawerTitle);
+        		supportInvalidateOptionsMenu(); 
+        	}
+        };
+    }
+    
     /*
      * Helper class to send an email to the developer
      */
     private void sendEmailToDeveloper() {
 		Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 //		emailIntent.setType("message/rfc822");
-		emailIntent.setData(Uri.parse("mailto:" + "bradleytse@gmail.com"));
-		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"bradleytse@gmail.com"});
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MTA Commute");
-		startActivity(Intent.createChooser(emailIntent, "Send email via:"));
+		emailIntent.setData(Uri.parse("mailto:" + EMAIL));
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {EMAIL});
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, EMAIL_SUBJECT);
+		startActivity(Intent.createChooser(emailIntent, CHOOSE_MSG));
     }
+    
+    /*
+     * Saves the state of the TransitData singleton to SharedPreferences
+     */
+    private void saveTransitData() {
+    	Log.d(LOG_TAG, "saveTransitData()");
+    	Gson gson = new Gson();
+    	Editor edit = getSharedPreferences(SHARED_PREFS, 0).edit();
+    	edit.putString(TRANSIT_DATA, gson.toJson(TransitData.getInstance()));
+    	edit.commit();
+    }
+    
+    /*
+     * Restores the state of the TransitData singleton from SharedPreferences
+     */
+    private void restoreTransitData() {
+    	Log.d(LOG_TAG, "restoreTransitData()");
+    	Gson gson = new Gson();
+    	SharedPreferences shared = getSharedPreferences(SHARED_PREFS, 0);
+    	String data = shared.getString(TRANSIT_DATA, "");
+    	TransitData.setInstance(gson.fromJson(data, TransitData.class));
+    }
+
 
     /*
      * LoaderCallback methods
@@ -447,18 +483,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
  	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
  		Log.d(LOG_TAG, "Loader intialized");
- 		String[] projection = {Favorites._ID, 
- 							   Favorites.KEY_ROUTE_ID,
- 							   Favorites.KEY_ROUTE_SHORT_NAME,
- 							   Favorites.KEY_ROUTE_LONG_NAME,
- 							   Favorites.KEY_DIRECTION_ID,
- 							   Favorites.KEY_DIRECTION_HEADSIGN,
- 							   Favorites.KEY_START_STOP_ID,
- 							   Favorites.KEY_START_STOP_NAME,
- 							   Favorites.KEY_START_STOP_SEQ,
- 							   Favorites.KEY_FINAL_STOP_ID,
- 							   Favorites.KEY_FINAL_STOP_NAME};
- 		return new CursorLoader(this, Favorites.CONTENT_URI, projection, null, 
+ 		return new CursorLoader(this, Favorites.CONTENT_URI, 
+ 								Favorites.KEY_ARRAY, null, 
  								null, Favorites.DEFAULT_SORT_ORDER);
 	}
 
@@ -474,8 +500,9 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		mCursorAdapter.changeCursor(null);
 	}   
 
+
     /*
-     * Overrides for debugging the activity lifecycle
+     * The activity lifecycle for debugging purposes
      */
     
     @Override

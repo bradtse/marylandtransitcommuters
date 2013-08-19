@@ -40,6 +40,7 @@ public class DirectionsFragment extends TransitFragment {
 		return mRootView;
 	}
 	
+	@Override
 	protected void setupBreadcrumbs() {
 		String route = mTransitData.getRouteShortName() + " " + mTransitData.getRouteLongName();
 		TextView routeText = (TextView) mRootView.findViewById(R.id.info_route_data);
@@ -93,6 +94,7 @@ public class DirectionsFragment extends TransitFragment {
 		mList.setAdapter(mAdapter);
 	}
 	
+	@Override
 	public void selectItem(int index) {		
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) mAdapter.getItem(index);

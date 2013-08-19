@@ -41,6 +41,12 @@ public class Route {
 		this.prettyData = prettify(data);
 		this.routesList = createRoutesList();
 	}
+	
+	public void setData(JSONArray data) {
+		this.rawData = data;
+		this.prettyData = prettify(data);
+		this.routesList = createRoutesList();
+	}
 
 	/**
 	 * Select a route. This method should be used when a route is selected
