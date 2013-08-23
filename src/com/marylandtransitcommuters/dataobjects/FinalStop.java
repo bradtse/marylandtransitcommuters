@@ -24,13 +24,7 @@ public class FinalStop {
 	private ArrayList<HashMap<String, String>> finalStopsList;
 	
 	public FinalStop() {}
-	
-	public FinalStop(JSONArray data) {
-		this.rawData = data;
-		this.prettyData = data;
-		this.finalStopsList = createStopsList();
-	}
-	
+
 	public void setData(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;

@@ -27,13 +27,13 @@ public class TimesFragment extends TransitFragment {
 	public static final String TAG = "times";
 	private static final int OFF = 0;
 	private static final int ON = 1;
-	private static final String mSelection = Favorites.KEY_ROUTE_ID + " = ?"
+	private static final String mSelection = Favorites.ROUTE_ID + " = ?"
   										  + " AND "
-										  + Favorites.KEY_DIRECTION_ID + " = ?"
+										  + Favorites.DIRECTION_ID + " = ?"
 										  + " AND "
-										  + Favorites.KEY_START_STOP_ID + " = ?"
+										  + Favorites.START_STOP_ID + " = ?"
 										  + " AND "
-										  + Favorites.KEY_FINAL_STOP_ID + " = ?";
+										  + Favorites.FINAL_STOP_ID + " = ?";
 	private String[] mSelectionArgs;
 	private boolean mIsFavorite = false;
 	private MenuItem mFavoritesIcon;
@@ -89,7 +89,7 @@ public class TimesFragment extends TransitFragment {
 					mContext, 
 					mTransitData.getTimesList(),
 					R.layout.fragment_times_listview_row,
-					new String[] {Time.ARRIVAL_TIME},
+					new String[] {Time.ARRIVAL_TIME_SECONDS},
 					new int[] {R.id.time_list_item}
 					)
 		{
@@ -103,6 +103,14 @@ public class TimesFragment extends TransitFragment {
 		
 		mList.setAdapter(mAdapter);
 		mList.setEmptyView((TextView) mRootView.findViewById(R.id.empty));
+	}
+	
+	/**
+	 * Updates the ListView in order to refresh the times
+	 */
+	public void refreshListView() {
+		mTransitData.updateTimesList();
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	private void setFavoritesState(int state) {
@@ -124,7 +132,7 @@ public class TimesFragment extends TransitFragment {
 		}
 	}
 
-	// Clicking is disabled for this fragment's ListView
+	// Clicking a list item is disabled for this fragment's ListView
 	@Override
 	public void selectItem(int position) {}
 
@@ -139,6 +147,7 @@ public class TimesFragment extends TransitFragment {
 		mSearchView = (SearchView) searchItem.getActionView();    
 		mSearchView.setVisibility(View.GONE);
 
+		// If the stop is a favorite then star should be yellow
 		if (mIsFavorite == true) {
 			setFavoritesState(ON);
 		}
@@ -151,7 +160,7 @@ public class TimesFragment extends TransitFragment {
     			toggleFavorite();
 	    		return true;
     		case R.id.refresh:
-    			setListViewAdapter();
+    			refreshListView();
 	    		Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
 	    		return true;
 	    	default:
@@ -206,16 +215,16 @@ public class TimesFragment extends TransitFragment {
 		protected Void doInBackground(Void...v) {
 			ContentValues cv = new ContentValues();
 			
-			cv.put(Favorites.KEY_ROUTE_ID, mTransitData.getRouteId());
-			cv.put(Favorites.KEY_ROUTE_SHORT_NAME, mTransitData.getRouteShortName());
-			cv.put(Favorites.KEY_ROUTE_LONG_NAME, mTransitData.getRouteLongName());
-			cv.put(Favorites.KEY_DIRECTION_ID, mTransitData.getDirectionId());
-			cv.put(Favorites.KEY_DIRECTION_HEADSIGN, mTransitData.getDirectionHeadsign());
-			cv.put(Favorites.KEY_START_STOP_ID, mTransitData.getStartStopId());
-			cv.put(Favorites.KEY_START_STOP_NAME, mTransitData.getStartStopName());
-			cv.put(Favorites.KEY_START_STOP_SEQ, mTransitData.getStartStopSeq());
-			cv.put(Favorites.KEY_FINAL_STOP_ID, mTransitData.getFinalStopId());
-			cv.put(Favorites.KEY_FINAL_STOP_NAME, mTransitData.getFinalStopName());
+			cv.put(Favorites.ROUTE_ID, mTransitData.getRouteId());
+			cv.put(Favorites.ROUTE_SHORT_NAME, mTransitData.getRouteShortName());
+			cv.put(Favorites.ROUTE_LONG_NAME, mTransitData.getRouteLongName());
+			cv.put(Favorites.DIRECTION_ID, mTransitData.getDirectionId());
+			cv.put(Favorites.DIRECTION_HEADSIGN, mTransitData.getDirectionHeadsign());
+			cv.put(Favorites.START_STOP_ID, mTransitData.getStartStopId());
+			cv.put(Favorites.START_STOP_NAME, mTransitData.getStartStopName());
+			cv.put(Favorites.START_STOP_SEQ, mTransitData.getStartStopSeq());
+			cv.put(Favorites.FINAL_STOP_ID, mTransitData.getFinalStopId());
+			cv.put(Favorites.FINAL_STOP_NAME, mTransitData.getFinalStopName());
 	
 			mContext.getContentResolver().insert(Favorites.CONTENT_URI, cv);
 

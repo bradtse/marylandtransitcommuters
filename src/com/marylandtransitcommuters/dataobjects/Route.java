@@ -32,16 +32,6 @@ public class Route {
 	 */
 	public Route() {}
 
-	/**
-	 * Constructor
-	 * @param data The route data returned by the server
-	 */
-	public Route(JSONArray data) {
-		this.rawData = data;
-		this.prettyData = prettify(data);
-		this.routesList = createRoutesList();
-	}
-	
 	public void setData(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = prettify(data);

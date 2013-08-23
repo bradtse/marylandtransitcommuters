@@ -28,12 +28,6 @@ public class StartStop {
 	
 	public StartStop() {}
 
-	public StartStop(JSONArray data) {
-		this.rawData = data;
-		this.prettyData = data;
-		this.startStopsList = createStopsList();
-	}
-	
 	public void setData(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = data;

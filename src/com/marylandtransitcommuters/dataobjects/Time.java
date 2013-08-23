@@ -20,27 +20,39 @@ import android.util.Log;
 import com.marylandtransitcommuters.MainActivity;
 
 public class Time {
-	public static final String ARRIVAL_TIME = "arrival_time";
 	public static final String ARRIVAL_TIME_SECONDS = "arrival_time_seconds";
-	private static final String[] KEYS = {ARRIVAL_TIME, ARRIVAL_TIME_SECONDS};
 	
 	private JSONArray rawData;
-	private JSONArray prettyData;
+	private ArrayList<HashMap<String, String>> timesList;
 	
 	public Time() {}
 	
-	public Time(JSONArray data) {
-		this.rawData = data;
-		this.prettyData = data;
-	}
-	
 	public void setData(JSONArray data) {
 		this.rawData = data;
-		this.prettyData = data;
+		this.timesList = createTimesList();
 	}
 	
 	public ArrayList<HashMap<String, String>> getTimesList() {
-		return createTimesList();
+		return timesList;
+	}
+	
+	public void updateTimesList() {
+		refreshList(this.timesList);
+	}
+	
+	// This doesn't seem like the best method, but it should work for now
+	private void refreshList(ArrayList<HashMap<String, String>> data) {
+		int currentTime = new DateTime().getSecondOfDay();
+		for (HashMap<String, String> map : data) {
+			// This map should always only contain 1 value
+			int arrivalTime = Integer.parseInt(map.get("time"));
+			
+			if (arrivalTime < currentTime) {
+				data.remove(map);
+			}
+
+			map.put(ARRIVAL_TIME_SECONDS, getBusTimeMsg(arrivalTime, currentTime));
+		}
 	}
 	
 	/**
@@ -49,55 +61,39 @@ public class Time {
 	 * FIXME
 	 */
 	private ArrayList<HashMap<String, String>> createTimesList() {
-		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		DateTime dt = new DateTime();
-		int current = dt.getSecondOfDay();
+		ArrayList<HashMap<String, String>> timesList = new ArrayList<HashMap<String, String>>();
+		int currentTime = new DateTime().getSecondOfDay();
 		
 		for (int i = 0; i < rawData.length(); i++) {
 			try {
-				HashMap<String, String> map = new HashMap<String, String>();
+				HashMap<String, String> busTime = new HashMap<String, String>();
 				JSONObject json = rawData.getJSONObject(i);
-				String secs = json.getString(ARRIVAL_TIME_SECONDS);
-				int arrival = Integer.parseInt(secs);
+				int arrivalTime = Integer.parseInt(json.getString(ARRIVAL_TIME_SECONDS));
 				
-				if (arrival < current) {
+				if (arrivalTime < currentTime) {
 					continue;
 				}
 				
-				String result = getBusTime(arrival, current);
-				map.put(ARRIVAL_TIME, result);
-				list.add(map);
+				busTime.put(ARRIVAL_TIME_SECONDS, getBusTimeMsg(arrivalTime, currentTime));
+				busTime.put("time", String.valueOf(arrivalTime));
+				timesList.add(busTime);
 			} catch (JSONException e) {
 				Log.d(MainActivity.LOG_TAG, e.getMessage());
 			}
 		}
 		
-		return list;
+		return timesList;
 	}
 	
 	/**
-	 * Returns the final string for the bus. I mainly created this helper method
+	 * Returns the final string for the bus time. I mainly created this helper method
 	 * for testing purposes.
 	 * @return A String in the form of "<period> until <clocktime>"
 	 */
-	public String getBusTime(int arrival, int current) {
-		StringBuilder time = new StringBuilder();
-
-		String remaining = timeUntilArrival(current, arrival);
-		String clockTime = clockTime(arrival);
-		
-		if (remaining.isEmpty()) {
-			time.append("Arriving now at ");
-		} else {
-			time.append(remaining);
-			time.append(" until " );
-		}
-		
-		time.append(clockTime);
-		
-//		Log.d(MainActivity.LOG_TAG, time.toString());
-		
-		return time.toString();
+	public String getBusTimeMsg(int arrival, int current) {
+		return new StringBuilder().append(timeUntilArrival(current, arrival))
+				                  .append(clockTime(arrival))
+				                  .toString();
 	}
 	
 	/**
@@ -121,7 +117,9 @@ public class Time {
 				.appendMinutes()
 				.appendSuffix(" min", " mins")
 				.toFormatter();
-		return dhm.print(period.normalizedStandard());
+		return seconds.getSeconds() < 60 ? 
+				   "Arriving now at " : 
+			       dhm.print(period.normalizedStandard()) + " until ";
 	}	
 	
 	/**
@@ -138,7 +136,6 @@ public class Time {
 		LocalTime lt = new LocalTime(hours, minutes);
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("h:mm");
 		
-		String clockTime = fmt.print(lt);
-		return (hours < 12) ? clockTime + " AM" : clockTime + " PM"; 
+		return (hours < 12) ? fmt.print(lt) + " AM" : fmt.print(lt) + " PM"; 
 	}
 }

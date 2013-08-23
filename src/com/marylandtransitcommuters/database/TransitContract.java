@@ -69,67 +69,67 @@ public final class TransitContract {
 	     * Column name for the route_id 
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_ROUTE_ID = "route_id";
+		public static final String ROUTE_ID = "route_id";
 		
 		/**
 	     * Column name for the route_id 
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_ROUTE_SHORT_NAME = "route_short_name";
+		public static final String ROUTE_SHORT_NAME = "route_short_name";
 
 		/**
 	     * Column name for the start stop_id
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_ROUTE_LONG_NAME = "route_long_name";
+		public static final String ROUTE_LONG_NAME = "route_long_name";
 
 		/**
 	     * Column name for the direction_id 
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_DIRECTION_ID = "direction_id";
+		public static final String DIRECTION_ID = "direction_id";
 		
 		/**
 	     * Column name for the direction's headsign
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_DIRECTION_HEADSIGN = "direction_headsign";
+		public static final String DIRECTION_HEADSIGN = "direction_headsign";
 		
 		/**
 	     * Column name for the start stop_id
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_START_STOP_ID = "start_stop_id";
+		public static final String START_STOP_ID = "start_stop_id";
 		
 		/**
 	     * Column name for the start stop name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_START_STOP_NAME = "start_stop_name";
+		public static final String START_STOP_NAME = "start_stop_name";
 
 		/**
 	     * Column name for the start stop sequence
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_START_STOP_SEQ = "start_stop_seq";
+		public static final String START_STOP_SEQ = "start_stop_seq";
 
 		/**
 	     * Column name for the final stop_id
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_FINAL_STOP_ID = "final_stop_id";
+		public static final String FINAL_STOP_ID = "final_stop_id";
 
 		/**
 	     * Column name for the start stop name
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_FINAL_STOP_NAME = "final_stop_name";
+		public static final String FINAL_STOP_NAME = "final_stop_name";
 		
 		/**
 	     * Column name for the start stop sequence
 	     * <P>Type: TEXT</P>
 	     */
-		public static final String KEY_FINAL_STOP_SEQ = "final_stop_seq";
+		public static final String FINAL_STOP_SEQ = "final_stop_seq";
 
 		/*
          * URI definitions
@@ -171,16 +171,16 @@ public final class TransitContract {
          */
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
         										  + _ID + " INTEGER PRIMARY KEY,"
-        										  + KEY_ROUTE_ID + " TEXT,"
-        										  + KEY_ROUTE_SHORT_NAME + " TEXT,"
-        										  + KEY_ROUTE_LONG_NAME + " TEXT,"
-        										  + KEY_DIRECTION_ID + " TEXT,"
-        										  + KEY_DIRECTION_HEADSIGN + " TEXT,"
-        										  + KEY_START_STOP_ID + " TEXT,"
-        										  + KEY_START_STOP_NAME + " TEXT,"
-        										  + KEY_START_STOP_SEQ + " TEXT,"
-        										  + KEY_FINAL_STOP_ID + " TEXT," 
-        										  + KEY_FINAL_STOP_NAME + " TEXT" 
+        										  + ROUTE_ID + " TEXT,"
+        										  + ROUTE_SHORT_NAME + " TEXT,"
+        										  + ROUTE_LONG_NAME + " TEXT,"
+        										  + DIRECTION_ID + " TEXT,"
+        										  + DIRECTION_HEADSIGN + " TEXT,"
+        										  + START_STOP_ID + " TEXT,"
+        										  + START_STOP_NAME + " TEXT,"
+        										  + START_STOP_SEQ + " TEXT,"
+        										  + FINAL_STOP_ID + " TEXT," 
+        										  + FINAL_STOP_NAME + " TEXT" 
         										  + ");";
         
         /**
@@ -193,16 +193,16 @@ public final class TransitContract {
          */
         public static final String[] KEY_ARRAY = {
         	_ID,
-			KEY_ROUTE_ID,
-			KEY_ROUTE_SHORT_NAME,
-			KEY_ROUTE_LONG_NAME,
-			KEY_DIRECTION_ID,
-			KEY_DIRECTION_HEADSIGN,
-			KEY_START_STOP_ID,
-			KEY_START_STOP_NAME,
-			KEY_START_STOP_SEQ,
-			KEY_FINAL_STOP_ID,
-			KEY_FINAL_STOP_NAME
+			ROUTE_ID,
+			ROUTE_SHORT_NAME,
+			ROUTE_LONG_NAME,
+			DIRECTION_ID,
+			DIRECTION_HEADSIGN,
+			START_STOP_ID,
+			START_STOP_NAME,
+			START_STOP_SEQ,
+			FINAL_STOP_ID,
+			FINAL_STOP_NAME
         };
 	}
 	

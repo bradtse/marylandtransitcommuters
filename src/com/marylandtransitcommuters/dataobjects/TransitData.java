@@ -173,4 +173,8 @@ public final class TransitData {
 	public ArrayList<HashMap<String, String>> getTimesList() {
 		return instance.time.getTimesList();
 	}
+
+	public void updateTimesList() {
+		instance.time.updateTimesList();
+	}
 }

@@ -29,16 +29,6 @@ public class Direction {
 	
 	public Direction() {}
 	
-	/**
-	 * Constructor
-	 * @param data The direction data returned by the server
-	 */
-	public Direction(JSONArray data) {
-		this.rawData = data;
-		this.prettyData = prettify(data);
-		this.dirsList = createDirectionsList();
-	}
-	
 	public void setData(JSONArray data) {
 		this.rawData = data;
 		this.prettyData = prettify(data);

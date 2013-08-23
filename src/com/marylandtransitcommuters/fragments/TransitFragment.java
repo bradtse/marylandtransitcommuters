@@ -54,16 +54,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate()");
 		super.onCreate(savedInstanceState);
 		
-		// Initialize some components
+		// Initialize components
 		mContext = getActivity();
 		mTransitData = TransitData.getInstance();
-		if (mTransitData.getRouteId() != null) {
-			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteId()); 
-			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteShortName()); 
-			Log.d(MainActivity.LOG_TAG, mTransitData.getRouteLongName()); 
-		} else {
-			Log.d(MainActivity.LOG_TAG, "mTransitData null"); 
-		}
 		setupTransitReceiver();
 
 		// Forces onCreateOptionsMenu to be called
@@ -152,21 +145,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 		return super.onCreateAnimation(transit, enter, nextAnim);
 	}
-
-	/**
-	 * ListView item click listener
-	 */
-    class ListItemClickListener implements ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			// Clears the SearchView text and closes the keyboard
-			mSearchView.setQuery("", false);
-			mSearchView.clearFocus();
-
-			selectItem(position);
-		}
-    }
     
     
     /*
@@ -244,7 +222,22 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		mContext.startService(intent);
 	}
 
-	/*
+	/**
+	 * Sets up the different parts of the fragment after the data has been received
+	 * back from the server.
+	 */
+	public void setupFragment() {
+		Log.d(MainActivity.LOG_TAG, "Starting to set up fragment");
+
+		setListViewAdapter();
+		setSearchViewTextListener();
+		mResults.setText(String.valueOf(mAdapter.getCount()) + " results");
+		mList.setOnItemClickListener(new ListItemClickListener());
+
+		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
+	}
+
+	/**
 	 * Attaches the adapter's filter to the Search View to allow filtering of the ListView
 	 */
 	private void setSearchViewTextListener() {
@@ -266,19 +259,19 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	}
 
 	/**
-	 * Sets up the different parts of the fragment after the data has been received
-	 * back from the server.
+	 * ListView item click listener
 	 */
-	public void setupFragment() {
-		Log.d(MainActivity.LOG_TAG, "Starting to set up fragment");
+    class ListItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			// Clears the SearchView text and closes the keyboard
+			mSearchView.setQuery("", false);
+			mSearchView.clearFocus();
 
-		setListViewAdapter();
-		setSearchViewTextListener();
-		mResults.setText(String.valueOf(mAdapter.getCount()) + " results");
-		mList.setOnItemClickListener(new ListItemClickListener());
-
-		Log.d(MainActivity.LOG_TAG, "Finished setting up fragment");
-	}
+			selectItem(position);
+		}
+    }
 
 	/**
 	 * Checks for Internet connectivity
