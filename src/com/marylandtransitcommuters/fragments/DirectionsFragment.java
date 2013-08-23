@@ -71,18 +71,17 @@ public class DirectionsFragment extends TransitFragment {
 				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String headsign = map.get(Direction.TRIP_HEADSIGN);
-				int color = getResources().getColor(R.color.glue_color);
 				
 				if (headsign.contains(Direction.GLUE)) {
 					int start = headsign.indexOf(Direction.GLUE);
 					int end = start + Direction.GLUE.length();
 					SpannableString result = new SpannableString(headsign);
 				
-					result.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+					result.setSpan(mSpanHolder.styleSpan, 
 								start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new RelativeSizeSpan(0.8f), start, end, 
+					result.setSpan(mSpanHolder.sizeSpan, start, end, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new ForegroundColorSpan(color), start, end,
+					result.setSpan(mSpanHolder.colorSpan, start, end,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(result);
 				} 

@@ -9,6 +9,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,8 +49,15 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected CustomSimpleAdapter mAdapter;
 	protected ReplaceFragmentListener mCallback;
 	protected TextView mResults;
+	protected SpanHolder mSpanHolder;
 	private TransitReceiver mReceiver;
 	private RelativeLayout mProgressLayout;
+	
+	static class SpanHolder {
+		StyleSpan styleSpan;
+		RelativeSizeSpan sizeSpan; 
+		ForegroundColorSpan colorSpan;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +77,12 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			if (hasInternet()) {
 				startIntentService();
 			}
+			
+			// Initialize span holder which should help improve getView()'s performance
+			mSpanHolder = new SpanHolder();
+			mSpanHolder.styleSpan = new StyleSpan(android.graphics.Typeface.BOLD_ITALIC);
+			mSpanHolder.sizeSpan = new RelativeSizeSpan(0.8f);
+			mSpanHolder.colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.glue_color));
 		} 
 	}
 	

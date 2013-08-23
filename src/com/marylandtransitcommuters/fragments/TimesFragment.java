@@ -106,7 +106,7 @@ public class TimesFragment extends TransitFragment {
 	}
 	
 	/**
-	 * Updates the ListView in order to refresh the times
+	 * Updates the ListView in order to refresh the list of times 
 	 */
 	public void refreshListView() {
 		mTransitData.updateTimesList();

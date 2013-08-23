@@ -74,18 +74,17 @@ public class FinalStopsFragment extends TransitFragment {
 				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) mData.get(pos);
 				String stopName = map.get(FinalStop.STOP_NAME);
-				int color = getResources().getColor(R.color.glue_color);
 				
 				if (stopName.contains(FinalStop.GLUE)) {
 					int start = stopName.indexOf(FinalStop.GLUE);
 					int end = start + FinalStop.GLUE.length();
 					SpannableString result = new SpannableString(stopName);
 				
-					result.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+					result.setSpan(mSpanHolder.styleSpan, 
 								start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new RelativeSizeSpan(0.8f), start, end, 
+					result.setSpan(mSpanHolder.sizeSpan, start, end, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new ForegroundColorSpan(color), start, end,
+					result.setSpan(mSpanHolder.colorSpan, start, end,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(result);
 				} 

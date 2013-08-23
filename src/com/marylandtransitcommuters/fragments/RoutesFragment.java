@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,17 +60,16 @@ public class RoutesFragment extends TransitFragment {
 				@SuppressWarnings("unchecked")
 				Map<String, String> map = (Map<String, String>) mData.get(position);
 				String longName = map.get(Route.LONG_NAME);
-				int color = getResources().getColor(R.color.glue_color);
 				
 				if (longName.contains(" to ")) {
 					int index = longName.indexOf(" to ") + 1;
 					SpannableString colored = new SpannableString(longName);
 				
-					colored.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+					colored.setSpan(mSpanHolder.styleSpan, 
 								index, index+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					colored.setSpan(new RelativeSizeSpan(0.8f), index, index+2, 
+					colored.setSpan(mSpanHolder.sizeSpan, index, index+2, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					colored.setSpan(new ForegroundColorSpan(color), index, index+2,
+					colored.setSpan(mSpanHolder.colorSpan, index, index+2,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(colored);
 				} 

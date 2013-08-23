@@ -76,13 +76,12 @@ public class StartStopsFragment extends TransitFragment {
 					int start = stopName.indexOf(StartStop.GLUE);
 					int end = start + StartStop.GLUE.length();
 					SpannableString result = new SpannableString(stopName);
-					int color = getResources().getColor(R.color.glue_color);
 				
-					result.setSpan(new StyleSpan(android.graphics.Typeface.BOLD_ITALIC), 
+					result.setSpan(mSpanHolder.styleSpan, 
 								start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new RelativeSizeSpan(0.8f), start, end, 
+					result.setSpan(mSpanHolder.sizeSpan, start, end, 
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					result.setSpan(new ForegroundColorSpan(color), start, end,
+					result.setSpan(mSpanHolder.colorSpan, start, end,
 								Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 					tv.setText(result);
 				} 
