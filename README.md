@@ -1,15 +1,11 @@
 Maryland Transit Commuters Android App
 ==========
-A simple app that is used to determine upcoming bus times
+A simple app that is used to determine upcoming bus times. It is very basic at
+the moment but I plan on adding for features soon.
 
 Note:
 This app requires ActionBarSherlock which can be found
-(here)[http://actionbarsherlock.com/].
+[here](http://actionbarsherlock.com/). I plan on including the library in this
+repository in the future, but right now you have to download it yourself.
 
 Known bugs:
-
-1) There is an issue with how Google handles the fragment backstack when the
-fragments are destroyed. The fragments lose their transaction animation when
-they are recreated. I might put my own fix for this in the future, but for now
-the fragments are working pretty good, minus the lack of animations.
-
