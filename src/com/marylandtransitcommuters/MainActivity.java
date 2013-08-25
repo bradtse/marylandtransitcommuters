@@ -258,11 +258,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
      * navigation drawer
      */
     private void setupNavigationDrawer() {
-    	// Add drawer shadow
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // Attach the adapter to the drawer ListView
         mDrawerList.setAdapter(setupMergeAdapter());
-        // Attach a list item click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
         // Enable Action Bar app icon to toggle nav drawer

@@ -2,6 +2,8 @@ package com.marylandtransitcommuters.dataobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +18,7 @@ public class FinalStop {
 	public static final String STOP_ID = "stop_id";
 	public static final String STOP_KEY = "final_stop_id";
 	public static final String GLUE = "&";
+	private static final Pattern P = Pattern.compile("((f/?s ?)|(opp? ?)|(mid ?))?([news]/?b)?$", Pattern.CASE_INSENSITIVE);
 
 	private JSONArray rawData;
 	private JSONArray prettyData;
@@ -27,7 +30,7 @@ public class FinalStop {
 
 	public void setData(JSONArray data) {
 		this.rawData = data;
-		this.prettyData = data;
+		this.prettyData = prettify(data);
 		this.finalStopsList = createStopsList();
 	}
 	
@@ -73,5 +76,28 @@ public class FinalStop {
 		
 		return list;
 	}
+
+	private JSONArray prettify(JSONArray data) {
+		
+		for (int i = 0; i < data.length(); i++) {
+			try {
+				JSONObject route = data.getJSONObject(i);
+				String stop_name = prettyRouteName(route.getString(STOP_NAME));
+				route.put(STOP_NAME, stop_name);
+				data.put(i, route);
+			} catch (JSONException e) {
+				Log.d(MainActivity.LOG_TAG, "prettify() failed: " + e.getMessage());
+			}	
+		}
+		
+		return data;
+	}
 	
+	private String prettyRouteName(String name) {
+		Matcher m = P.matcher(name);
+		if (m.find()) {
+			name = name.substring(0, m.start());
+		}
+		return name;
+	}
 }
