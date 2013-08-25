@@ -139,7 +139,7 @@ public class TimesFragment extends TransitFragment {
 	@Override 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		Log.d(MainActivity.LOG_TAG, "onCreateOptionsMenu()");
-		inflater.inflate(R.menu.time, menu);
+		inflater.inflate(R.menu.fragment_time, menu);
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mFavoritesIcon = menu.findItem(R.id.favorite);
 

@@ -1,5 +1,6 @@
 package com.marylandtransitcommuters.fragments;
 
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

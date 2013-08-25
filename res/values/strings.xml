@@ -8,11 +8,11 @@
     <string name="drawer_item_icon">Icon for drawer item</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <string name="routes_header">Route</string>
-    <string name="direction_header">Direction</string>
-    <string name="final_stop_header">Final Stop</string>
-    <string name="start_stop_header">Start Stop</string>
-    <string name="times_header">Predictions</string>
+    <string name="routes_header">Select Route</string>
+    <string name="direction_header">Select Direction</string>
+    <string name="start_stop_header">Select Boarding Stop</string>
+    <string name="final_stop_header">Select Departing Stop</string>
+    <string name="times_header">Bus Predictions</string>
     <string name="menu_search">Search</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_refresh">Refresh</string>
