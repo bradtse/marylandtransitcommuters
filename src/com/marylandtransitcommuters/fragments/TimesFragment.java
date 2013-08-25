@@ -169,7 +169,10 @@ public class TimesFragment extends TransitFragment {
     	}
     }
 	
-	public void refreshTimesList() {
+	/**
+	 * Refreshes the data and also animates the refresh icon
+	 */
+	private void refreshTimesList() {
 		// Implement some pretty animations
 		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_action_view, null);

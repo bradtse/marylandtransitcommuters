@@ -126,8 +126,8 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
 			case TransitService.FINISH:
-				mProgressLayout.setVisibility(View.GONE);
 				setupFragment();
+				mProgressLayout.setVisibility(View.GONE);
 				break;
 			default:
 				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");

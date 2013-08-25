@@ -23,8 +23,8 @@
     </string>
     <string name="route">Route:\u0020 </string>
     <string name="direction">Direction:\u0020</string>
-    <string name="finalstop">Final Stop:\u0020</string>
-    <string name="startstop">Start stop:\u0020</string>
+    <string name="startstop">Boarding:\u0020</string>
+    <string name="finalstop">Departing:\u0020</string>
     <string name="favorite_desc">Add this route to your favorites</string>
     <string name="progress_desc">Fetching data&#8230;</string>
     <string name="progress_image_desc">Image of bus moving</string>
