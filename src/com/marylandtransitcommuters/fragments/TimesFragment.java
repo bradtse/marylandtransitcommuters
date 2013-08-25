@@ -1,6 +1,7 @@
 package com.marylandtransitcommuters.fragments;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -9,6 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +42,7 @@ public class TimesFragment extends TransitFragment {
 	private String[] mSelectionArgs;
 	private boolean mIsFavorite = false;
 	private MenuItem mFavoritesIcon;
+	private MenuItem mRefreshItem;
 	
 	@Override
 	public void onCreate(Bundle savedBundleInstanceState) {
@@ -105,13 +111,7 @@ public class TimesFragment extends TransitFragment {
 		mList.setEmptyView((TextView) mRootView.findViewById(R.id.empty));
 	}
 	
-	/**
-	 * Updates the ListView in order to refresh the list of times 
-	 */
-	public void refreshListView() {
-		mTransitData.updateTimesList();
-		mAdapter.notifyDataSetChanged();
-	}
+	
 	
 	private void setFavoritesState(int state) {
 		switch(state) {
@@ -142,6 +142,7 @@ public class TimesFragment extends TransitFragment {
 		inflater.inflate(R.menu.fragment_time, menu);
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		mFavoritesIcon = menu.findItem(R.id.favorite);
+		mRefreshItem = menu.findItem(R.id.refresh);
 
 		// Hide the SearchView
 		mSearchView = (SearchView) searchItem.getActionView();    
@@ -160,13 +161,43 @@ public class TimesFragment extends TransitFragment {
     			toggleFavorite();
 	    		return true;
     		case R.id.refresh:
-    			refreshListView();
+    			refreshTimesList();
 	    		Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
 	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);
     	}
     }
+	
+	public void refreshTimesList() {
+		// Implement some pretty animations
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_action_view, null);
+		
+		Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.animate_refresh);
+		anim.setRepeatCount(0);
+		anim.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				mRefreshItem.setActionView(null);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// Update the data
+				mTransitData.updateTimesList();
+				mAdapter.notifyDataSetChanged();
+			}
+		});
+		iv.startAnimation(anim);
+		
+		mRefreshItem.setActionView(iv);
+	}
 	
 	private void toggleFavorite() {
 		if (mIsFavorite == false) {

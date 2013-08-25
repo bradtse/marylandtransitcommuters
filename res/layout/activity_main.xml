@@ -25,6 +25,7 @@
     <!-- The navigation drawer view -->
     <ListView
         android:id="@+id/left_drawer"
+        android:animateLayoutChanges="true"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
