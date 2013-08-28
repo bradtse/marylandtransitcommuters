@@ -29,6 +29,8 @@
         style="@style/HeaderBorder" />
 
     <include layout="@layout/progress_layout" />
+    
+    <include layout="@layout/retry_layout" />
 
     <include layout="@layout/fragment_listview" />
  

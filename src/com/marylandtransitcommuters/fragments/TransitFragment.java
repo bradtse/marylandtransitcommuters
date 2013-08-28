@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -15,13 +13,16 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -40,7 +41,7 @@ import com.marylandtransitcommuters.service.TransitService;
 /**
  * Parent class for each fragment
  */
-public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver	{
+public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver, OnClickListener	{
 	protected Context mContext;
 	protected View mRootView;
 	protected ListView mList;
@@ -52,6 +53,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	protected SpanHolder mSpanHolder;
 	private TransitReceiver mReceiver;
 	private RelativeLayout mProgressLayout;
+	private RelativeLayout mRetryLayout;
 	
 	static class SpanHolder {
 		StyleSpan styleSpan;
@@ -74,9 +76,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
-			if (hasInternet()) {
-				startIntentService();
-			}
+			startIntentService();
 			
 			// Initialize span holder which should help improve getView()'s performance
 			mSpanHolder = new SpanHolder();
@@ -92,7 +92,9 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onCreateView()");
 		mList = (ListView) mRootView.findViewById(R.id.fragment_list);
 		mProgressLayout = (RelativeLayout) mRootView.findViewById(R.id.progress);
+		mRetryLayout = (RelativeLayout) mRootView.findViewById(R.id.retry_layout);
 		mResults = (TextView) mRootView.findViewById(R.id.result_count);
+		mRootView.findViewById(R.id.retry_button).setOnClickListener(this);
 		setupBreadcrumbs();
 
 		// Start the bus animation. Had to use this workaround for it to work
@@ -129,8 +131,24 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 				setupFragment();
 				mProgressLayout.setVisibility(View.GONE);
 				break;
+			case TransitService.FAIL:
+				mProgressLayout.setVisibility(View.GONE);
+				mRetryLayout.setVisibility(View.VISIBLE);
 			default:
 				Log.d(MainActivity.LOG_TAG, "onReceiveResult() should never reach default case");
+		}
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+			case R.id.retry_button:
+				startIntentService();
+				mProgressLayout.setVisibility(View.VISIBLE);
+				mRetryLayout.setVisibility(View.GONE);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -288,16 +306,6 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 			selectItem(position);
 		}
     }
-
-	/**
-	 * Checks for Internet connectivity
-	 */
-    private boolean hasInternet() {
-    	ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-    	NetworkInfo info = cm.getActiveNetworkInfo();
-    	return (info != null && info.isConnected()) ? true : false;
-    }
-
 
     /*
      * Fragment Lifecycle debugging

@@ -13,6 +13,9 @@ import org.json.JSONObject;
 
 import com.marylandtransitcommuters.MainActivity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 /**
@@ -30,10 +33,14 @@ public final class RestHelper {
 	 * @return a JSONArray containing the response from the server, or null on failure
 	 * FIXME Handle what happens when null returns
 	 */
-	public static JSONArray post(JSONObject data) {
+	public static JSONArray post(JSONObject data, Context context) {
 		JSONArray json = null;
 		boolean success = true;
 		int failCount = 0; 
+		
+		if (!hasInternet(context)) {
+			return null;
+		}
 		
 		do {
 			// Only retry a max of 10 times
@@ -75,6 +82,15 @@ public final class RestHelper {
 		
 		return json;
 	}
+	
+	/**
+	 * Checks for Internet connectivity
+	 */
+    private static boolean hasInternet(Context context) {
+    	ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    	NetworkInfo info = cm.getActiveNetworkInfo();
+    	return (info != null && info.isConnected()) ? true : false;
+    }
 	
 	/**
 	 * Sets up the connection to the provided url. Does not actually connect yet.

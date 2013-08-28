@@ -161,8 +161,10 @@ public class TimesFragment extends TransitFragment {
     			toggleFavorite();
 	    		return true;
     		case R.id.refresh:
-    			refreshTimesList();
-	    		Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
+    			if (mAdapter != null) {
+	    			refreshTimesList();
+		    		Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
+    			}
 	    		return true;
 	    	default:
 	    		return super.onOptionsItemSelected(item);

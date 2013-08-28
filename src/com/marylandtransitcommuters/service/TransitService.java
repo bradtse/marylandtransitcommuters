@@ -28,6 +28,7 @@ import android.util.Log;
 public class TransitService extends IntentService {
 	public static final int START = 0;
 	public static final int FINISH = 1;
+	public static final int FAIL = 2;
 	
 	public enum DataType {
 		ROUTES, STARTSTOPS, FINALSTOPS, TIMES, DIRECTIONS;
@@ -42,9 +43,12 @@ public class TransitService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		ResultReceiver mReceiver = intent.getParcelableExtra(TransitReceiver.RECEIVER);
 		
-		serviceHelper((DataType) intent.getSerializableExtra(DataType.KEY));
-		
-		mReceiver.send(FINISH, Bundle.EMPTY);
+		boolean ret = serviceHelper((DataType) intent.getSerializableExtra(DataType.KEY));
+		if (ret == false) {
+			mReceiver.send(FAIL, Bundle.EMPTY);
+		} else {
+			mReceiver.send(FINISH, Bundle.EMPTY);
+		}
 	}
 	
 	/**
@@ -53,7 +57,7 @@ public class TransitService extends IntentService {
 	 * the necessary data for the given type.
 	 * @param type the type of the query being sent to the server
 	 */
-	private void serviceHelper(DataType type) {
+	private boolean serviceHelper(DataType type) {
 		try {
 			TransitData transitObject = TransitData.getInstance();
 			JSONObject data = new JSONObject();
@@ -70,10 +74,16 @@ public class TransitService extends IntentService {
 			
 //			Log.d(MainActivity.LOG_TAG, data.toString());
 			
-			JSONArray results = RestHelper.post(data);
+			JSONArray results = RestHelper.post(data, getApplicationContext());
+			if (results == null) {
+				return false;
+			}
+
 			transitObject.setData(type, results);
 		} catch (JSONException e) {
 			Log.d(MainActivity.LOG_TAG, "serviceHelper() failed: " + e.getMessage());
+			return false;
 		}
+		return true;
 	}
 }

@@ -29,6 +29,8 @@
     <string name="progress_desc">Fetching data&#8230;</string>
     <string name="progress_image_desc">Image of bus moving</string>
     <string name="frame_layout_image">Image of grey bus</string>
+    <string name="retry_dialog">Could not connect to the network</string>
+    <string name="retry">Retry</string>
         
     <!-- Items added to nav drawer -->
     <string-array name="drawer_categories">
