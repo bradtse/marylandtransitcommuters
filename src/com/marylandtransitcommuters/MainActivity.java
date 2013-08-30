@@ -74,6 +74,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	Log.d(LOG_TAG, "MainActivity onCreate()");
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         // Stores a bunch of resources that we'll need later
         mTitle = mDrawerTitle = getTitle();
@@ -81,9 +82,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mFrameImage = (ImageView) findViewById(R.id.frame_layout_image);
-
         setupNavigationDrawer();   
-        getSupportLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
         	mFragTags = new ArrayDeque<String>();
@@ -93,11 +92,12 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         	restoreTransitData();
         	mFragTags = (ArrayDeque<String>) savedInstanceState.getSerializable(FRAG_STACK);
         	mCurrFragTag = (String) savedInstanceState.getSerializable(FRAG_TAG);
-        	if (mCurrFragTag != null) {
-        		mFrameImage.setVisibility(View.GONE);
-        	}
         	hideFragmentsOnBackStack();	
         }
+
+    	if (mCurrFragTag != null) {
+    		mFrameImage.setVisibility(View.GONE);
+    	}
     }
     
     @Override
