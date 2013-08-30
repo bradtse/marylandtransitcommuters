@@ -81,11 +81,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mFrameImage = (ImageView) findViewById(R.id.frame_layout_image);
-        
-        // Fully set up the navigation drawer
-        setupNavigationDrawer();   
 
-        // Initialize the Cursor Loader
+        setupNavigationDrawer();   
         getSupportLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
@@ -152,6 +149,8 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     public void onBackPressed() {
     	if (mFragTags.size() > 0) {
     		mCurrFragTag = mFragTags.pop();
+    		TransitFragment f = (TransitFragment) getSupportFragmentManager().findFragmentByTag(mCurrFragTag);
+    		f.enableList();
     	}
     	super.onBackPressed();
     }
@@ -172,6 +171,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			mDrawerList.setEnabled(false);
 			selectItem(position);
 		}		
     }
@@ -450,6 +450,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
         	}
         	
         	public void onDrawerOpened(View drawerView) {
+        		mDrawerList.setEnabled(true);
         		getSupportActionBar().setTitle(mDrawerTitle);
         		supportInvalidateOptionsMenu(); 
         	}

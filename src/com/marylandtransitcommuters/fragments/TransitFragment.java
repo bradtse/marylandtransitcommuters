@@ -17,12 +17,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -44,16 +42,17 @@ import com.marylandtransitcommuters.service.TransitService;
 public abstract class TransitFragment extends SherlockFragment implements TransitReceiver.Receiver, OnClickListener	{
 	protected Context mContext;
 	protected View mRootView;
-	protected ListView mList;
 	protected TransitData mTransitData;
 	protected SearchView mSearchView;
 	protected CustomSimpleAdapter mAdapter;
 	protected ReplaceFragmentListener mCallback;
 	protected TextView mResults;
+	protected ListView mList;
 	protected SpanHolder mSpanHolder;
 	private TransitReceiver mReceiver;
 	private RelativeLayout mProgressLayout;
 	private RelativeLayout mRetryLayout;
+	public Boolean mClicked;
 	
 	static class SpanHolder {
 		StyleSpan styleSpan;
@@ -67,6 +66,7 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		super.onCreate(savedInstanceState);
 		
 		// Initialize components
+		mClicked = false;
 		mContext = getActivity();
 		mTransitData = TransitData.getInstance();
 		setupTransitReceiver();
@@ -74,15 +74,15 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		// Forces onCreateOptionsMenu to be called
 		setHasOptionsMenu(true); 
 
+		// Initialize span holder which should help improve getView()'s performance
+		mSpanHolder = new SpanHolder();
+		mSpanHolder.styleSpan = new StyleSpan(android.graphics.Typeface.BOLD_ITALIC);
+		mSpanHolder.sizeSpan = new RelativeSizeSpan(0.8f);
+		mSpanHolder.colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.glue_color));
+
 		if (savedInstanceState == null) {
 			Log.d(MainActivity.LOG_TAG, "TransitFragment onCreate() savedInstanceState is null");
 			startIntentService();
-			
-			// Initialize span holder which should help improve getView()'s performance
-			mSpanHolder = new SpanHolder();
-			mSpanHolder.styleSpan = new StyleSpan(android.graphics.Typeface.BOLD_ITALIC);
-			mSpanHolder.sizeSpan = new RelativeSizeSpan(0.8f);
-			mSpanHolder.colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.glue_color));
 		} 
 	}
 	
@@ -179,7 +179,10 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 		}
 		return super.onCreateAnimation(transit, enter, nextAnim);
 	}
-    
+	
+	public void enableList() {
+		mList.setEnabled(true);
+	}
     
     /*
      * Abstract methods/interfaces
@@ -295,32 +298,35 @@ public abstract class TransitFragment extends SherlockFragment implements Transi
 	/**
 	 * ListView item click listener
 	 */
-    class ListItemClickListener implements ListView.OnItemClickListener {
+    public class ListItemClickListener implements ListView.OnItemClickListener {
+
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			// Clears the SearchView text and closes the keyboard
-			mSearchView.setQuery("", false);
-			mSearchView.clearFocus();
+				mList.setEnabled(false);
 
-			selectItem(position);
+				// Clears the SearchView text and closes the keyboard
+				mSearchView.setQuery("", false);
+				mSearchView.clearFocus();
+			
+				selectItem(position);
 		}
     }
-
+    
     /*
      * Fragment Lifecycle debugging
      */
-    
+
 	@Override
 	public void onPause() {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onPause()");
-		super.onDestroy();
+		super.onPause();
 	}
 
 	@Override
 	public void onStop() {
 		Log.d(MainActivity.LOG_TAG, "TransitFragment onStop()");
-		super.onDestroy();
+		super.onStop();
 	}
 
 	@Override

@@ -48,13 +48,6 @@ public class TimesFragment extends TransitFragment {
 	public void onCreate(Bundle savedBundleInstanceState) {
 		super.onCreate(savedBundleInstanceState);
 
-		String[] selectionArgs = {mTransitData.getRouteId(),
-							      mTransitData.getDirectionId(),
-								  mTransitData.getStartStopId(),
-								  mTransitData.getFinalStopId()};
-		mSelectionArgs = selectionArgs;
-		
-		new QueryFavoritesTable().execute();
 	}
 	
 	@Override
@@ -64,6 +57,17 @@ public class TimesFragment extends TransitFragment {
 		mRootView = inflater.inflate(R.layout.fragment_layout_times, container, false);
 		super.onCreateView(inflater, container, savedInstanceState);
 		return mRootView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		String[] selectionArgs = {mTransitData.getRouteId(),
+							      mTransitData.getDirectionId(),
+								  mTransitData.getStartStopId(),
+								  mTransitData.getFinalStopId()};
+		mSelectionArgs = selectionArgs;
+		new QueryFavoritesTable().execute();
 	}
 	
 	@Override

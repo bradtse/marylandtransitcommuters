@@ -105,10 +105,8 @@ public class StartStop {
 	
 	private String prettyRouteName(String name) {
 		Matcher m = P.matcher(name);
-		Log.d(MainActivity.LOG_TAG, name);
 		if (m.find()) {
 			name = name.substring(0, m.start());
-			Log.d(MainActivity.LOG_TAG, name);
 		}
 		return name;
 	}
