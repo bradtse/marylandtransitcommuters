@@ -115,9 +115,7 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	
     	if (animate == true) {
 	    	mFt.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, 
-	    						   R.anim.slide_in_left, R.anim.slide_out_right);
-//	    	ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, 
-//	    						   R.anim.fade_in, R.anim.fade_out);
+	    						   	R.anim.slide_in_left, R.anim.slide_out_right);
     	}
 
     	// If there is a current fragment in the frame layout then hide it
@@ -224,10 +222,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	// Let ActionBarDrawerToggle attempt to handle home/up action
-//    	if (mDrawerToggle.onOptionsItemSelected(item)) {
-//    		return true;
-//    	}
     	switch(item.getItemId()) {
     		// A workaround until ABS implements onOptionsItemSelected 
 	    	case android.R.id.home:
@@ -413,7 +407,6 @@ public class MainActivity extends SherlockFragmentActivity implements ReplaceFra
     	}
     	
     	// Indicates the item has been selected
-//    	mDrawerList.setItemChecked(position, true);
     	mDrawerLayout.closeDrawer(mDrawerList);
     }
     
